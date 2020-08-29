@@ -15,6 +15,8 @@ target 'ting' do
 
   pod 'react-native-slider', :path => '../node_modules/@react-native-community/slider'
 
+  pod 'FirebaseAnalytics'
+
   target 'tingTests' do
     inherit! :complete
     # Pods for testing

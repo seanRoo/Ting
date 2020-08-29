@@ -3,46 +3,19 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {View, Text, Button} from 'react-native';
 import {Center} from './components/Center';
 import {AuthContext} from './AuthProvider';
+import Login from './components/LogIn';
 
 const Stack = createStackNavigator();
 
-// const Home = ({navigation: {navigate}}) => {
+// const Login = ({navigation: {navigate}}) => {
+//   const {login} = useContext(AuthContext);
 //   return (
 //     <Center>
-//       <Text>carolinnbe</Text>
-//       <Button
-//         title="Go to About"
-//         onPress={() => {
-//           navigate('About');
-//         }}
-//       />
+//       <Text>I am Log in</Text>
+//       <Button onPress={login} title="Log me in" />
 //     </Center>
 //   );
 // };
-
-// const About = ({navigation: {navigate}}) => {
-//   return (
-//     <Center>
-//       <Text>I am about</Text>
-//       <Button
-//         title="Go to Home"
-//         onPress={() => {
-//           navigate('Home');
-//         }}
-//       />
-//     </Center>
-//   );
-// };
-
-const Login = ({navigation: {navigate}}) => {
-  const {login} = useContext(AuthContext);
-  return (
-    <Center>
-      <Text>I am Log in</Text>
-      <Button onPress={login} title="Log me in" />
-    </Center>
-  );
-};
 
 export const AuthStack = () => {
   return (

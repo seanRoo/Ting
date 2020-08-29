@@ -20,7 +20,7 @@ const Dashboard = ({navigation}) => {
           handleButtonPress={() => navigation.navigate('Check In')}
         />
         <DashboardCard
-          headerText="Reminders"
+          headerText="Metrics"
           bodyText={<LineChartComponent />}
           buttonText="Go To My Data"
           handleButtonPress={() => navigation.navigate('My Data')}

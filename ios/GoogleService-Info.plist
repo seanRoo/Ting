@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>968559092249-9ajlafnb204ivt4khvqss2tlfjdcr8qq.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.968559092249-9ajlafnb204ivt4khvqss2tlfjdcr8qq</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDCmRD24oej6kHzkGXYTo30uYgq5Aqh8RY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>968559092249</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>tingFirebaseIOS</string>
+	<key>PROJECT_ID</key>
+	<string>ting-service</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ting-service.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:968559092249:ios:fc1aba0634862f0e5f8088</string>
+	<key>CFBundleIdentifier</key>
+	<string>tingFirebaseIOS</string>
+	<key>DATABASE_URL</key>
+	<string>https://ting-service.firebaseio.com</string>
+</dict>
+</plist>
