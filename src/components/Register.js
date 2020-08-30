@@ -9,6 +9,7 @@ import {
   Input,
   Label,
   Button,
+  Icon,
 } from 'native-base';
 import {StyleSheet, View} from 'react-native';
 import {AuthContext} from '../AuthProvider';
@@ -16,9 +17,28 @@ import {Center} from './Center';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Register = ({navigation: {navigate}}) => {
-  const {register} = useContext(AuthContext);
+  const {register, error, setError} = useContext(AuthContext);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [emptyStringError, setEmptyStringError] = useState(false);
+  const [emailFieldError, setEmailFieldError] = useState(false);
+
+  const handleRegister = () => {
+    if (email && password) {
+      register(email, password);
+    } else {
+      setEmptyStringError(true);
+    }
+  };
+
+  const handleTextChange = (email) => {
+    setEmail(email);
+  };
+
+  const handleFocus = () => {
+    setError(false);
+    setEmailFieldError(false);
+  };
 
   return (
     <View style={RegisterStyles.container}>
@@ -26,28 +46,61 @@ const Register = ({navigation: {navigate}}) => {
         <Text style={RegisterStyles.header}>Ting!</Text>
       </View>
       <Form>
-        <Item style={RegisterStyles.inputFields} floatingLabel>
+        <Item
+          style={RegisterStyles.inputFields}
+          floatingLabel
+          error={emailFieldError}>
           <Label>Email</Label>
           <Input
-            onChangeText={(email) => setEmail(email)}
+            onChangeText={(email) => handleTextChange(email)}
             autoCapitalize="none"
             keyboardType="email-address"
             autoCorrect={false}
+            onFocus={handleFocus}
+            value={email}
+            onBlur={() => {
+              if (
+                email &&
+                !email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
+              ) {
+                setEmailFieldError(true);
+              } else {
+                setEmailFieldError(false);
+              }
+            }}
           />
+          {emailFieldError && <Icon name="alert-circle-outline"></Icon>}
         </Item>
         <Item style={RegisterStyles.inputFields} floatingLabel>
           <Label>Password</Label>
           <Input
             secureTextEntry={true}
             onChangeText={(password) => setPassword(password)}
+            onFocus={() => setError(false)}
           />
         </Item>
+        {error && (
+          <>
+            <Text style={RegisterStyles.registerErrorText}>
+              Incorrect Email or Password.
+            </Text>
+            <Text style={RegisterStyles.registerErrorText}>Try Again.</Text>
+          </>
+        )}
+        {emptyStringError && (
+          <>
+            <Text style={RegisterStyles.registerErrorText}>
+              Fields Cannot be Blank.
+            </Text>
+            <Text style={RegisterStyles.registerErrorText}>Try Again.</Text>
+          </>
+        )}
         <View>
           <Button
-            onPress={() => register(email, password)}
+            onPress={() => handleRegister(email, password)}
             style={RegisterStyles.registerButton}>
             <Center>
-              <Text style={RegisterStyles.buttonText}>Register</Text>
+              <Text>Register</Text>
             </Center>
           </Button>
           <TouchableOpacity
@@ -90,6 +143,7 @@ const RegisterStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  registerErrorText: {alignSelf: 'center', paddingTop: 10, color: 'red'},
 });
 
 export default Register;

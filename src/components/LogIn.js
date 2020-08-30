@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {Text, Form, Item, Input, Label, Button} from 'native-base';
+import {Text, Form, Item, Input, Label, Button, Icon} from 'native-base';
 import {StyleSheet, View} from 'react-native';
 import {AuthContext} from '../AuthProvider';
 import {Center} from './Center';
@@ -23,11 +23,11 @@ const Login = ({navigation: {navigate}}) => {
 
   const handleTextChange = (email) => {
     setEmail(email);
-    if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
-      setEmailFieldError(true);
-    } else {
-      setEmailFieldError(false);
-    }
+  };
+
+  const handleFocus = () => {
+    setError(false);
+    setEmailFieldError(false);
   };
 
   return (
@@ -46,8 +46,20 @@ const Login = ({navigation: {navigate}}) => {
             autoCapitalize="none"
             keyboardType="email-address"
             autoCorrect={false}
-            onFocus={() => setError(false)}
+            onFocus={handleFocus}
+            value={email}
+            onBlur={() => {
+              if (
+                email &&
+                !email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
+              ) {
+                setEmailFieldError(true);
+              } else {
+                setEmailFieldError(false);
+              }
+            }}
           />
+          {emailFieldError && <Icon name="alert-circle-outline"></Icon>}
         </Item>
         <Item style={LoginStyles.inputFields} floatingLabel>
           <Label>Password</Label>

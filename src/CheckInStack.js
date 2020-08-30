@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Right} from './components/Right';
 import {Text, StyleSheet, StatusBar} from 'react-native';
-import {CalendarList} from 'react-native-calendars';
+import {Calendar} from 'react-native-calendars';
 import {soundsArray} from './utils';
 import {
   Container,
@@ -29,12 +29,14 @@ const options = {
 
 export const MyCalendar = ({navigation}) => {
   return (
-    <CalendarList
+    <Calendar
       onDayPress={(day) =>
         navigation.navigate('Check In', {
           date: day,
         })
       }
+      hideArrows={false}
+      hideExtraDays={true}
     />
   );
 };

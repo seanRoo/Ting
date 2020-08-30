@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Center} from './components/Center';
 import {TouchableOpacity, Text} from 'react-native';
 import {AuthContext} from './AuthProvider';
-import {Button} from 'native-base';
+import {Button, Icon} from 'native-base';
 import {MyData} from './components/AppTabs';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {CheckInStack} from './CheckInStack';
@@ -12,33 +12,10 @@ import Dashboard from './components/Dashboard';
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 
-const Product = ({route, navigation}) => {
-  return (
-    <Center>
-      <Text>{route.params.name}</Text>
-      <Button
-        title="Edit This Product"
-        onPress={() =>
-          navigation.navigate('EditProduct', {
-            name: route.params.name,
-          })
-        }
-      />
-    </Center>
-  );
-};
-
 export const DashboardStack = () => {
   const {logout} = useContext(AuthContext);
   return (
     <Stack.Navigator initialRouteName="Dashboard">
-      <Stack.Screen
-        name="Product"
-        component={Product}
-        options={({route}) => ({
-          headerTitle: `Product: ${route.params.name}`,
-        })}
-      />
       <Stack.Screen
         name="Dashboard"
         component={Dashboard}
@@ -47,6 +24,13 @@ export const DashboardStack = () => {
             return (
               <TouchableOpacity onPress={logout} style={{paddingRight: 20}}>
                 <Text>Logout</Text>
+              </TouchableOpacity>
+            );
+          },
+          headerLeft: () => {
+            return (
+              <TouchableOpacity style={{paddingLeft: 20}}>
+                <Icon name="person-circle" />
               </TouchableOpacity>
             );
           },
