@@ -4,6 +4,7 @@ import {View, Text, Button} from 'react-native';
 import {Center} from './components/Center';
 import {AuthContext} from './AuthProvider';
 import Login from './components/LogIn';
+import Register from './components/Register';
 
 const Stack = createStackNavigator();
 
@@ -25,9 +26,13 @@ export const AuthStack = () => {
       <Stack.Screen
         name="Log in"
         component={Login}
-        options={{title: 'Log In'}}
+        options={{header: () => null}}
       />
-      {/* <Stack.Screen name="Home" component={Home} options={{title: 'Home'}} /> */}
+      <Stack.Screen
+        name="Register"
+        component={Register}
+        options={{title: 'Register'}}
+      />
     </Stack.Navigator>
   );
 };

@@ -1,90 +1,92 @@
 import React, {useContext, useState} from 'react';
-import {
-  Container,
-  Text,
-  Header,
-  Content,
-  Form,
-  Item,
-  Input,
-  Label,
-  Button,
-} from 'native-base';
+import {Text, Form, Item, Input, Label, Button} from 'native-base';
 import {StyleSheet, View} from 'react-native';
 import {AuthContext} from '../AuthProvider';
 import {Center} from './Center';
 import auth from '@react-native-firebase/auth';
-
-// const __doSignUp = () => {
-//     if (!email) {
-//       setError("Email required *")
-//       setValid(false)
-//       return
-//     } else if (!password && password.trim() && password.length > 6) {
-//       setError("Weak password, minimum 5 chars")
-//       setValid(false)
-//       return
-//     } else if (!__isValidEmail(email)) {
-//       setError("Invalid Email")
-//       setValid(false)
-//       return
-//     }
-
-//     __doCreateUser(email, password)
-//   }
-
-const __doCreateUser = async (userName, password) => {
-  try {
-    let response = await auth().createUserWithEmailAndPassword(
-      userName,
-      password,
-    );
-    if (response) {
-      console.log(response);
-    }
-  } catch (e) {
-    console.error(e.message);
-  }
-};
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Login = ({navigation: {navigate}}) => {
-  const {login} = useContext(AuthContext);
-  const [userName, setUsername] = useState();
+  const {login, error, setError} = useContext(AuthContext);
+  const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [emptyStringError, setEmptyStringError] = useState(false);
+  const [emailFieldError, setEmailFieldError] = useState(false);
+
+  const handleLogIn = () => {
+    if (email && password) {
+      login(email, password);
+    } else {
+      setEmptyStringError(true);
+    }
+  };
+
+  const handleTextChange = (email) => {
+    setEmail(email);
+    if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+      setEmailFieldError(true);
+    } else {
+      setEmailFieldError(false);
+    }
+  };
 
   return (
-    <Container>
-      <Header />
-      <Content>
-        <Center>
-          <View>
-            <Text style={LoginStyles.header}>Ting!</Text>
-          </View>
-        </Center>
-        <Form>
-          <Center>
-            <Item style={LoginStyles.inputFields} floatingLabel>
-              <Label>Username</Label>
-              <Input onChangeText={(userName) => setUsername(userName)} />
-            </Item>
-            <Item style={LoginStyles.inputFields} floatingLabel>
-              <Label>Password</Label>
-              <Input
-                secureTextEntry={true}
-                onChangeText={(password) => setPassword(password)}
-              />
-            </Item>
-            <View>
-              <Button
-                onPress={() => __doCreateUser(userName, password)}
-                style={LoginStyles.loginButton}>
-                <Text>Log In</Text>
-              </Button>
-            </View>
-          </Center>
-        </Form>
-      </Content>
-    </Container>
+    <View style={LoginStyles.container}>
+      <View>
+        <Text style={LoginStyles.header}>Ting!</Text>
+      </View>
+      <Form>
+        <Item
+          style={LoginStyles.inputFields}
+          floatingLabel
+          error={emailFieldError}>
+          <Label>Email</Label>
+          <Input
+            onChangeText={(email) => handleTextChange(email)}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            autoCorrect={false}
+            onFocus={() => setError(false)}
+          />
+        </Item>
+        <Item style={LoginStyles.inputFields} floatingLabel>
+          <Label>Password</Label>
+          <Input
+            secureTextEntry={true}
+            onChangeText={(password) => setPassword(password)}
+            onFocus={() => setError(false)}
+          />
+        </Item>
+        {error && (
+          <>
+            <Text style={LoginStyles.loginErrorText}>
+              Incorrect Email or Password.
+            </Text>
+            <Text style={LoginStyles.loginErrorText}>Try Again.</Text>
+          </>
+        )}
+        {emptyStringError && (
+          <>
+            <Text style={LoginStyles.loginErrorText}>
+              Fields Cannot be Blank.
+            </Text>
+            <Text style={LoginStyles.loginErrorText}>Try Again.</Text>
+          </>
+        )}
+        <View>
+          <Button onPress={handleLogIn} style={LoginStyles.loginButton}>
+            <Center>
+              <Text>Log In</Text>
+            </Center>
+          </Button>
+          <TouchableOpacity
+            style={LoginStyles.registerButton}
+            onPress={() => navigate('Register')}>
+            <Text>New User? Register Here</Text>
+          </TouchableOpacity>
+        </View>
+      </Form>
+    </View>
   );
 };
 
@@ -94,12 +96,24 @@ const LoginStyles = StyleSheet.create({
   },
   loginButton: {
     marginTop: 30,
+    alignSelf: 'center',
+    width: 200,
+  },
+  registerButton: {
+    alignSelf: 'center',
+    paddingTop: 20,
   },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    paddingTop: 30,
   },
+  container: {
+    backgroundColor: '#f5f5f5',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginErrorText: {alignSelf: 'center', paddingTop: 10, color: 'red'},
 });
 
 export default Login;

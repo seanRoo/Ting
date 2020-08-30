@@ -1,26 +1,49 @@
 import React, {useState} from 'react';
-import {AsyncStorage} from 'react-native';
+import auth from '@react-native-firebase/auth';
 
-export const AuthContext = React.createContext({
-  user: '',
-  login: () => {},
-  logout: () => {},
-});
+export const AuthContext = React.createContext({});
 
 export const AuthProvider = ({children}) => {
   const [user, setUser] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   return (
     <AuthContext.Provider
       value={{
         user,
-        login: () => {
-          const fakeUser = {username: 'Bob'};
-          setUser(fakeUser);
-          AsyncStorage.setItem('user', JSON.stringify(fakeUser));
+        setUser,
+        loading,
+        setLoading,
+        error,
+        setError,
+        login: async (email, password) => {
+          try {
+            setLoading(true);
+            await auth().signInWithEmailAndPassword(email, password);
+          } catch (e) {
+            console.log(e);
+            setLoading(false);
+            setError(true);
+          }
         },
-        logout: () => {
-          setUser(null);
-          AsyncStorage.removeItem('user', '');
+        register: async (email, password) => {
+          try {
+            setLoading(true);
+            await auth().createUserWithEmailAndPassword(email, password);
+          } catch (e) {
+            console.log(e);
+            setLoading(false);
+            setError(true);
+          }
+        },
+        logout: async () => {
+          try {
+            setLoading(true);
+            await auth().signOut();
+          } catch (e) {
+            console.error(e);
+            setLoading(false);
+          }
         },
       }}>
       {children}

@@ -45,7 +45,7 @@ export const DashboardStack = () => {
         options={{
           headerRight: () => {
             return (
-              <TouchableOpacity onPress={logout}>
+              <TouchableOpacity onPress={logout} style={{paddingRight: 20}}>
                 <Text>Logout</Text>
               </TouchableOpacity>
             );
