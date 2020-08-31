@@ -1,16 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {
-  Container,
-  Text,
-  Header,
-  Content,
-  Form,
-  Item,
-  Input,
-  Label,
-  Button,
-  Icon,
-} from 'native-base';
+import {Text, Form, Item, Input, Label, Button, Icon} from 'native-base';
 import {StyleSheet, View} from 'react-native';
 import {AuthContext} from '../AuthProvider';
 import {Center} from './Center';
@@ -20,12 +9,13 @@ const Register = ({navigation: {navigate}}) => {
   const {register, error, setError} = useContext(AuthContext);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [userName, setUserName] = useState();
   const [emptyStringError, setEmptyStringError] = useState(false);
   const [emailFieldError, setEmailFieldError] = useState(false);
 
   const handleRegister = () => {
     if (email && password) {
-      register(email, password);
+      register(email, password).then(() => navigate('Log in'));
     } else {
       setEmptyStringError(true);
     }
@@ -40,12 +30,24 @@ const Register = ({navigation: {navigate}}) => {
     setEmailFieldError(false);
   };
 
+  const handleUserNameChange = (newUserName) => {
+    setUserName(newUserName);
+  };
   return (
     <View style={RegisterStyles.container}>
       <View>
         <Text style={RegisterStyles.header}>Ting!</Text>
       </View>
       <Form>
+        <Item style={RegisterStyles.inputFields} floatingLabel>
+          <Label>Username</Label>
+          <Input
+            onChangeText={(userName) => handleUserNameChange(userName)}
+            onFocus={handleFocus}
+            value={userName}
+          />
+          {emailFieldError && <Icon name="alert-circle-outline"></Icon>}
+        </Item>
         <Item
           style={RegisterStyles.inputFields}
           floatingLabel
@@ -97,7 +99,7 @@ const Register = ({navigation: {navigate}}) => {
         )}
         <View>
           <Button
-            onPress={() => handleRegister(email, password)}
+            onPress={() => handleRegister(email, password, userName)}
             style={RegisterStyles.registerButton}>
             <Center>
               <Text>Register</Text>

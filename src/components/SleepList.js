@@ -1,13 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Container,
-  Header,
-  Content,
-  List,
-  ListItem,
-  Left,
-  Icon,
-} from 'native-base';
+import {Container, Content, List, ListItem, Left, Icon} from 'native-base';
 import {sleepArray} from '../utils';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Text} from 'react-native';

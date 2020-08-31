@@ -3,7 +3,6 @@ import {Text, Form, Item, Input, Label, Button, Icon} from 'native-base';
 import {StyleSheet, View} from 'react-native';
 import {AuthContext} from '../AuthProvider';
 import {Center} from './Center';
-import auth from '@react-native-firebase/auth';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Login = ({navigation: {navigate}}) => {

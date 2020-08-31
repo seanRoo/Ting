@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text} from 'react-native';
-import {Container, Content} from 'native-base';
+import {Container, Content, Button, Toast, Root} from 'native-base';
 import LineChartComponent from './LineChart';
 import DashboardCard from './DashboardCard/DashboardCard';
 import Styles from './DashboardCard/DashboardCard.styles';

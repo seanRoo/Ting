@@ -1,19 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Right} from './components/Right';
-import {Text, StyleSheet, StatusBar} from 'react-native';
+import {StyleSheet, StatusBar} from 'react-native';
 import {Calendar} from 'react-native-calendars';
-import {soundsArray} from './utils';
-import {
-  Container,
-  Header,
-  Content,
-  List,
-  ListItem,
-  Left,
-  Icon,
-} from 'native-base';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import SleepList from './components/SleepList';
 import CheckIn from './components/CheckIn';
 import SoundList from './components/SoundList';
