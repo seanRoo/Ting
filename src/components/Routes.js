@@ -10,24 +10,24 @@ const Routes = () => {
   const {user, setUser, loading, setLoading} = useContext(AuthContext);
   const [initializing, setInitializing] = useState(true);
   // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
+  function onAuthStateChanged(userEvent) {
+    setUser(userEvent);
     if (initializing) {
       setInitializing(false);
     }
     setLoading(false);
   }
+
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
   if (loading) {
-    console.log(true);
     return <Loading />;
   }
   return (
     <NavigationContainer>
-      {user && <AppTabs />}
+      {user && !loading && <AppTabs />}
       {!user && !loading && <AuthStack />}
     </NavigationContainer>
   );

@@ -1,23 +1,6 @@
 import React from 'react';
-import {
-  Container,
-  Header,
-  Content,
-  Picker,
-  Form,
-  List,
-  ListItem,
-  Left,
-  Icon,
-} from 'native-base';
-import {
-  FlatList,
-  Text,
-  View,
-  StyleSheet,
-  StatusBar,
-  Button,
-} from 'react-native';
+import {Container, Content, List, ListItem, Icon} from 'native-base';
+import {Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Right} from './Right';
 

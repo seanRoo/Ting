@@ -1,14 +1,6 @@
 import React, {useState} from 'react';
 import {soundsArray} from '../utils';
-import {
-  Container,
-  Header,
-  Content,
-  List,
-  ListItem,
-  Left,
-  Icon,
-} from 'native-base';
+import {Container, Content, List, ListItem, Left, Icon} from 'native-base';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Right} from './Right';
 import {Text} from 'react-native';

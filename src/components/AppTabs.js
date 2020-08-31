@@ -25,7 +25,8 @@ const Share = () => {
     </Center>
   );
 };
-export const AppTabs = () => {
+export const AppTabs = (props) => {
+  const {displayName} = props;
   return (
     <Tabs.Navigator
       screenOptions={({route}) => ({

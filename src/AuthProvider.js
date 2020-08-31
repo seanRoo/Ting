@@ -19,7 +19,9 @@ export const AuthProvider = ({children}) => {
         login: async (email, password) => {
           try {
             setLoading(true);
-            await auth().signInWithEmailAndPassword(email, password);
+            await auth()
+              .signInWithEmailAndPassword(email, password)
+              .then((e) => console.log(e));
           } catch (e) {
             console.log(e);
             setLoading(false);
