@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {StyleSheet, StatusBar} from 'react-native';
-import {Calendar} from 'react-native-calendars';
+import {StyleSheet, StatusBar, TouchableOpacity, Text} from 'react-native';
 import SleepList from './components/SleepList';
-import CheckIn from './components/CheckIn';
-import SoundList from './components/SoundList';
+import CheckIn from './components/CheckIn/CheckIn';
+import SoundList from './components/CheckIn/SoundList';
+import MyCalendar from './components/MyCalendar/MyCalendar';
 
 const Stack = createStackNavigator();
 
@@ -15,23 +15,10 @@ const options = {
   day: 'numeric',
 };
 
-export const MyCalendar = ({navigation}) => {
-  return (
-    <Calendar
-      onDayPress={(day) =>
-        navigation.navigate('Check In', {
-          date: day,
-        })
-      }
-      hideArrows={false}
-      hideExtraDays={true}
-    />
-  );
-};
-
 export const CheckInStack = () => {
+  const [sounds, setSounds] = useState();
   return (
-    <Stack.Navigator initialRouteName="MyCalendar">
+    <Stack.Navigator initialRouteName="My Calendar">
       <Stack.Screen name="My Calendar" component={MyCalendar} />
       <Stack.Screen
         name="Check In"
@@ -44,6 +31,7 @@ export const CheckInStack = () => {
           );
           return {
             headerTitle: dateLocaleString,
+            sounds,
           };
         }}
       />

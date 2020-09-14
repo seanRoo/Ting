@@ -4,43 +4,48 @@ export const capitalize = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-export const soundsArray = [
-  {
+export const soundsListArray = {
+  ringing: {
     name: 'Ringing',
     id: uuid(),
     checked: false,
   },
-  {
+  hissing: {
     name: 'Hissing',
     id: uuid(),
     checked: false,
   },
-  {
-    name: 'Pulsating',
-    id: uuid(),
-    checked: false,
-  },
-  {
-    name: 'Buzzing',
-    id: uuid(),
-    checked: false,
-  },
-  {
+  whistle: {
     name: 'Whistle',
     id: uuid(),
     checked: false,
   },
-  {
+  buzzing: {
+    name: 'Buzzing',
+    id: uuid(),
+    checked: false,
+  },
+  hum: {
     name: 'Hum',
     id: uuid(),
     checked: false,
   },
-  {
+  music: {
     name: 'Music',
     id: uuid(),
     checked: false,
   },
-];
+  pulsating: {
+    name: 'Pulsating',
+    id: uuid(),
+    checked: false,
+  },
+  other: {
+    name: 'Other',
+    id: uuid(),
+    checked: false,
+  },
+};
 
 export const sleepArray = [
   {

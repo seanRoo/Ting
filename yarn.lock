@@ -1013,6 +1013,11 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@react-native-community/checkbox@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.5.2.tgz#e1f40aa11ae0d518090bcd4577c5855f46504644"
+  integrity sha512-n7hq3RUXAqtrM/GngXjDoZ7ldWj7G1+jebQFiwSqZtKdzzvt3u4bVfs6g/UQaSaRhGaoCwJ5F7nNhmvAIJ4Y6g==
+
 "@react-native-community/cli-debugger-ui@^4.9.0":
   version "4.9.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-4.9.0.tgz#4177764ba69243c97aa26829d59d9501acb2bd71"
@@ -1176,6 +1181,11 @@
   version "7.5.3"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/database/-/database-7.5.3.tgz#c89c51eaba83a8c9ece8bede46839073cdfddc12"
   integrity sha512-oyJle4Wn5FI/Q6txjTDgc9pehmM98ThOnoM4Ls/LlbFREISY6ItJzWVaNrh2B8vpsx2dmjy9p1wSlsLo4kELWA==
+
+"@react-native-firebase/firestore@^7.8.0":
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-7.8.0.tgz#c6bcc6e9b8c91a52f0c4f7e857780adb4f93da14"
+  integrity sha512-ElR3nQQaKYyIuBD+XhqDOlmJJRn0Ytu/dgYDRblJm5QqvhKgnw0hWCE02gU+85HDh8s9V3omH5QUVJMQdCM1fQ==
 
 "@react-navigation/bottom-tabs@^5.8.0":
   version "5.8.0"
@@ -4677,7 +4687,7 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
-lodash@^4.17.10, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.3.0:
+lodash@^4.17.10, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.3.0:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -5991,6 +6001,13 @@ react-native-chart-kit@^6.6.0:
     paths-js "^0.4.10"
     point-in-polygon "^1.0.1"
 
+react-native-collapsible@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/react-native-collapsible/-/react-native-collapsible-1.5.3.tgz#d6bc7274ae8f40f7688cca23ededa263e6c81c63"
+  integrity sha512-Ciuy3yF8wcHeLxXFtx9vxoyrq8l+9EJqLM/ADw54gVwzTQc1/e2ojhQbVFPlxhDA+Pba2qezkaKfv5ifxg8hoQ==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-drawer@2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/react-native-drawer/-/react-native-drawer-2.5.1.tgz#08b9314184f48c724f1b467f8859797369798654"
@@ -6056,6 +6073,11 @@ react-native-sectioned-multi-select@^0.7.7:
   version "0.7.7"
   resolved "https://registry.yarnpkg.com/react-native-sectioned-multi-select/-/react-native-sectioned-multi-select-0.7.7.tgz#81b3dbfb50c72eb27e095b0e4f1c6ae34f9bf669"
   integrity sha512-+34+PgQ7K4nfdn6dAFIfInj1dXpaLOcSSaNqQeNpByQUPoFcF29YeeNpw/h+vI7aYUFnmjuD6O7DBO9eihjC8A==
+
+react-native-simple-toast@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-simple-toast/-/react-native-simple-toast-1.1.2.tgz#007de57e21986e811b4bbc2d3a6de949c0221df9"
+  integrity sha512-p13p6Db9viLBxbAlicVLD6CcrbkmqQoEjP20vY+SxbO3y5cdmY0AOn/FiMC+iuC4eQxk0SFeJm4PFRWby/ntyg==
 
 react-native-svg@^12.1.0:
   version "12.1.0"
