@@ -4,7 +4,6 @@ import {DashboardStack} from '../DashboardStack';
 import {CheckInStack} from '../CheckInStack';
 import {Center} from './Center';
 import {Text} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 
@@ -26,9 +25,9 @@ const Share = () => {
   );
 };
 export const AppTabs = (props) => {
-  const {displayName} = props;
   return (
     <Tabs.Navigator
+      tab
       screenOptions={({route}) => ({
         tabBarIcon: ({focused, color, size}) => {
           if (route.name === 'Dashboard') {
@@ -61,7 +60,7 @@ export const AppTabs = (props) => {
         },
       })}
       tabBarOptions={{
-        activeTintColor: 'tomato',
+        activeTintColor: 'orchid',
         inactiveTintColor: 'gray',
       }}>
       <Tabs.Screen name="Dashboard" component={DashboardStack} />

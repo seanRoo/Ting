@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Container, Content, List, ListItem, Left, Icon} from 'native-base';
 import {sleepArray} from '../utils';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Text} from 'react-native';
 import {Right} from './Right';
 
-const SleepList = () => {
+const SleepList = ({navigation}) => {
   const [sleep, setSleep] = useState(sleepArray);
   const handleNewSleep = (newSleep) => {
     let newSleepArray = Array.from(sleep);

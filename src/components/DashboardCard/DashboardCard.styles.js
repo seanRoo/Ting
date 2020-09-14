@@ -4,6 +4,7 @@ import {StyleSheet} from 'react-native';
 const DashboardCardStyles = StyleSheet.create({
   container: {
     padding: 5,
+    backgroundColor: 'ghostwhite',
   },
   heading: {
     fontWeight: 'bold',
