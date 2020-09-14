@@ -6,10 +6,7 @@ import {Center} from '../Center';
 
 const SoundList = ({sliderValues, setSliderValues}) => {
   return (
-    <View
-      style={{
-        width: '100%',
-      }}>
+    <View style={Styles.containerView}>
       <Text style={Styles.header}>What is the sound intensity level?</Text>
       <Center>
         <Text>
