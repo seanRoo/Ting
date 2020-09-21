@@ -1,7 +1,7 @@
 import {DB} from '../config';
 
-export const addCheckIn = async (sounds, sliderValues, date) => {
-  await DB.ref(`/checkIns/${date}`)
+export const addCheckIn = async (sounds, sliderValues, date, userId) => {
+  await DB.ref(`/checkIns/${userId}/${date}`)
     .set({sounds, sliderValues})
     .then(() => console.log('Success'))
     .catch((error) => {
