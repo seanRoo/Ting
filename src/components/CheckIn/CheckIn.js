@@ -18,6 +18,7 @@ const CheckIn = ({route, navigation}) => {
   const {
     params: {
       date: {dateString},
+      monthYearString,
     },
   } = route;
   const [sounds, setSounds] = useState();
@@ -37,6 +38,7 @@ const CheckIn = ({route, navigation}) => {
         sliderValues,
         dateString,
         currentUser,
+        monthYearString,
       ).then(() => {
         Toast.show({
           text: 'Check In Successful',
@@ -57,7 +59,7 @@ const CheckIn = ({route, navigation}) => {
 
   const getCheckIn = () => {
     const currentUser = auth().currentUser.uid;
-    DB.ref(`/checkIns/${currentUser}/${dateString}`).on(
+    DB.ref(`/checkIns/${currentUser}/${monthYearString}/${dateString}`).on(
       'value',
       (querySnapshot) => {
         let soundsResponse = {};
@@ -96,107 +98,100 @@ const CheckIn = ({route, navigation}) => {
         <ScrollView>
           <View style={Styles.containerView}>
             <View>
-              {!checkedIn && (
-                <List>
-                  <ListItem style={Styles.soundListContainer}>
-                    <SoundList sounds={sounds} setSounds={setSounds} />
-                  </ListItem>
-                  <ListItem style={Styles.soundIntensitySliderContainer}>
-                    <SoundIntensitySlider
-                      sliderValues={sliderValues}
-                      setSliderValues={setSliderValues}
-                    />
-                  </ListItem>
-                  <ListItem style={{height: 120, width: '100%'}}>
-                    <View
+              <List>
+                <ListItem style={Styles.soundListContainer}>
+                  <SoundList sounds={sounds} setSounds={setSounds} />
+                </ListItem>
+                <ListItem style={Styles.soundIntensitySliderContainer}>
+                  <SoundIntensitySlider
+                    sliderValues={sliderValues}
+                    setSliderValues={setSliderValues}
+                  />
+                </ListItem>
+                <ListItem style={{height: 120, width: '100%'}}>
+                  <View
+                    style={{
+                      width: '100%',
+                    }}>
+                    <Text
                       style={{
-                        width: '100%',
+                        fontSize: 18,
+                        paddingBottom: 14,
+                        alignSelf: 'center',
                       }}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          paddingBottom: 14,
-                          alignSelf: 'center',
-                        }}>
-                        How much sleep did you get?
+                      How much sleep did you get?
+                    </Text>
+                    <Center>
+                      <Text>
+                        {sliderValues.sleepHours}{' '}
+                        <Text style={{fontWeight: 'bold'}}>Hours</Text>
                       </Text>
-                      <Center>
-                        <Text>
-                          {sliderValues.sleepHours}{' '}
-                          <Text style={{fontWeight: 'bold'}}>Hours</Text>
-                        </Text>
-                        <Slider
-                          style={{width: 300, height: 40}}
-                          minimumValue={0}
-                          maximumValue={12}
-                          maximumTrackTintColor="#000000"
-                          value={sliderValues.sleepHours}
-                          step={0.5}
-                          onValueChange={(value) =>
-                            setSliderValues({
-                              ...sliderValues,
-                              sleepHours: value,
-                            })
-                          }
-                          minimumTrackTintColor="black"
-                          thumbTintColor="orchid"
-                        />
-                      </Center>
-                    </View>
-                  </ListItem>
-                  <ListItem style={{height: 120, width: '100%'}}>
-                    <View
+                      <Slider
+                        style={{width: 300, height: 40}}
+                        minimumValue={0}
+                        maximumValue={12}
+                        maximumTrackTintColor="#000000"
+                        value={sliderValues.sleepHours}
+                        step={0.5}
+                        onValueChange={(value) =>
+                          setSliderValues({
+                            ...sliderValues,
+                            sleepHours: value,
+                          })
+                        }
+                        minimumTrackTintColor="black"
+                        thumbTintColor="orchid"
+                      />
+                    </Center>
+                  </View>
+                </ListItem>
+                <ListItem style={{height: 120, width: '100%'}}>
+                  <View
+                    style={{
+                      width: '100%',
+                    }}>
+                    <Text
                       style={{
-                        width: '100%',
+                        fontSize: 18,
+                        paddingBottom: 14,
+                        alignSelf: 'center',
                       }}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          paddingBottom: 14,
-                          alignSelf: 'center',
-                        }}>
-                        How is your stress level?
+                      How is your stress level?
+                    </Text>
+                    <Center>
+                      <Text>
+                        {sliderValues.stressLevel} /
+                        <Text style={{fontWeight: 'bold'}}> 10</Text>
                       </Text>
-                      <Center>
-                        <Text>
-                          {sliderValues.stressLevel} /
-                          <Text style={{fontWeight: 'bold'}}> 10</Text>
-                        </Text>
-                        <Slider
-                          style={{width: 300, height: 40}}
-                          minimumValue={0}
-                          maximumValue={10}
-                          maximumTrackTintColor="#000000"
-                          value={sliderValues.stressLevel}
-                          step={0.5}
-                          onValueChange={(value) =>
-                            setSliderValues({
-                              ...sliderValues,
-                              stressLevel: value,
-                            })
-                          }
-                          minimumTrackTintColor="black"
-                          thumbTintColor="orchid"
-                        />
-                      </Center>
-                    </View>
-                  </ListItem>
-                  {!checkedIn && (
-                    <Button
-                      onPress={handleCheckIn}
-                      style={{backgroundColor: 'orchid'}}>
-                      <Center>
-                        <Text style={{color: 'white'}}>Check In!</Text>
-                      </Center>
-                    </Button>
-                  )}
-                </List>
-              )}
-              {checkedIn && (
-                <View>
-                  <Text>You are checked in</Text>
-                </View>
-              )}
+                      <Slider
+                        style={{width: 300, height: 40}}
+                        minimumValue={0}
+                        maximumValue={10}
+                        maximumTrackTintColor="#000000"
+                        value={sliderValues.stressLevel}
+                        step={0.5}
+                        onValueChange={(value) =>
+                          setSliderValues({
+                            ...sliderValues,
+                            stressLevel: value,
+                          })
+                        }
+                        minimumTrackTintColor="black"
+                        thumbTintColor="orchid"
+                      />
+                    </Center>
+                  </View>
+                </ListItem>
+                {!checkedIn && (
+                  <Button
+                    onPress={handleCheckIn}
+                    style={{backgroundColor: 'orchid'}}>
+                    <Center>
+                      <Text style={{color: 'white'}}>Check In!</Text>
+                    </Center>
+                  </Button>
+                )}
+              </List>
             </View>
           </View>
         </ScrollView>
