@@ -2,7 +2,7 @@ import React from 'react';
 import {Dimensions} from 'react-native';
 import {LineChart} from 'react-native-chart-kit';
 
-const LineChartComponent = () => {
+const LineChartComponent = ({height, width}) => {
   return (
     <LineChart
       data={{
@@ -20,11 +20,10 @@ const LineChartComponent = () => {
           },
         ],
       }}
-      width={Dimensions.get('window').width - 50} // from react-native
-      height={220}
+      width={width || Dimensions.get('window').width - 50}
+      height={height || 220}
       yAxisLabel="$"
       yAxisSuffix="k"
-      yAxisInterval={1} // optional, defaults to 1
       chartConfig={{
         backgroundColor: '#e26a00',
         backgroundGradientFrom: '#fb8c00',

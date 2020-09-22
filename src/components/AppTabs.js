@@ -6,16 +6,9 @@ import {Center} from './Center';
 import {Text} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
+import {MyDataStack} from '../MyDataStack';
 
 const Tabs = createBottomTabNavigator();
-
-export const MyData = () => {
-  return (
-    <Center>
-      <Text>My Data</Text>
-    </Center>
-  );
-};
 
 const Share = () => {
   return (
@@ -65,7 +58,7 @@ export const AppTabs = (props) => {
       }}>
       <Tabs.Screen name="Dashboard" component={DashboardStack} />
       <Tabs.Screen name="Check In" component={CheckInStack} />
-      <Tabs.Screen name="My Data" component={MyData} />
+      <Tabs.Screen name="My Data" component={MyDataStack} />
       <Tabs.Screen name="Share" component={Share} />
     </Tabs.Navigator>
   );

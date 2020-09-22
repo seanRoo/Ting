@@ -2,28 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {Calendar} from 'react-native-calendars';
 import auth from '@react-native-firebase/auth';
 import {DB} from '../../config';
-import {isEmpty} from 'lodash';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import Loading from '../Loading';
 import {Center} from '../Center';
-
-const handleMarkedDates = (data = {}) => {
-  let markedDates = [];
-  Object.keys(data).map((key) => {
-    markedDates[key] = {
-      customStyles: {
-        container: {
-          backgroundColor: 'green',
-        },
-        text: {
-          color: 'white',
-          fontWeight: 'bold',
-        },
-      },
-    };
-  });
-  return markedDates;
-};
 
 const MyCalendar = ({navigation}) => {
   const currentUser = auth().currentUser.uid;
@@ -33,6 +14,25 @@ const MyCalendar = ({navigation}) => {
   const [monthYearString, setMonthYearString] = useState();
   const [loading, setLoading] = useState(true);
 
+  const handleMarkedDates = (data = {}) => {
+    let newMarkedDates = [];
+    Object.keys(data).map((key) => {
+      newMarkedDates[key] = {
+        customStyles: {
+          container: {
+            backgroundColor: 'green',
+          },
+          text: {
+            color: 'white',
+            fontWeight: 'bold',
+          },
+        },
+      };
+    });
+    setMarkedDates(newMarkedDates);
+    setLoading(false);
+  };
+
   const getCheckIns = (userId, monthYearValue) => {
     try {
       DB.ref(`/checkIns/${userId}/${monthYearValue}`).on(
@@ -40,6 +40,7 @@ const MyCalendar = ({navigation}) => {
         (querySnapshot) => {
           let data = querySnapshot.val() ? querySnapshot.val() : {};
           setCheckIns(data);
+          handleMarkedDates(data);
         },
       );
     } catch (error) {
@@ -48,12 +49,14 @@ const MyCalendar = ({navigation}) => {
   };
 
   const handleMonthUpdate = (date) => {
+    setLoading(true);
     const updatedDate = new Date(date);
+    const newMonthYearString = `${updatedDate.getFullYear()}-${
+      updatedDate.getMonth() + 1
+    }`;
     setCurrentCalendarDate(updatedDate);
-    setMonthYearString(
-      `${updatedDate.getFullYear()}-${updatedDate.getMonth() + 1}`,
-    );
-    getCheckIns(currentUser, monthYearString);
+    setMonthYearString(newMonthYearString);
+    getCheckIns(currentUser, newMonthYearString);
   };
 
   useEffect(() => {
@@ -67,16 +70,10 @@ const MyCalendar = ({navigation}) => {
     if (!checkIns && monthYearString) {
       getCheckIns(currentUser, monthYearString);
     }
-    if (!markedDates && checkIns) {
-      setMarkedDates(handleMarkedDates(checkIns));
-    }
-    if (!isEmpty(checkIns) && markedDates) {
-      setLoading(false);
-    }
   }, [markedDates, currentCalendarDate, monthYearString, checkIns]);
   return (
     <View>
-      {checkIns && markedDates && (
+      {checkIns && markedDates && !loading && (
         <Calendar
           onDayPress={(day) =>
             navigation.navigate('Check In', {
@@ -92,7 +89,7 @@ const MyCalendar = ({navigation}) => {
           onMonthChange={(date) => handleMonthUpdate(date.dateString)}
         />
       )}
-      {loading && (
+      {loading && !markedDates && !checkIns && (
         <Center>
           <View>
             <Loading />
