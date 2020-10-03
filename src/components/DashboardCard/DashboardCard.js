@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, StyleSheet} from 'react-native';
+import {Text} from 'react-native';
 import {Card, CardItem, Body} from 'native-base';
 import DashboardCardFooter from './DashboardCardFooter';
 import Styles from './DashboardCard.styles';
