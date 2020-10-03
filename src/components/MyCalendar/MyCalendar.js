@@ -20,10 +20,10 @@ const MyCalendar = ({navigation}) => {
       newMarkedDates[key] = {
         customStyles: {
           container: {
-            backgroundColor: 'green',
+            backgroundColor: '#C3FDB8',
           },
           text: {
-            color: 'white',
+            color: 'black',
             fontWeight: 'bold',
           },
         },
@@ -72,31 +72,33 @@ const MyCalendar = ({navigation}) => {
     }
   }, [markedDates, currentCalendarDate, monthYearString, checkIns]);
   return (
-    <View>
+    <>
       {checkIns && markedDates && !loading && (
-        <Calendar
-          onDayPress={(day) =>
-            navigation.navigate('Check In', {
-              date: day,
-              monthYearString,
-            })
-          }
-          hideArrows={false}
-          hideExtraDays={true}
-          markedDates={markedDates}
-          markingType={'custom'}
-          current={currentCalendarDate}
-          onMonthChange={(date) => handleMonthUpdate(date.dateString)}
-        />
+        <View>
+          <Calendar
+            onDayPress={(day) =>
+              navigation.navigate('Check In', {
+                date: day,
+                monthYearString,
+              })
+            }
+            hideArrows={false}
+            hideExtraDays={true}
+            markedDates={markedDates}
+            markingType={'custom'}
+            current={currentCalendarDate}
+            onMonthChange={(date) => handleMonthUpdate(date.dateString)}
+          />
+        </View>
       )}
-      {loading && !markedDates && !checkIns && (
+      {loading && (
         <Center>
           <View>
             <Loading />
           </View>
         </Center>
       )}
-    </View>
+    </>
   );
 };
 

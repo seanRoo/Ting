@@ -1,61 +1,82 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {Center} from '../Center';
-import {Button, Segment} from 'native-base';
+import {View, Text} from 'react-native';
+import {Button, Segment, Card, CardItem} from 'native-base';
 import LineChart from '../LineChart';
+import PieChart from '../PieChart';
+import GraphViewDropdown from './GraphViewDropdown';
+import MyDataStyles from './MyData.styles';
+
 const MyData = () => {
   const [buttonState, setButtonState] = useState({
-    primary: true,
-    secondary: false,
+    week: true,
+    month: false,
+    year: false,
   });
+  const [graphView, setGraphView] = useState('pie');
+
   return (
     <View style={MyDataStyles.container}>
       <Segment style={MyDataStyles.buttonContainer}>
         <Button
           onPress={() =>
             setButtonState({
-              primary: true,
-              secondary: false,
+              week: true,
+              month: false,
+              year: false,
             })
           }
-          active={buttonState.primary}
+          active={buttonState.week}
           first
           style={MyDataStyles.buttons}>
-          <Text>Primary</Text>
+          <Text>Week</Text>
         </Button>
         <Button
           onPress={() =>
             setButtonState({
-              primary: false,
-              secondary: true,
+              week: false,
+              month: true,
+              year: false,
             })
           }
-          active={buttonState.secondary}
+          active={buttonState.month}
+          style={MyDataStyles.buttons}>
+          <Text>Month</Text>
+        </Button>
+        <Button
+          onPress={() =>
+            setButtonState({
+              week: false,
+              month: false,
+              year: true,
+            })
+          }
+          active={buttonState.year}
           last
           style={MyDataStyles.buttons}>
-          <Text>Success</Text>
+          <Text>Year</Text>
         </Button>
       </Segment>
       <View style={MyDataStyles.graphContainer}>
-        <LineChart height={350} width={350} />
+        <View style={MyDataStyles.graphViewDropdown}>
+          <Text style={{fontSize: 20}}>Graph View</Text>
+          <GraphViewDropdown
+            setGraphView={setGraphView}
+            graphView={graphView}
+          />
+        </View>
+        <View style={{alignSelf: 'center'}}>
+          {graphView === 'line' && <LineChart height={350} />}
+          {graphView === 'pie' && (
+            <Card>
+              <CardItem>
+                <PieChart />
+              </CardItem>
+            </Card>
+          )}
+        </View>
       </View>
     </View>
   );
 };
-
-const MyDataStyles = StyleSheet.create({
-  container: {flex: 1, flexDirection: 'column', marginTop: 20},
-  buttonContainer: {
-    marginBottom: 30,
-  },
-  buttons: {
-    height: 35,
-    padding: 20,
-  },
-  graphContainer: {
-    width: '100%',
-    alignItems: 'center',
-  },
-});
 
 export default MyData;
