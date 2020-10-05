@@ -1,14 +1,16 @@
 import React from 'react';
-import {CheckBox} from 'native-base';
-import {Right} from '../Right';
-import {Text, View} from 'react-native';
-import {cloneDeep} from 'lodash';
+import { CheckBox } from 'native-base';
+import { Right } from '../Right';
+import { Text, View } from 'react-native';
+import { cloneDeep } from 'lodash';
 import Styles from './SoundList.styles';
 
-const SoundList = ({sounds, setSounds}) => {
-  const handleNewSound = (name) => {
+const SoundList = ({ sounds, setSounds }) => {
+  const handleNewSound = (soundObject) => {
     let newSoundArray = cloneDeep(sounds);
-    const clickedItem = newSoundArray.get(name);
+    const clickedItem = newSoundArray.find(
+      (elementArray) => elementArray.name === soundObject.name,
+    );
     if (clickedItem.checked) {
       clickedItem.checked = false;
     } else {
@@ -21,18 +23,18 @@ const SoundList = ({sounds, setSounds}) => {
       <Text style={Styles.header}>What are you hearing?</Text>
       <View style={Styles.listContainer}>
         <View style={Styles.listRow}>
-          {Array.from(sounds).map((sound, index) => {
+          {sounds.map((sound, index) => {
             if (index < 4) {
               return (
                 <View style={Styles.listItem}>
-                  <Text>{sound[1].name}</Text>
+                  <Text>{sound.name}</Text>
                   <Right>
                     <CheckBox
                       style={Styles.checkbox}
                       color="orchid"
-                      checked={sound[1].checked}
+                      checked={sound.checked}
                       onPress={() => {
-                        handleNewSound(sound[0]);
+                        handleNewSound(sound);
                       }}
                     />
                   </Right>
@@ -43,18 +45,18 @@ const SoundList = ({sounds, setSounds}) => {
         </View>
         <View style={Styles.divider} />
         <View style={Styles.listRow}>
-          {Array.from(sounds).map((sound, index) => {
+          {sounds.map((sound, index) => {
             if (index >= 4) {
               return (
                 <View style={Styles.listItem}>
-                  <Text>{sound[1].name}</Text>
+                  <Text>{sound.name}</Text>
                   <Right>
                     <CheckBox
                       style={Styles.checkbox}
                       color="orchid"
-                      checked={sound[1].checked}
+                      checked={sound.checked}
                       onPress={() => {
-                        handleNewSound(sound[0]);
+                        handleNewSound(sound);
                       }}
                     />
                   </Right>
