@@ -1,12 +1,12 @@
-import React, {useContext, useState} from 'react';
-import {Text, Form, Item, Input, Label, Button, Icon} from 'native-base';
-import {StyleSheet, View} from 'react-native';
-import {AuthContext} from '../AuthProvider';
-import {Center} from './Center';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import React, { useContext, useState } from 'react';
+import { Text, Form, Item, Input, Label, Button, Icon } from 'native-base';
+import { StyleSheet, View } from 'react-native';
+import { AuthContext } from '../AuthProvider';
+import { Center } from './Center';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const Register = ({navigation: {navigate}}) => {
-  const {register, error, setError} = useContext(AuthContext);
+const Register = ({ navigation: { navigate } }) => {
+  const { register, error, setError } = useContext(AuthContext);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [userName, setUserName] = useState();
@@ -51,7 +51,8 @@ const Register = ({navigation: {navigate}}) => {
         <Item
           style={RegisterStyles.inputFields}
           floatingLabel
-          error={emailFieldError}>
+          error={emailFieldError}
+        >
           <Label>Email</Label>
           <Input
             onChangeText={(email) => handleTextChange(email)}
@@ -100,14 +101,16 @@ const Register = ({navigation: {navigate}}) => {
         <View>
           <Button
             onPress={() => handleRegister(email, password, userName)}
-            style={RegisterStyles.registerButton}>
+            style={RegisterStyles.registerButton}
+          >
             <Center>
               <Text>Register</Text>
             </Center>
           </Button>
           <TouchableOpacity
             style={RegisterStyles.loginButton}
-            onPress={() => navigate('Log in')}>
+            onPress={() => navigate('Log in')}
+          >
             <Text>Already a User? Sign In Here</Text>
           </TouchableOpacity>
         </View>
@@ -145,7 +148,7 @@ const RegisterStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  registerErrorText: {alignSelf: 'center', paddingTop: 10, color: 'red'},
+  registerErrorText: { alignSelf: 'center', paddingTop: 10, color: 'red' },
 });
 
 export default Register;

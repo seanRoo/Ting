@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const SoundIntensitySliderStyles = StyleSheet.create({
   header: {
@@ -6,8 +6,8 @@ const SoundIntensitySliderStyles = StyleSheet.create({
     paddingBottom: 14,
     alignSelf: 'center',
   },
-  bold: {fontWeight: 'bold'},
-  slider: {width: 300, height: 40},
+  bold: { fontWeight: 'bold' },
+  slider: { width: 300, height: 40 },
   containerView: {
     width: '100%',
   },

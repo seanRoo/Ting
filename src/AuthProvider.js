@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import auth from '@react-native-firebase/auth';
 
 export const AuthContext = React.createContext({});
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -47,7 +47,8 @@ export const AuthProvider = ({children}) => {
             setLoading(false);
           }
         },
-      }}>
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

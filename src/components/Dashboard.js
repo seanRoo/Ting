@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
-import {Text} from 'react-native';
-import {Container, Content, Button, Toast, Root} from 'native-base';
+import React, { useEffect } from 'react';
+import { Text } from 'react-native';
+import { Container, Content, Button, Toast, Root } from 'native-base';
 import LineChartComponent from './LineChart';
 import DashboardCard from './DashboardCard/DashboardCard';
 import Styles from './DashboardCard/DashboardCard.styles';
 
-const Dashboard = ({navigation}) => {
+const Dashboard = ({ navigation }) => {
   return (
     <Container style={Styles.container}>
       <Content>

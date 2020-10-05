@@ -1,8 +1,8 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const SoundListStyles = StyleSheet.create({
-  header: {fontSize: 18, alignSelf: 'center'},
-  listContainer: {width: '100%', flexDirection: 'row', marginTop: 25},
+  header: { fontSize: 18, alignSelf: 'center' },
+  listContainer: { width: '100%', flexDirection: 'row', marginTop: 25 },
   listRow: {
     width: '45%',
     flexDirection: 'column',
@@ -18,7 +18,7 @@ const SoundListStyles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 30,
   },
-  checkbox: {width: 25},
+  checkbox: { width: 25 },
 });
 
 export default SoundListStyles;

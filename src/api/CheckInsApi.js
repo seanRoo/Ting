@@ -1,4 +1,4 @@
-import {DB} from '../config';
+import { DB } from '../config';
 
 export const addCheckIn = async (
   sounds,
@@ -8,7 +8,7 @@ export const addCheckIn = async (
   monthYearString,
 ) => {
   await DB.ref(`/checkIns/${userId}/${monthYearString}/${date}`)
-    .set({sounds, sliderValues})
+    .set({ sounds, sliderValues })
     .then(() => console.log('Success'))
     .catch((error) => {
       throw error;

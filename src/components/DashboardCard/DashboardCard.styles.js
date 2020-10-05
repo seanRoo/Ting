@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const DashboardCardStyles = StyleSheet.create({
   container: {
@@ -9,8 +9,8 @@ const DashboardCardStyles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
   },
-  bodyText: {fontSize: 20},
-  bold: {fontWeight: 'bold'},
+  bodyText: { fontSize: 20 },
+  bold: { fontWeight: 'bold' },
   footer: {
     paddingRight: 0,
     height: 55,
@@ -29,7 +29,7 @@ const DashboardCardStyles = StyleSheet.create({
     fontSize: 18,
     color: 'black',
   },
-  cardBody: {paddingLeft: 5, paddingRight: 5},
+  cardBody: { paddingLeft: 5, paddingRight: 5 },
 });
 
 export default DashboardCardStyles;

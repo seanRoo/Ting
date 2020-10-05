@@ -1,12 +1,12 @@
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {DashboardStack} from '../DashboardStack';
-import {CheckInStack} from '../CheckInStack';
-import {Center} from './Center';
-import {Text} from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { DashboardStack } from '../DashboardStack';
+import { CheckInStack } from '../CheckInStack';
+import { Center } from './Center';
+import { Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
-import {MyDataStack} from '../MyDataStack';
+import { MyDataStack } from '../MyDataStack';
 
 const Tabs = createBottomTabNavigator();
 
@@ -21,8 +21,8 @@ export const AppTabs = (props) => {
   return (
     <Tabs.Navigator
       tab
-      screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
           if (route.name === 'Dashboard') {
             return (
               <MaterialCommunityIcons
@@ -55,7 +55,8 @@ export const AppTabs = (props) => {
       tabBarOptions={{
         activeTintColor: 'orchid',
         inactiveTintColor: 'gray',
-      }}>
+      }}
+    >
       <Tabs.Screen name="Dashboard" component={DashboardStack} />
       <Tabs.Screen name="Check In" component={CheckInStack} />
       <Tabs.Screen name="My Data" component={MyDataStack} />

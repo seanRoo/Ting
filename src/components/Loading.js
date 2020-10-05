@@ -1,6 +1,6 @@
 import React from 'react';
-import {ActivityIndicator} from 'react-native';
-import {Center} from './Center';
+import { ActivityIndicator } from 'react-native';
+import { Center } from './Center';
 
 const Loading = () => {
   return (

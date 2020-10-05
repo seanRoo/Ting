@@ -1,10 +1,10 @@
 import React from 'react';
-import {Dimensions, View} from 'react-native';
-import {LineChart} from 'react-native-chart-kit';
+import { Dimensions, View } from 'react-native';
+import { LineChart } from 'react-native-chart-kit';
 
-const LineChartComponent = ({height, width}) => {
+const LineChartComponent = ({ height, width }) => {
   return (
-    <View style={{alignSelf: 'center'}}>
+    <View style={{ alignSelf: 'center' }}>
       <LineChart
         data={{
           labels: [

@@ -1,6 +1,6 @@
 import React from 'react';
-import {Providers} from './src/Providers';
-import {Root} from 'native-base';
+import { Providers } from './src/Providers';
+import { Root } from 'native-base';
 
 const App = () => {
   return (

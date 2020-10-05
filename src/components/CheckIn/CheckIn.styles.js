@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const SoundListStyles = StyleSheet.create({
   containerView: {
@@ -8,8 +8,8 @@ const SoundListStyles = StyleSheet.create({
     width: '100%',
     marginTop: 5,
   },
-  soundListContainer: {height: 'auto', flexDirection: 'column'},
-  soundIntensitySliderContainer: {height: 120, width: '100%'},
+  soundListContainer: { height: 'auto', flexDirection: 'column' },
+  soundIntensitySliderContainer: { height: 120, width: '100%' },
 });
 
 export default SoundListStyles;

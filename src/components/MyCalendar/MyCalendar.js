@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {Calendar} from 'react-native-calendars';
+import React, { useEffect, useState } from 'react';
+import { Calendar } from 'react-native-calendars';
 import auth from '@react-native-firebase/auth';
-import {DB} from '../../config';
-import {View} from 'react-native';
+import { DB } from '../../config';
+import { View } from 'react-native';
 import Loading from '../Loading';
-import {Center} from '../Center';
+import { Center } from '../Center';
 
-const MyCalendar = ({navigation}) => {
+const MyCalendar = ({ navigation }) => {
   const currentUser = auth().currentUser.uid;
   const [markedDates, setMarkedDates] = useState();
   const [currentCalendarDate, setCurrentCalendarDate] = useState(new Date());
