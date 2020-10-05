@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
-import {Text, View} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Styles from './SoundIntensitySlider.styles';
-import {Center} from '../Center';
+import { Center } from '../Center';
 
 const SliderComponent = ({
   sliderValue,

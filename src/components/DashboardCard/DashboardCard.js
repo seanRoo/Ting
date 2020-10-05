@@ -1,11 +1,11 @@
 import React from 'react';
-import {Text} from 'react-native';
-import {Card, CardItem, Body} from 'native-base';
+import { Text } from 'react-native';
+import { Card, CardItem, Body } from 'native-base';
 import DashboardCardFooter from './DashboardCardFooter';
 import Styles from './DashboardCard.styles';
 
 const DashboardCard = (props) => {
-  const {headerText, bodyText, handleButtonPress, buttonText} = props;
+  const { headerText, bodyText, handleButtonPress, buttonText } = props;
   return (
     <Card>
       <CardItem header>

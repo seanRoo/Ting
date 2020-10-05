@@ -1,7 +1,7 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 const MyDataStyles = StyleSheet.create({
-  container: {flex: 1, flexDirection: 'column', marginTop: 20},
+  container: { flex: 1, flexDirection: 'column', marginTop: 20 },
   buttonContainer: {
     marginBottom: 15,
     backgroundColor: 'transparent',
@@ -13,7 +13,7 @@ const MyDataStyles = StyleSheet.create({
   graphContainer: {
     width: '100%',
   },
-  graphViewDropdown: {marginLeft: 10, marginBottom: 20},
+  graphViewDropdown: { marginLeft: 10, marginBottom: 20 },
   menuOption: {
     height: 40,
     justifyContent: 'center',

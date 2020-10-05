@@ -1,18 +1,18 @@
-import React, {useContext} from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {TouchableOpacity, Text} from 'react-native';
-import {AuthContext} from './AuthProvider';
-import {Icon} from 'native-base';
-import {MyData} from './components/AppTabs';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {CheckInStack} from './CheckInStack';
+import React, { useContext } from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { TouchableOpacity, Text } from 'react-native';
+import { AuthContext } from './AuthProvider';
+import { Icon } from 'native-base';
+import { MyData } from './components/AppTabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { CheckInStack } from './CheckInStack';
 import Dashboard from './components/Dashboard';
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 
 export const DashboardStack = (props) => {
-  const {logout} = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
   return (
     <Stack.Navigator initialRouteName="Dashboard">
       <Stack.Screen
@@ -21,14 +21,14 @@ export const DashboardStack = (props) => {
         options={{
           headerRight: () => {
             return (
-              <TouchableOpacity onPress={logout} style={{paddingRight: 20}}>
+              <TouchableOpacity onPress={logout} style={{ paddingRight: 20 }}>
                 <Text>Logout</Text>
               </TouchableOpacity>
             );
           },
           headerLeft: () => {
             return (
-              <TouchableOpacity style={{paddingLeft: 20}}>
+              <TouchableOpacity style={{ paddingLeft: 20 }}>
                 <Icon name="person-circle" />
               </TouchableOpacity>
             );

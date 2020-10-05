@@ -1,10 +1,10 @@
 import React from 'react';
-import {Text} from 'react-native';
-import {Left} from 'native-base';
-import {Menu, MenuOptions, MenuTrigger} from 'react-native-popup-menu';
-import {Icon} from 'native-base';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {Right} from '../Right';
+import { Text } from 'react-native';
+import { Left } from 'native-base';
+import { Menu, MenuOptions, MenuTrigger } from 'react-native-popup-menu';
+import { Icon } from 'native-base';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Right } from '../Right';
 import MyDataStyles from './MyData.styles';
 import MenuOption from './MenuOption';
 
@@ -22,15 +22,16 @@ const charts = [
     value: 'bar',
   },
 ];
-const GraphViewDropdown = ({graphView, setGraphView}) => {
+const GraphViewDropdown = ({ graphView, setGraphView }) => {
   return (
     <Menu
       style={{
         flexDirection: 'row',
         marginTop: 4,
-      }}>
+      }}
+    >
       <MenuTrigger
-        style={{flexDirection: 'row'}}
+        style={{ flexDirection: 'row' }}
         customStyles={{
           TriggerTouchableComponent: TouchableOpacity,
           triggerTouchable: {
@@ -47,10 +48,11 @@ const GraphViewDropdown = ({graphView, setGraphView}) => {
           triggerWrapper: {
             width: '100%',
           },
-        }}>
-        <Text style={{fontSize: 18}}>{graphView}</Text>
+        }}
+      >
+        <Text style={{ fontSize: 18 }}>{graphView}</Text>
         <Right>
-          <Icon style={{fontSize: 25}} name="caret-down" />
+          <Icon style={{ fontSize: 25 }} name="caret-down" />
         </Right>
       </MenuTrigger>
       <MenuOptions>

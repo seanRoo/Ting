@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import {Container, Content, List, ListItem, Left, Icon} from 'native-base';
-import {sleepArray} from '../utils';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {Text} from 'react-native';
-import {Right} from './Right';
+import React, { useState, useEffect } from 'react';
+import { Container, Content, List, ListItem, Left, Icon } from 'native-base';
+import { sleepArray } from '../utils';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Text } from 'react-native';
+import { Right } from './Right';
 
-const SleepList = ({navigation}) => {
+const SleepList = ({ navigation }) => {
   const [sleep, setSleep] = useState(sleepArray);
   const handleNewSleep = (newSleep) => {
     let newSleepArray = Array.from(sleep);
@@ -25,13 +25,16 @@ const SleepList = ({navigation}) => {
           {sleepArray.map((sleep) => {
             return (
               <TouchableOpacity onPress={() => handleNewSleep(sleep)}>
-                <ListItem style={{height: 60}}>
+                <ListItem style={{ height: 60 }}>
                   <Left>
-                    <Text style={{fontSize: 18}}>{sleep.name}</Text>
+                    <Text style={{ fontSize: 18 }}>{sleep.name}</Text>
                   </Left>
                   <Right>
                     {sleep.checked && (
-                      <Icon style={{color: 'green'}} name="checkmark-outline" />
+                      <Icon
+                        style={{ color: 'green' }}
+                        name="checkmark-outline"
+                      />
                     )}
                   </Right>
                 </ListItem>

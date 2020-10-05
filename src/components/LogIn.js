@@ -1,12 +1,12 @@
-import React, {useContext, useState} from 'react';
-import {Text, Form, Item, Input, Label, Button, Icon} from 'native-base';
-import {StyleSheet, View} from 'react-native';
-import {AuthContext} from '../AuthProvider';
-import {Center} from './Center';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import React, { useContext, useState } from 'react';
+import { Text, Form, Item, Input, Label, Button, Icon } from 'native-base';
+import { StyleSheet, View } from 'react-native';
+import { AuthContext } from '../AuthProvider';
+import { Center } from './Center';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const Login = ({navigation: {navigate}}) => {
-  const {login, error, setError} = useContext(AuthContext);
+const Login = ({ navigation: { navigate } }) => {
+  const { login, error, setError } = useContext(AuthContext);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [emptyStringError, setEmptyStringError] = useState(false);
@@ -38,7 +38,8 @@ const Login = ({navigation: {navigate}}) => {
         <Item
           style={LoginStyles.inputFields}
           floatingLabel
-          error={emailFieldError}>
+          error={emailFieldError}
+        >
           <Label>Email</Label>
           <Input
             onChangeText={(email) => handleTextChange(email)}
@@ -92,7 +93,8 @@ const Login = ({navigation: {navigate}}) => {
           </Button>
           <TouchableOpacity
             style={LoginStyles.registerButton}
-            onPress={() => navigate('Register')}>
+            onPress={() => navigate('Register')}
+          >
             <Text>New User? Register Here</Text>
           </TouchableOpacity>
         </View>
@@ -124,7 +126,7 @@ const LoginStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  loginErrorText: {alignSelf: 'center', paddingTop: 10, color: 'red'},
+  loginErrorText: { alignSelf: 'center', paddingTop: 10, color: 'red' },
 });
 
 export default Login;
