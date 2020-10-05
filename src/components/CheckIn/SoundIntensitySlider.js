@@ -4,27 +4,35 @@ import Slider from '@react-native-community/slider';
 import Styles from './SoundIntensitySlider.styles';
 import {Center} from '../Center';
 
-const SoundList = ({sliderValues, setSliderValues}) => {
+const SliderComponent = ({
+  sliderValue,
+  setSliderValue,
+  headerText,
+  isHours = false,
+}) => {
   return (
     <View style={Styles.containerView}>
-      <Text style={Styles.header}>What is the sound intensity level?</Text>
+      <Text style={Styles.header}>{headerText}</Text>
       <Center>
-        <Text>
-          {sliderValues.soundIntensity} / <Text style={Styles.bold}> 10</Text>
-        </Text>
+        {!isHours && (
+          <Text>
+            {sliderValue} / <Text style={Styles.bold}>10</Text>
+          </Text>
+        )}
+        {isHours && (
+          <Text>
+            {sliderValue}
+            <Text style={Styles.bold}> Hours</Text>
+          </Text>
+        )}
         <Slider
           style={Styles.slider}
           minimumValue={0}
           maximumValue={10}
           maximumTrackTintColor="#000000"
-          value={sliderValues.soundIntensity}
+          value={sliderValue}
           step={0.5}
-          onValueChange={(value) =>
-            setSliderValues({
-              ...sliderValues,
-              soundIntensity: value,
-            })
-          }
+          onValueChange={setSliderValue}
           minimumTrackTintColor="black"
           thumbTintColor="orchid"
         />
@@ -33,4 +41,4 @@ const SoundList = ({sliderValues, setSliderValues}) => {
   );
 };
 
-export default SoundList;
+export default SliderComponent;

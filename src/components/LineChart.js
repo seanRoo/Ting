@@ -7,10 +7,29 @@ const LineChartComponent = ({height, width}) => {
     <View style={{alignSelf: 'center'}}>
       <LineChart
         data={{
-          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+          labels: [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec',
+          ],
           datasets: [
             {
               data: [
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
                 Math.random() * 100,
                 Math.random() * 100,
                 Math.random() * 100,
@@ -26,9 +45,9 @@ const LineChartComponent = ({height, width}) => {
         yAxisLabel="$"
         yAxisSuffix="k"
         chartConfig={{
-          // backgroundColor: '#e26a00',
-          backgroundGradientFrom: '#fb8c00',
-          backgroundGradientTo: '#ffa726',
+          //backgroundColor: '#e26a00',
+          backgroundGradientFrom: 'orchid',
+          backgroundGradientTo: 'black',
           decimalPlaces: 2, // optional, defaults to 2dp
           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,

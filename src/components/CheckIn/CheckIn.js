@@ -1,23 +1,23 @@
-import React, {useState, useEffect} from 'react';
-import {List, ListItem, Button, Toast} from 'native-base';
-import {Text, View} from 'react-native';
-import {Center} from '../Center';
-import {addCheckIn} from '../../api/CheckInsApi';
-import {soundsListArray} from '../../utils';
-import Slider from '@react-native-community/slider';
-import {isEmpty} from 'lodash';
-import {DB} from '../../config';
+import React, { useState, useEffect } from 'react';
+import { List, ListItem, Button, Toast } from 'native-base';
+import { Text, View } from 'react-native';
+import { Center } from '../Center';
+import { addCheckIn } from '../../api/CheckInsApi';
+import { soundsListArray } from '../../utils';
+import { cloneDeep } from 'lodash';
+import { isEmpty } from 'lodash';
+import { DB } from '../../config';
 import Loading from '../Loading';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import SoundList from './SoundList';
-import SoundIntensitySlider from './SoundIntensitySlider';
+import CustomSlider from './SoundIntensitySlider';
 import Styles from './CheckIn.styles';
 import auth from '@react-native-firebase/auth';
 
-const CheckIn = ({route, navigation}) => {
+const CheckIn = ({ route, navigation }) => {
   const {
     params: {
-      date: {dateString},
+      date: { dateString },
       monthYearString,
     },
   } = route;
@@ -34,7 +34,7 @@ const CheckIn = ({route, navigation}) => {
     try {
       const currentUser = auth().currentUser.uid;
       addCheckIn(
-        Object.fromEntries(sounds),
+        getCheckedSounds(sounds),
         sliderValues,
         dateString,
         currentUser,
@@ -75,13 +75,31 @@ const CheckIn = ({route, navigation}) => {
             sleepHours: slidersResponse.sleepHours,
             stressLevel: slidersResponse.stressLevel,
           });
-          setSounds(new Map(Object.entries(soundsResponse)));
+          const soundArrayClone = cloneDeep(soundsListArray);
+          soundArrayClone.map((sound) => {
+            const checkedSound = soundsResponse.find(
+              (element) => element === sound.name,
+            );
+            if (checkedSound) {
+              sound.checked = true;
+            }
+            return sound;
+          });
+          setSounds(soundArrayClone);
         } else {
           setCheckedIn(false);
-          setSounds(new Map(Object.entries(soundsListArray)));
+          setSounds(soundsListArray);
         }
       },
     );
+  };
+
+  const getCheckedSounds = (soundArray) => {
+    const checkedSounds = soundArray.filter(
+      (element) => element.checked === true,
+    );
+    const soundNames = checkedSounds.map((sound) => sound.name);
+    return soundNames;
   };
 
   useEffect(() => {
@@ -103,91 +121,49 @@ const CheckIn = ({route, navigation}) => {
                   <SoundList sounds={sounds} setSounds={setSounds} />
                 </ListItem>
                 <ListItem style={Styles.soundIntensitySliderContainer}>
-                  <SoundIntensitySlider
-                    sliderValues={sliderValues}
-                    setSliderValues={setSliderValues}
+                  <CustomSlider
+                    sliderValue={sliderValues.soundIntensity}
+                    setSliderValue={(value) =>
+                      setSliderValues({
+                        ...sliderValues,
+                        soundIntensity: value,
+                      })
+                    }
+                    headerText="What is the sound intensity level?"
                   />
                 </ListItem>
-                <ListItem style={{height: 120, width: '100%'}}>
-                  <View
-                    style={{
-                      width: '100%',
-                    }}>
-                    <Text
-                      style={{
-                        fontSize: 18,
-                        paddingBottom: 14,
-                        alignSelf: 'center',
-                      }}>
-                      How much sleep did you get?
-                    </Text>
-                    <Center>
-                      <Text>
-                        {sliderValues.sleepHours}{' '}
-                        <Text style={{fontWeight: 'bold'}}>Hours</Text>
-                      </Text>
-                      <Slider
-                        style={{width: 300, height: 40}}
-                        minimumValue={0}
-                        maximumValue={12}
-                        maximumTrackTintColor="#000000"
-                        value={sliderValues.sleepHours}
-                        step={0.5}
-                        onValueChange={(value) =>
-                          setSliderValues({
-                            ...sliderValues,
-                            sleepHours: value,
-                          })
-                        }
-                        minimumTrackTintColor="black"
-                        thumbTintColor="orchid"
-                      />
-                    </Center>
-                  </View>
+                <ListItem style={Styles.soundIntensitySliderContainer}>
+                  <CustomSlider
+                    sliderValue={sliderValues.sleepHours}
+                    setSliderValue={(value) =>
+                      setSliderValues({
+                        ...sliderValues,
+                        sleepHours: value,
+                      })
+                    }
+                    isHours
+                    headerText="How much sleep did you get?"
+                  />
                 </ListItem>
-                <ListItem style={{height: 120, width: '100%'}}>
-                  <View
-                    style={{
-                      width: '100%',
-                    }}>
-                    <Text
-                      style={{
-                        fontSize: 18,
-                        paddingBottom: 14,
-                        alignSelf: 'center',
-                      }}>
-                      How is your stress level?
-                    </Text>
-                    <Center>
-                      <Text>
-                        {sliderValues.stressLevel} /
-                        <Text style={{fontWeight: 'bold'}}> 10</Text>
-                      </Text>
-                      <Slider
-                        style={{width: 300, height: 40}}
-                        minimumValue={0}
-                        maximumValue={10}
-                        maximumTrackTintColor="#000000"
-                        value={sliderValues.stressLevel}
-                        step={0.5}
-                        onValueChange={(value) =>
-                          setSliderValues({
-                            ...sliderValues,
-                            stressLevel: value,
-                          })
-                        }
-                        minimumTrackTintColor="black"
-                        thumbTintColor="orchid"
-                      />
-                    </Center>
-                  </View>
+                <ListItem style={Styles.soundIntensitySliderContainer}>
+                  <CustomSlider
+                    sliderValue={sliderValues.stressLevel}
+                    setSliderValue={(value) =>
+                      setSliderValues({
+                        ...sliderValues,
+                        stressLevel: value,
+                      })
+                    }
+                    headerText="How is your stress level?"
+                  />
                 </ListItem>
                 {!checkedIn && (
                   <Button
                     onPress={handleCheckIn}
-                    style={{backgroundColor: 'orchid'}}>
+                    style={{ backgroundColor: 'orchid' }}
+                  >
                     <Center>
-                      <Text style={{color: 'white'}}>Check In!</Text>
+                      <Text style={{ color: 'white' }}>Check In!</Text>
                     </Center>
                   </Button>
                 )}

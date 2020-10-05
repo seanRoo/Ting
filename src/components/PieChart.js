@@ -1,44 +1,65 @@
 import React from 'react';
-import {PieChart} from 'react-native-chart-kit';
-import {Dimensions} from 'react-native';
+import { PieChart } from 'react-native-chart-kit';
+import { Dimensions } from 'react-native';
 
-const data = [
-  {
-    name: 'Seoul',
-    population: 30,
-    color: 'rgba(131, 167, 234, 1)',
-    legendFontColor: '#7F7F7F',
-    legendFontSize: 15,
-  },
-  {
-    name: 'Toronto',
-    population: 10,
-    color: '#F00',
-    legendFontColor: '#7F7F7F',
-    legendFontSize: 15,
-  },
-  {
-    name: 'Beijing',
-    population: 20,
-    color: 'red',
-    legendFontColor: '#7F7F7F',
-    legendFontSize: 15,
-  },
-  {
-    name: 'New York',
-    population: 20,
-    color: '#ffffff',
-    legendFontColor: '#7F7F7F',
-    legendFontSize: 15,
-  },
-  {
-    name: 'Moscow',
-    population: 20,
-    color: 'rgb(0, 0, 255)',
-    legendFontColor: '#7F7F7F',
-    legendFontSize: 15,
-  },
-];
+// const data = [
+//   {
+//     name: 'Buzzing',
+//     population: 25,
+//     color: 'orchid',
+//     legendFontColor: 'black',
+//     legendFontSize: 15,
+//   },
+//   {
+//     name: 'Hissing',
+//     population: 10,
+//     color: 'blue',
+//     legendFontColor: 'black',
+//     legendFontSize: 15,
+//   },
+//   {
+//     name: 'Ringing',
+//     population: 20,
+//     color: 'red',
+//     legendFontColor: 'black',
+//     legendFontSize: 15,
+//   },
+//   {
+//     name: 'Hum',
+//     population: 20,
+//     color: 'green',
+//     legendFontColor: 'black',
+//     legendFontSize: 15,
+//   },
+//   {
+//     name: 'Music',
+//     population: 15,
+//     color: 'yellow',
+//     legendFontColor: 'black',
+//     legendFontSize: 15,
+//   },
+//   {
+//     name: 'Whistle',
+//     population: 4,
+//     color: 'orange',
+//     legendFontColor: 'black',
+//     legendFontSize: 15,
+//   },
+//   {
+//     name: 'Pulsating',
+//     population: 5,
+//     color: 'grey',
+//     legendFontColor: 'black',
+//     legendFontSize: 15,
+//   },
+//   {
+//     name: 'Other',
+//     population: 1,
+//     color: 'black',
+//     legendFontColor: 'black',
+//     legendFontSize: 15,
+//   },
+// ];
 
 const chartConfig = {
   backgroundGradientFrom: '#1E2923',
@@ -51,16 +72,20 @@ const chartConfig = {
   useShadowColorFromDataset: false, // optional
 };
 
-const PieChartComponent = ({height, width}) => {
+const PieChartComponent = ({ height, width, countArray, data }) => {
   return (
-    <PieChart
-      data={data}
-      width={width || Dimensions.get('window').width - 50}
-      height={255}
-      chartConfig={chartConfig}
-      accessor="population"
-      paddingLeft="15"
-    />
+    <>
+      {data && (
+        <PieChart
+          data={data}
+          width={width || Dimensions.get('window').width - 20}
+          height={220}
+          chartConfig={chartConfig}
+          accessor="percentage"
+          //paddingLeft="15"
+        />
+      )}
+    </>
   );
 };
 

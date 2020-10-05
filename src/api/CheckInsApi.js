@@ -20,7 +20,6 @@ export const getCheckIn = (userId, monthYearString) => {
     'value',
     (querySnapshot) => {
       let data = querySnapshot.val() ? querySnapshot.val() : {};
-      console.log(data);
     },
   );
   return res;
