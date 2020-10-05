@@ -1,7 +1,13 @@
 import {DB} from '../config';
 
-export const addCheckIn = async (sounds, sliderValues, date, userId) => {
-  await DB.ref(`/checkIns/${userId}/${date}`)
+export const addCheckIn = async (
+  sounds,
+  sliderValues,
+  date,
+  userId,
+  monthYearString,
+) => {
+  await DB.ref(`/checkIns/${userId}/${monthYearString}/${date}`)
     .set({sounds, sliderValues})
     .then(() => console.log('Success'))
     .catch((error) => {
@@ -9,10 +15,12 @@ export const addCheckIn = async (sounds, sliderValues, date, userId) => {
     });
 };
 
-export const getCheckIn = (date) => {
-  const res = DB.ref(`/checkIns/${date}`).on('value', (querySnapshot) => {
-    let data = querySnapshot.val() ? querySnapshot.val() : {};
-    return data[Object.getOwnPropertyNames(data)[0]];
-  });
+export const getCheckIn = (userId, monthYearString) => {
+  const res = DB.ref(`/checkIns/${userId}/${monthYearString}`).on(
+    'value',
+    (querySnapshot) => {
+      let data = querySnapshot.val() ? querySnapshot.val() : {};
+    },
+  );
   return res;
 };
