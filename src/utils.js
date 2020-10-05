@@ -1,51 +1,19 @@
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 export const capitalize = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-export const soundsListArray = {
-  ringing: {
-    name: 'Ringing',
-    id: uuid(),
-    checked: false,
-  },
-  hissing: {
-    name: 'Hissing',
-    id: uuid(),
-    checked: false,
-  },
-  whistle: {
-    name: 'Whistle',
-    id: uuid(),
-    checked: false,
-  },
-  buzzing: {
-    name: 'Buzzing',
-    id: uuid(),
-    checked: false,
-  },
-  hum: {
-    name: 'Hum',
-    id: uuid(),
-    checked: false,
-  },
-  music: {
-    name: 'Music',
-    id: uuid(),
-    checked: false,
-  },
-  pulsating: {
-    name: 'Pulsating',
-    id: uuid(),
-    checked: false,
-  },
-  other: {
-    name: 'Other',
-    id: uuid(),
-    checked: false,
-  },
-};
+export const soundsListArray = [
+  { checked: false, name: 'Ringing' },
+  { checked: false, name: 'Hissing' },
+  { checked: false, name: 'Whistle' },
+  { checked: false, name: 'Buzzing' },
+  { checked: false, name: 'Hum' },
+  { checked: false, name: 'Music' },
+  { checked: false, name: 'Pulsating' },
+  { checked: false, name: 'Other' },
+];
 
 export const sleepArray = [
   {
