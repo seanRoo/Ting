@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const MyDataStyles = StyleSheet.create({
   container: { flex: 1, flexDirection: 'column', marginTop: 20 },
@@ -13,9 +13,9 @@ const MyDataStyles = StyleSheet.create({
   graphContainer: {
     width: '100%',
   },
-  graphViewDropdown: { marginLeft: 10, marginBottom: 20 },
+  graphViewDropdown: { marginBottom: 20 },
   menuOption: {
-    height: 40,
+    height: 45,
     justifyContent: 'center',
     borderBottomWidth: 0.25,
     flexDirection: 'row',

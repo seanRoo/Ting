@@ -2,28 +2,16 @@ import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 
-const LineChartComponent = ({ height, width }) => {
+const LineChartComponent = ({ height, width, data }) => {
   return (
     <View style={{ alignSelf: 'center' }}>
       <LineChart
+        onDataPointClick={(event) => console.log(event)}
         data={{
-          labels: [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec',
-          ],
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
           datasets: [
             {
-              data: [
+              data: data?.map((element) => element.sleepHours) || [
                 Math.random() * 100,
                 Math.random() * 100,
                 Math.random() * 100,
@@ -37,30 +25,47 @@ const LineChartComponent = ({ height, width }) => {
                 Math.random() * 100,
                 Math.random() * 100,
               ],
+              color: () => 'blue',
+            },
+            {
+              data: data?.map((element) => element.stressLevel) || [
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+                Math.random() * 100,
+              ],
+              color: () => 'green',
             },
           ],
+          legend: ['Sleep', 'Stress'],
         }}
-        width={width || Dimensions.get('window').width - 20}
+        width={width || Dimensions.get('window').width - 50}
         height={height || 220}
-        yAxisLabel="$"
-        yAxisSuffix="k"
         chartConfig={{
           //backgroundColor: '#e26a00',
           backgroundGradientFrom: 'orchid',
           backgroundGradientTo: 'black',
-          decimalPlaces: 2, // optional, defaults to 2dp
+          decimalPlaces: 0, // optional, defaults to 2dp
           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           style: {
             borderRadius: 16,
           },
           propsForDots: {
-            r: '6',
-            strokeWidth: '2',
+            r: '2',
+            strokeWidth: '1',
             stroke: '#ffa726',
           },
         }}
-        bezier
+        //bezier
       />
     </View>
   );
