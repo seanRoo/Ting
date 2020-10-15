@@ -15,6 +15,7 @@ import {
   monthsArray,
   countOccurrences,
   transformCountArray,
+  sortData,
 } from './MyData.utils';
 import { Center } from '../Center';
 
@@ -60,13 +61,11 @@ const MyData = () => {
         'value',
         (querySnapshot) => {
           if (querySnapshot.val()) {
-            const responseArray = Object.values(querySnapshot.val());
-            console.log(responseArray);
+            const responseArray = sortData(querySnapshot.val());
             setDataEntries(responseArray.length);
             const sounds = responseArray
               .map((element) => element.sounds)
               .flat();
-            console.log(sounds);
             const sliderValues = responseArray
               .map((element) => element.sliderValues)
               .flat();
