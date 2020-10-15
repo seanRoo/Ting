@@ -8,7 +8,7 @@ const LineChartComponent = ({ height, width, data }) => {
       <LineChart
         onDataPointClick={(event) => console.log(event)}
         data={{
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+          labels: [],
           datasets: [
             {
               data: data?.map((element) => element.sleepHours) || [
@@ -45,7 +45,7 @@ const LineChartComponent = ({ height, width, data }) => {
               color: () => 'green',
             },
           ],
-          legend: ['Sleep', 'Stress'],
+          legend: ['Sleep (hrs)', 'Stress (lvl)'],
         }}
         width={width || Dimensions.get('window').width - 50}
         height={height || 220}
@@ -65,7 +65,7 @@ const LineChartComponent = ({ height, width, data }) => {
             stroke: '#ffa726',
           },
         }}
-        //bezier
+        bezier
       />
     </View>
   );

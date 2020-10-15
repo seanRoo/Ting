@@ -55,3 +55,11 @@ export const charts = [
     value: 'mood',
   },
 ];
+
+export const sortData = (data) => {
+  const sortedKeys = Object.keys(data).sort();
+  const sortedData = sortedKeys.map((element, index) => {
+    return data[sortedKeys[index]];
+  });
+  return sortedData;
+};
