@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { List, ListItem, Button, Toast } from 'native-base';
-import { Text, View } from 'react-native';
+import { Text, View, Alert } from 'react-native';
 import { Center } from '../Center';
 import { addCheckIn } from '../../api/CheckInsApi';
 import { soundsListArray } from '../../utils';
@@ -13,6 +13,7 @@ import SoundList from './SoundList';
 import CustomSlider from './SoundIntensitySlider';
 import Styles from './CheckIn.styles';
 import auth from '@react-native-firebase/auth';
+import { NoDataAlert } from './NoDataAlert';
 
 const CheckIn = ({ route, navigation }) => {
   const {
@@ -159,7 +160,11 @@ const CheckIn = ({ route, navigation }) => {
                 </ListItem>
                 {!checkedIn && (
                   <Button
-                    onPress={handleCheckIn}
+                    onPress={() =>
+                      getCheckedSounds(sounds).length !== 0
+                        ? handleCheckIn()
+                        : NoDataAlert({ handleCheckIn })
+                    }
                     style={{ backgroundColor: 'orchid' }}
                   >
                     <Center>

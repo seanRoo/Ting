@@ -79,7 +79,7 @@ const PieChartComponent = ({ height, width, countArray, data }) => {
         <PieChart
           data={data}
           width={width || Dimensions.get('window').width - 20}
-          height={220}
+          height={height || 220}
           chartConfig={chartConfig}
           accessor="percentage"
           //paddingLeft="15"
