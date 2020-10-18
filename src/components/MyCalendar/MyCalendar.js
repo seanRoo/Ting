@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Calendar } from 'react-native-calendars';
 import auth from '@react-native-firebase/auth';
 import { DB } from '../../config';
-import { View } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import Loading from '../Loading';
 import { Center } from '../Center';
 
@@ -71,6 +71,7 @@ const MyCalendar = ({ navigation }) => {
       getCheckIns(currentUser, monthYearString);
     }
   }, [markedDates, currentCalendarDate, monthYearString, checkIns]);
+
   return (
     <>
       {checkIns && markedDates && !loading && (
@@ -88,6 +89,7 @@ const MyCalendar = ({ navigation }) => {
             markingType={'custom'}
             current={currentCalendarDate}
             onMonthChange={(date) => handleMonthUpdate(date.dateString)}
+            maxDate={new Date()}
           />
         </View>
       )}
