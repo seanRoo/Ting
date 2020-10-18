@@ -175,7 +175,7 @@ const MyData = () => {
                     )}
                   </CardItem>
                   <CardItem footer>
-                    <Text>*Data from {dataEntries} entries</Text>
+                    <Text>* Data from {dataEntries} entries</Text>
                   </CardItem>
                 </>
               )}
