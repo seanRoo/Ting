@@ -19,19 +19,3 @@ export const MyDataStack = () => {
     </Stack.Navigator>
   );
 };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     marginTop: StatusBar.currentHeight || 0,
-//   },
-//   item: {
-//     borderColor: 'black',
-//     borderWidth: 0.5,
-//     padding: 20,
-//     marginVertical: 8,
-//   },
-//   title: {
-//     fontSize: 16,
-//   },
-// });
