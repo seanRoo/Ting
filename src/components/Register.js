@@ -10,12 +10,16 @@ const Register = ({ navigation: { navigate } }) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [userName, setUserName] = useState();
+  const [firstName, setFirstName] = useState();
+  const [lastName, setLastName] = useState();
   const [emptyStringError, setEmptyStringError] = useState(false);
   const [emailFieldError, setEmailFieldError] = useState(false);
 
   const handleRegister = () => {
     if (email && password) {
-      register(email, password).then(() => navigate('Log in'));
+      register(email, password, firstName, lastName, userName).then(() =>
+        navigate('Log in'),
+      );
     } else {
       setEmptyStringError(true);
     }
@@ -39,6 +43,24 @@ const Register = ({ navigation: { navigate } }) => {
         <Text style={RegisterStyles.header}>Ting!</Text>
       </View>
       <Form>
+        <Item style={RegisterStyles.inputFields} floatingLabel>
+          <Label>First Name</Label>
+          <Input
+            onChangeText={(firstName) => setFirstName(firstName)}
+            onFocus={handleFocus}
+            value={firstName}
+          />
+          {emailFieldError && <Icon name="alert-circle-outline"></Icon>}
+        </Item>
+        <Item style={RegisterStyles.inputFields} floatingLabel>
+          <Label>Last Name</Label>
+          <Input
+            onChangeText={(lastName) => setLastName(lastName)}
+            onFocus={handleFocus}
+            value={lastName}
+          />
+          {emailFieldError && <Icon name="alert-circle-outline"></Icon>}
+        </Item>
         <Item style={RegisterStyles.inputFields} floatingLabel>
           <Label>Username</Label>
           <Input
