@@ -78,7 +78,7 @@ const MyCalendar = ({ navigation }) => {
         <View>
           <Calendar
             onDayPress={(day) =>
-              navigation.navigate('Check In', {
+              navigation.push('Check In', {
                 date: day,
                 monthYearString,
               })
