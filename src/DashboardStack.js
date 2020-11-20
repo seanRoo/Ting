@@ -15,26 +15,7 @@ export const DashboardStack = (props) => {
   const { logout } = useContext(AuthContext);
   return (
     <Stack.Navigator initialRouteName="Dashboard">
-      <Stack.Screen
-        name="Dashboard"
-        component={Dashboard}
-        options={{
-          headerRight: () => {
-            return (
-              <TouchableOpacity onPress={logout} style={{ paddingRight: 20 }}>
-                <Text>Logout</Text>
-              </TouchableOpacity>
-            );
-          },
-          headerLeft: () => {
-            return (
-              <TouchableOpacity style={{ paddingLeft: 20 }}>
-                <Icon name="person-circle" />
-              </TouchableOpacity>
-            );
-          },
-        }}
-      />
+      <Stack.Screen name="Dashboard" component={Dashboard} />
     </Stack.Navigator>
   );
 };

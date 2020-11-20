@@ -4,10 +4,15 @@ import { DashboardStack } from '../DashboardStack';
 import { CheckInStack } from '../CheckInStack';
 import { DiscussionStack } from '../DiscussionStack';
 import { Center } from './Center';
-import { Text } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import { MyDataStack } from '../MyDataStack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { CreateDiscussion } from './Discussions/CreateDiscussion';
+import { ViewDiscussion } from './Discussions/ViewDiscussion';
+import { addDiscussionPost } from '../api/DiscussionsApi';
+import { StackActions } from '@react-navigation/native';
 
 const Tabs = createBottomTabNavigator();
 export const AppTabs = (props) => {
@@ -15,7 +20,7 @@ export const AppTabs = (props) => {
     <Tabs.Navigator
       tab
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ color, size }) => {
           if (route.name === 'Dashboard') {
             return (
               <MaterialCommunityIcons

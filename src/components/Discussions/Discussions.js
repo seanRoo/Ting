@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardItem,
@@ -8,57 +8,94 @@ import {
   Icon,
   Fab,
 } from 'native-base';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import Styles from './Discussions.styles';
+import { getDiscussionPosts } from '../../api/DiscussionsApi';
+import Loading from '../Loading';
+import { Avatar } from 'react-native-elements';
 
 export const Discussions = ({ navigation }) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (!data) {
+      getDiscussionPosts(setData);
+    }
+    if (data) {
+      setLoading(false);
+    }
+  }, [data]);
+
   return (
     <Container style={Styles.container}>
-      <Content>
-        <Card style={{ width: '95%', alignSelf: 'center' }}>
-          <CardItem header>
-            <Text style={Styles.heading}>
-              This is a test heading for a test discussion
-            </Text>
-          </CardItem>
-          <CardItem>
-            <Body style={Styles.cardBody}>
-              <Text style={Styles.bodyText} numberOfLines={3}>
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum."
-              </Text>
-            </Body>
-          </CardItem>
-          <CardItem footer style={Styles.footer}>
-            <View style={{ flexDirection: 'row', marginRight: 12 }}>
-              <Icon
-                name="chatbox-sharp"
-                style={{
-                  fontSize: 20,
-                  textAlign: 'center',
-                }}
-              />
-              <Text>10</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginRight: 14 }}>
-              <Icon
-                name="md-arrow-up"
-                style={{
-                  fontSize: 20,
-                  textAlign: 'center',
-                }}
-              />
-              <Text>20</Text>
-            </View>
-          </CardItem>
-        </Card>
-      </Content>
-      <Fab onPress={() => navigation.push('Create Discussion')}>
+      {!loading && data && (
+        <Content>
+          {data.map((element) => {
+            return (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('View Discussion', { element })
+                }
+              >
+                <Card style={Styles.discussionCard}>
+                  <View style={{ flexDirection: 'row', margin: 14 }}>
+                    <Avatar
+                      size="medium"
+                      rounded
+                      title="SR"
+                      onPress={() => console.log('Works!')}
+                      activeOpacity={0.1}
+                      containerStyle={{ backgroundColor: 'black' }}
+                    />
+                    <Text style={{ marginLeft: 10, marginTop: 14 }}>
+                      {element.firstName} {element.lastName}
+                    </Text>
+                  </View>
+                  <CardItem header>
+                    <Text style={Styles.heading}>{element.messageHeader}</Text>
+                  </CardItem>
+                  <CardItem>
+                    <Body>
+                      <Text style={Styles.bodyText} numberOfLines={3}>
+                        {element.messageBody}
+                      </Text>
+                    </Body>
+                  </CardItem>
+
+                  <CardItem bordered footer style={Styles.footer}>
+                    <View style={{ flexDirection: 'row', marginRight: 12 }}>
+                      <Icon
+                        name="chatbox-sharp"
+                        style={{
+                          fontSize: 20,
+                          textAlign: 'center',
+                        }}
+                      />
+                      <Text>10</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', marginRight: 14 }}>
+                      <Icon
+                        name="md-arrow-up"
+                        style={{
+                          fontSize: 20,
+                          textAlign: 'center',
+                        }}
+                      />
+                      <Text>20</Text>
+                    </View>
+                  </CardItem>
+                </Card>
+              </TouchableOpacity>
+            );
+          })}
+        </Content>
+      )}
+      {loading && <Loading />}
+      {!loading && data.length === 0 && <Text>No Data</Text>}
+      <Fab
+        onPress={() => navigation.navigate('Create Discussion')}
+        style={{ backgroundColor: 'orchid' }}
+      >
         <Icon name="pencil-outline" />
       </Fab>
     </Container>
