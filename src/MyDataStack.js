@@ -10,11 +10,7 @@ export const MyDataStack = () => {
       <Stack.Screen
         name="My Data"
         component={MyData}
-        options={() => {
-          return {
-            headerTitle: 'My Data',
-          };
-        }}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

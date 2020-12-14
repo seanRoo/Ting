@@ -15,7 +15,11 @@ export const DashboardStack = (props) => {
   const { logout } = useContext(AuthContext);
   return (
     <Stack.Navigator initialRouteName="Dashboard">
-      <Stack.Screen name="Dashboard" component={Dashboard} />
+      <Stack.Screen
+        name="Dashboard"
+        component={Dashboard}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };

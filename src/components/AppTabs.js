@@ -15,6 +15,7 @@ import { addDiscussionPost } from '../api/DiscussionsApi';
 import { StackActions } from '@react-navigation/native';
 
 const Tabs = createBottomTabNavigator();
+
 export const AppTabs = (props) => {
   return (
     <Tabs.Navigator
@@ -48,6 +49,9 @@ export const AppTabs = (props) => {
               />
             );
           }
+        },
+        navigationOptions: {
+          header: null,
         },
       })}
       tabBarOptions={{

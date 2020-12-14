@@ -7,7 +7,11 @@ const Stack = createStackNavigator();
 export const CheckInStack = () => {
   return (
     <Stack.Navigator initialRouteName="My Calendar">
-      <Stack.Screen name="My Calendar" component={MyCalendar} />
+      <Stack.Screen
+        name="My Calendar"
+        component={MyCalendar}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };

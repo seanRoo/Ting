@@ -9,6 +9,11 @@
     "test": "jest",
     "lint": "eslint ."
   },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts"
+    ]
+  },
   "dependencies": {
     "@react-native-community/checkbox": "^0.5.2",
     "@react-native-community/cli": "^4.12.0",
@@ -23,12 +28,13 @@
     "@react-navigation/drawer": "^5.9.0",
     "@react-navigation/material-bottom-tabs": "^5.2.16",
     "@react-navigation/material-top-tabs": "^5.2.16",
-    "@react-navigation/native": "^5.7.3",
+    "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.9.0",
     "classnames": "^2.2.6",
     "dayjs": "^1.9.1",
     "faker": "^5.0.0",
     "lodash": "^4.17.20",
+    "luxon": "^1.25.0",
     "native-base": "^2.13.14",
     "react": "16.13.1",
     "react-native": "0.63.2",
@@ -37,6 +43,7 @@
     "react-native-collapsible": "^1.5.3",
     "react-native-elements": "^3.0.0-alpha.1",
     "react-native-gesture-handler": "^1.7.0",
+    "react-native-global-font": "^1.0.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.3",
     "react-native-month-year-picker": "^1.4.1",
     "react-native-multiple-select": "^0.5.5",
@@ -49,8 +56,6 @@
     "react-native-simple-toast": "^1.1.2",
     "react-native-svg": "^12.1.0",
     "react-native-vector-icons": "^7.0.0",
-    "react-navigation": "^4.4.0",
-    "react-navigation-tabs": "^2.9.0",
     "uuidv4": "^6.2.4"
   },
   "devDependencies": {
