@@ -9,6 +9,7 @@ export const ViewDiscussionFooter = ({
   setKeyboardText,
   setSendIsDisabled,
   sendIsDisabled,
+  keyboardText,
 }) => {
   return (
     <View
@@ -21,12 +22,12 @@ export const ViewDiscussionFooter = ({
       }}
     >
       <TextInput
+        value={keyboardText}
         style={Styles.textInputComponent}
         placeholder="Write a comment"
         ref={replyInput}
         multiline={true}
         onChangeText={(text) => {
-          console.log(text);
           setKeyboardText(text);
           if (text === '') {
             setSendIsDisabled(true);

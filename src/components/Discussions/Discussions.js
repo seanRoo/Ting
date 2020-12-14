@@ -1,22 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Card,
-  CardItem,
-  Body,
-  Container,
-  Content,
-  Icon,
-  Fab,
-} from 'native-base';
-import { Text, View, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { Container, Content, Icon, Fab } from 'native-base';
+import { Text, Dimensions, Animated } from 'react-native';
+import { DiscussionCard } from './DiscussionCard';
 import Styles from './Discussions.styles';
 import { getDiscussionPosts } from '../../api/DiscussionsApi';
 import Loading from '../Loading';
-import { Avatar } from 'react-native-elements';
+import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
+import auth from '@react-native-firebase/auth';
 
 export const Discussions = ({ navigation }) => {
+  const currentUser = auth().currentUser.uid;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const fadeIn = () => {
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 50,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const fadeOut = () => {
+    // Will change fadeAnim value to 0 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 50,
+      useNativeDriver: true,
+    }).start();
+  };
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (!data) {
       getDiscussionPosts(setData);
@@ -26,78 +41,61 @@ export const Discussions = ({ navigation }) => {
     }
   }, [data]);
 
-  return (
-    <Container style={Styles.container}>
-      {!loading && data && (
-        <Content>
-          {data.map((element) => {
-            return (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('View Discussion', { element })
-                }
-              >
-                <Card style={Styles.discussionCard}>
-                  <View style={{ flexDirection: 'row', margin: 14 }}>
-                    <Avatar
-                      size="medium"
-                      rounded
-                      title="SR"
-                      onPress={() => console.log('Works!')}
-                      activeOpacity={0.1}
-                      containerStyle={{ backgroundColor: 'black' }}
-                    />
-                    <Text style={{ marginLeft: 10, marginTop: 14 }}>
-                      {element.firstName} {element.lastName}
-                    </Text>
-                  </View>
-                  <CardItem header>
-                    <Text style={Styles.heading}>{element.messageHeader}</Text>
-                  </CardItem>
-                  <CardItem>
-                    <Body>
-                      <Text style={Styles.bodyText} numberOfLines={3}>
-                        {element.messageBody}
-                      </Text>
-                    </Body>
-                  </CardItem>
+  useEffect(() => {
+    fadeIn();
+  }, []);
 
-                  <CardItem bordered footer style={Styles.footer}>
-                    <View style={{ flexDirection: 'row', marginRight: 12 }}>
-                      <Icon
-                        name="chatbox-sharp"
-                        style={{
-                          fontSize: 20,
-                          textAlign: 'center',
-                        }}
-                      />
-                      <Text>10</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', marginRight: 14 }}>
-                      <Icon
-                        name="md-arrow-up"
-                        style={{
-                          fontSize: 20,
-                          textAlign: 'center',
-                        }}
-                      />
-                      <Text>20</Text>
-                    </View>
-                  </CardItem>
-                </Card>
-              </TouchableOpacity>
-            );
-          })}
-        </Content>
+  const handleNavigation = (message) => {
+    navigation.navigate('View Discussion', { message });
+  };
+
+  const handleScroll = (e, tabBarHeight) => {
+    const windowHeight = Dimensions.get('window').height;
+    const height = e.nativeEvent.contentSize.height;
+    const offset = e.nativeEvent.contentOffset.y;
+    if (windowHeight + offset >= height + tabBarHeight) {
+      fadeOut();
+    } else {
+      fadeIn();
+    }
+  };
+  return (
+    <BottomTabBarHeightContext.Consumer>
+      {(tabBarHeight) => (
+        <Container style={Styles.container}>
+          {!loading && data && (
+            <Content onScroll={(e) => handleScroll(e, tabBarHeight)}>
+              {data.map((message) => {
+                const isAuthor = message.userId === currentUser;
+                return (
+                  <DiscussionCard
+                    message={message}
+                    handleNavigation={handleNavigation}
+                    isAuthor={isAuthor}
+                  />
+                );
+              })}
+            </Content>
+          )}
+          {loading && <Loading />}
+          {!loading && data.length === 0 && <Text>No Data</Text>}
+          <Animated.View
+            style={[
+              Styles.fadingContainer,
+              {
+                opacity: fadeAnim,
+              },
+            ]}
+          >
+            <Fab
+              onPress={() => navigation.navigate('Create Discussion')}
+              style={{ backgroundColor: 'orchid' }}
+            >
+              <Icon name="pencil-outline" />
+            </Fab>
+          </Animated.View>
+        </Container>
       )}
-      {loading && <Loading />}
-      {!loading && data.length === 0 && <Text>No Data</Text>}
-      <Fab
-        onPress={() => navigation.navigate('Create Discussion')}
-        style={{ backgroundColor: 'orchid' }}
-      >
-        <Icon name="pencil-outline" />
-      </Fab>
-    </Container>
+    </BottomTabBarHeightContext.Consumer>
   );
 };

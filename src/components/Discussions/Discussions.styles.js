@@ -7,13 +7,17 @@ const DiscussionCardStyles = StyleSheet.create({
   },
   heading: {
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 14,
   },
-  bodyText: { fontSize: 18 },
+  bodyText: { fontSize: 16, fontFamily: 'Roboto' },
   bold: { fontWeight: 'bold' },
   footer: {
     paddingRight: 0,
-    height: 55,
+    flexDirection: 'row',
+    borderTopColor: 'black',
+    borderRadius: 20,
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
   },
   goToButton: {
     alignSelf: 'flex-end',
@@ -40,8 +44,10 @@ const DiscussionCardStyles = StyleSheet.create({
   discussionCard: {
     width: '95%',
     alignSelf: 'center',
-    borderLeftWidth: 0,
+    borderColor: 'orchid',
+    borderRadius: 20,
   },
+  authorStyle: { color: 'dodgerblue' },
 });
 
 export default DiscussionCardStyles;

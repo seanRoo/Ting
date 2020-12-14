@@ -11,7 +11,7 @@ import { TouchableOpacity, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { CreateDiscussion } from './Discussions/CreateDiscussion';
 import { ViewDiscussion } from './Discussions/ViewDiscussion';
-import { addDiscussionPost } from '../api/DiscussionsApi';
+import { addDiscussionPost, addReply } from '../api/DiscussionsApi';
 import { Icon } from 'native-base';
 import { getHeaderTitle, options } from './Routes.utils';
 import CheckIn from './CheckIn/CheckIn';
@@ -105,7 +105,13 @@ const Routes = () => {
               headerTitle: 'Post',
               headerRight: () => {
                 return (
-                  <TouchableOpacity disabled={params.disabled}>
+                  <TouchableOpacity
+                    disabled={params.disabled}
+                    onPress={() => {
+                      addReply(params.replyMessage);
+                      params.setKeyboardText(null);
+                    }}
+                  >
                     <MaterialCommunityIcons
                       style={{
                         fontSize: 26,

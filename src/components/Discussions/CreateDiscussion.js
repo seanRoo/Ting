@@ -9,7 +9,6 @@ export const CreateDiscussion = ({ navigation }) => {
   const [user, setUser] = useState();
   const messageBodyRef = useRef(null);
   const currentUser = auth().currentUser.uid;
-  console.log(auth().currentUser);
   const [message, setMessage] = useState({
     messageId: uuid(),
     userId: currentUser,
@@ -48,6 +47,7 @@ export const CreateDiscussion = ({ navigation }) => {
       firstName: data.firstName,
       lastName: data.lastName,
       userName: data.userName,
+      replyCount: 0,
     });
   };
   return (
