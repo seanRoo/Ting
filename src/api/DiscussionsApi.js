@@ -10,7 +10,7 @@ export const addDiscussionPost = async (message, callback) => {
 };
 
 export const getDiscussionPosts = (callback) => {
-  DB.ref(`/discussions/`).on('value', (querySnapshot) => {
+  DB.ref('/discussions/').on('value', (querySnapshot) => {
     let data = querySnapshot.val() ? querySnapshot.val() : {};
     callback(Object.values(data));
   });

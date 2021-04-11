@@ -12,7 +12,7 @@ import { charts } from './MyData.utils';
 const GraphViewDropdown = ({ graphView, setGraphView, customStyles }) => {
   return (
     <View style={{ ...MyDataStyles.graphViewDropdown, ...customStyles }}>
-      <Text style={{ fontSize: 20 }}>Graph View</Text>
+      <Text style={{ fontSize: 18 }}>Graph View</Text>
       <Menu
         style={{
           flexDirection: 'row',
@@ -25,13 +25,14 @@ const GraphViewDropdown = ({ graphView, setGraphView, customStyles }) => {
             TriggerTouchableComponent: TouchableOpacity,
             triggerTouchable: {
               style: {
-                height: 45,
+                height: 35,
                 backgroundColor: 'white',
                 borderColor: 'black',
                 borderWidth: 1,
-                padding: 10,
+                padding: 5,
                 width: 170,
                 borderRadius: 8,
+                paddingBottom: 0,
               },
             },
             triggerWrapper: {
@@ -39,7 +40,7 @@ const GraphViewDropdown = ({ graphView, setGraphView, customStyles }) => {
             },
           }}
         >
-          <Text style={{ fontSize: 18 }}>{graphView.text}</Text>
+          <Text style={{ fontSize: 16 }}>{graphView.text}</Text>
           <Right>
             <Icon style={{ fontSize: 25 }} name="caret-down" />
           </Right>

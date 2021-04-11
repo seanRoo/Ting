@@ -62,39 +62,48 @@ export const Discussions = ({ navigation }) => {
   return (
     <BottomTabBarHeightContext.Consumer>
       {(tabBarHeight) => (
-        <Container style={Styles.container}>
-          {!loading && data && (
-            <Content onScroll={(e) => handleScroll(e, tabBarHeight)}>
-              {data.map((message) => {
-                const isAuthor = message.userId === currentUser;
-                return (
-                  <DiscussionCard
-                    message={message}
-                    handleNavigation={handleNavigation}
-                    isAuthor={isAuthor}
-                  />
-                );
-              })}
-            </Content>
-          )}
-          {loading && <Loading />}
-          {!loading && data.length === 0 && <Text>No Data</Text>}
+        <>
+          <Container style={Styles.container}>
+            {!loading && data && (
+              <Content onScroll={(e) => handleScroll(e, tabBarHeight)}>
+                {data.map((message) => {
+                  const isAuthor = message.userId === currentUser;
+                  return (
+                    <DiscussionCard
+                      message={message}
+                      handleNavigation={handleNavigation}
+                      isAuthor={isAuthor}
+                    />
+                  );
+                })}
+              </Content>
+            )}
+            {loading && <Loading />}
+            {!loading && data.length === 0 && <Text>No Data</Text>}
+          </Container>
           <Animated.View
             style={[
               Styles.fadingContainer,
               {
                 opacity: fadeAnim,
+                height: 80,
+                width: '100%',
+                position: 'absolute',
+                bottom: 0,
               },
             ]}
           >
             <Fab
               onPress={() => navigation.navigate('Create Discussion')}
-              style={{ backgroundColor: 'orchid' }}
+              style={{
+                backgroundColor: 'orchid',
+              }}
+              position="bottomRight"
             >
-              <Icon name="pencil-outline" />
+              <Icon name="pencil-outline" size={80} />
             </Fab>
           </Animated.View>
-        </Container>
+        </>
       )}
     </BottomTabBarHeightContext.Consumer>
   );

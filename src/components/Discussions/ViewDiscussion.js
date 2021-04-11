@@ -19,6 +19,8 @@ import { getUser } from '.././../api/UserApi';
 import auth from '@react-native-firebase/auth';
 import { getInitials, formatFooterDate } from './Discussions.utils';
 import { v4 as uuid } from 'uuid';
+import Loading from '../Loading';
+import { Center } from '../Center';
 
 export const ViewDiscussion = ({ route: { params }, navigation }) => {
   const windowHeight = Dimensions.get('window').height;
@@ -31,6 +33,7 @@ export const ViewDiscussion = ({ route: { params }, navigation }) => {
   const [keyboardText, setKeyboardText] = useState(null);
   const [sendIsDisabled, setSendIsDisabled] = useState(true);
   const [replies, setReplies] = useState(null);
+  const [repliesLoading, setRepliesLoading] = useState(true);
 
   const replyInput = useRef(null);
   const mainMessageRef = useRef(null);
@@ -196,26 +199,32 @@ export const ViewDiscussion = ({ route: { params }, navigation }) => {
                 <Divider style={{ marginTop: 10 }} />
                 <Divider style={{ marginTop: 10 }} />
               </View>
-
-              {replies && (
-                <List
-                  style={{ backgroundColor: 'whitesmoke' }}
-                  onPress={() => ForceLoseFocus()}
-                >
-                  {replies.map((reply, index) => (
-                    <ReplyMessage
-                      initials={getInitials({
-                        firstName: reply.firstName,
-                        lastName: reply.lastName,
-                      })}
-                      message={reply}
-                      index={index}
-                      ForceLoseFocus={ForceLoseFocus}
-                      isAuthor={reply.userId === currentUser}
-                    />
-                  ))}
-                </List>
-              )}
+              <View>
+                {replies && (
+                  <List
+                    style={{ backgroundColor: 'whitesmoke' }}
+                    onPress={() => ForceLoseFocus()}
+                  >
+                    {replies.map((reply, index) => (
+                      <ReplyMessage
+                        initials={getInitials({
+                          firstName: reply.firstName,
+                          lastName: reply.lastName,
+                        })}
+                        message={reply}
+                        index={index}
+                        ForceLoseFocus={ForceLoseFocus}
+                        isAuthor={reply.userId === currentUser}
+                      />
+                    ))}
+                  </List>
+                )}
+                {/* {repliesLoading && (
+                  <Center>
+                    <Loading />
+                  </Center>
+                )} */}
+              </View>
             </ScrollView>
             <ViewDiscussionFooter
               keyboardHeight={keyboardHeight}

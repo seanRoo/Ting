@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Dimensions } from 'react-native';
-import { Button, Segment, Card, CardItem, Left } from 'native-base';
+import { View, Text, ScrollView } from 'react-native';
+import { Card, CardItem } from 'native-base';
 import LineChart from '../LineChart';
 import PieChart from '../PieChart';
 import GraphViewDropdown from './GraphViewDropdown';
@@ -8,16 +8,14 @@ import MyDataStyles from './MyData.styles';
 import auth from '@react-native-firebase/auth';
 import { DB } from '../../config';
 import Loading from '../Loading';
-import Entypo from 'react-native-vector-icons/Entypo';
-import { Right } from '../Right';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
-  monthsArray,
   countOccurrences,
   transformCountArray,
   sortData,
 } from './MyData.utils';
-import { Center } from '../Center';
+import MonthSelector from './MonthSelector';
+import NoDataMessage from './NoDataMessage';
+import { normalize } from '../Discussions/Discussion.utils';
 
 const MyData = () => {
   const currentUser = auth().currentUser.uid;
@@ -33,8 +31,8 @@ const MyData = () => {
     new Date().getMonth(),
   );
   const [disabledArrows, setDisabledArrows] = useState({
-    rightArrow: false,
-    leftArrow: false,
+    rightArrow: new Date().getMonth() === 11,
+    leftArrow: new Date().getMonth() === 1,
   });
   const [showNoDataMessage, setShowNoDataMessage] = useState(false);
   const [sliderData, setSliderData] = useState();
@@ -63,11 +61,14 @@ const MyData = () => {
           if (querySnapshot.val()) {
             const responseArray = sortData(querySnapshot.val());
             setDataEntries(responseArray.length);
-            const sounds = responseArray
-              .map((element) => element.sounds)
-              .flat();
+            const sounds = [
+              ...responseArray.map((element) => element.sounds).flat(),
+            ];
             const sliderValues = responseArray
-              .map((element) => element.sliderValues)
+              .map((element) => ({
+                date: element.date,
+                sliderValues: element.sliderValues,
+              }))
               .flat();
             setCountArray(countOccurrences(sounds));
             setSliderData(sliderValues);
@@ -98,100 +99,135 @@ const MyData = () => {
 
   useEffect(() => {}, [sliderData]);
   return (
-    <View style={MyDataStyles.container}>
-      <View style={{ width: '100%', flex: 1, flexDirection: 'column' }}>
-        <GraphViewDropdown
+    <View style={{ height: '100%', paddingTop: 20 }}>
+      <ScrollView contentContainerStyle={MyDataStyles.scrollView}>
+        {/* <GraphViewDropdown
           setGraphView={setGraphView}
           graphView={graphView}
-          customStyles={{ marginLeft: 12 }}
-        />
-        <Card
+          customStyles={{ alignSelf: 'flex-start' }}
+        /> */}
+        <View
           style={{
-            width: Dimensions.get('window').width,
-            height: 300,
+            width: '98%',
+            justifyContent: 'center',
+            borderRadius: 24,
+            height: 210,
+            borderWidth: 1,
+            backgroundColor: 'white',
+            paddingRight: 20,
+          }}
+        >
+          <View>
+            <Text style={{ paddingLeft: 18, fontSize: 18, marginBottom: 12 }}>
+              Sleep - Hours
+            </Text>
+            <LineChart data={sliderData} />
+          </View>
+        </View>
+        <View
+          style={{
+            width: '98%',
+            justifyContent: 'center',
+            borderRadius: 24,
+            height: 210,
+            borderWidth: 1,
+            backgroundColor: 'white',
+            paddingRight: 20,
+            marginTop: 10,
+          }}
+        >
+          <View>
+            <Text style={{ paddingLeft: 18, fontSize: 18, marginBottom: 12 }}>
+              Stress Level
+            </Text>
+            <LineChart data={sliderData} />
+          </View>
+        </View>
+        <View
+          style={{
+            width: '98%',
+            justifyContent: 'center',
+            borderRadius: 24,
+            height: 250,
+            borderWidth: 1,
+            backgroundColor: 'white',
+            paddingRight: 20,
+            marginTop: 10,
+            marginBottom: 10,
+          }}
+        >
+          <View style={{ marginTop: 16 }}>
+            <Text
+              style={{
+                fontSize: 18,
+                paddingLeft: 18,
+              }}
+            >
+              Sounds
+            </Text>
+            <PieChart />
+          </View>
+        </View>
+        {/* <Card
+        style={{
+          width: '95%',
+          alignSelf: 'center',
+          borderRadius: 16,
+          height: '78%',
+        }}
+      >
+        <View
+          style={{
+            borderWidth: 2,
+            borderRadius: 16,
+            borderColor: 'orchid',
+            flex: 1,
           }}
         >
           {!loading && (
-            <View>
-              <CardItem
-                header
-                style={{
-                  justifyContent: 'center',
-                  paddingBottom: 5,
-                }}
-              >
-                <Left>
-                  <TouchableOpacity
-                    disabled={disabledArrows.leftArrow}
-                    onPress={() => handleMonthUpdate(-1)}
-                  >
-                    <Entypo
-                      name="triangle-left"
-                      size={30}
-                      color={disabledArrows.leftArrow ? '#EBEBE4' : 'black'}
-                      style={{
-                        borderColor: 'black',
-                        borderWidth: 1,
-                        borderRadius: 12,
-                        padding: 5,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </Left>
-                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-                  {monthsArray[monthsArrayIndex]}
-                </Text>
-                <Right>
-                  <TouchableOpacity
-                    disabled={disabledArrows.rightArrow}
-                    onPress={() => handleMonthUpdate(1)}
-                  >
-                    <Entypo
-                      name="triangle-right"
-                      size={30}
-                      color={disabledArrows.rightArrow ? '#EBEBE4' : 'black'}
-                      style={{
-                        borderColor: 'black',
-                        borderWidth: 1,
-                        borderRadius: 12,
-                        padding: 5,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </Right>
-              </CardItem>
+            <View style={{ flex: 1 }}>
+              <MonthSelector
+                disabledArrows={disabledArrows}
+                handleMonthUpdate={handleMonthUpdate}
+                monthsArrayIndex={monthsArrayIndex}
+              />
               {!showNoDataMessage && (
-                <>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    flex: 1,
+                  }}
+                >
                   <CardItem>
                     {graphView.value === 'sounds' && pieData && (
-                      <PieChart data={pieData} height={220} />
+                      <PieChart data={pieData} height={normalize(190)} />
                     )}
                     {graphView.value === 'sleepAndStress' && sliderData && (
-                      <LineChart
-                        height={220}
-                        width={Dimensions.get('window').width - 30}
-                        data={sliderData}
-                      />
+                      <View>
+                        <LineChart height={normalize(210)} data={sliderData} />
+                      </View>
                     )}
                   </CardItem>
-                  <CardItem footer>
-                    <Text>* Data from {dataEntries} entries</Text>
+                  <CardItem
+                    footer
+                    style={{
+                      borderRadius: 16,
+                    }}
+                  >
+                    <Text style={{ fontSize: 16 }}>
+                      * Data from {dataEntries} entries
+                    </Text>
                   </CardItem>
-                </>
+                </View>
               )}
-              {showNoDataMessage && (
-                <CardItem style={{ height: 250 }}>
-                  <Center>
-                    <Text>No data found</Text>
-                    <Text>Have you checked in for this month?</Text>
-                  </Center>
-                </CardItem>
-              )}
+              {showNoDataMessage && <NoDataMessage />}
             </View>
           )}
           {loading && <Loading />}
-        </Card>
-      </View>
+        </View>
+      </Card> */}
+      </ScrollView>
     </View>
   );
 };

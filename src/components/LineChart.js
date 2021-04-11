@@ -1,11 +1,49 @@
 import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
+import PureChart from 'react-native-pure-chart';
+
+const tenRandomEntries = () => [
+  { x: 'foo', y: Math.round(Math.random() * 100) },
+  { x: 'foo', y: Math.round(Math.random() * 100) },
+  { x: 'foo', y: Math.round(Math.random() * 100) },
+  { x: 'foo', y: Math.round(Math.random() * 100) },
+  { x: 'foo', y: Math.round(Math.random() * 100) },
+  { x: 'foo', y: Math.round(Math.random() * 100) },
+  { x: 'foo', y: Math.round(Math.random() * 100) },
+  { x: 'foo', y: Math.round(Math.random() * 100) },
+  { x: 'foo', y: Math.round(Math.random() * 100) },
+  { x: 'foo', y: Math.round(Math.random() * 100) },
+];
 
 const LineChartComponent = ({ height, width, data }) => {
+  let sampleData = [
+    {
+      seriesName: 'series1',
+      data: data
+        ? data?.map((element) => ({
+            y: element?.sliderValues?.sleepHours,
+            x: element.date,
+          }))
+        : tenRandomEntries(),
+
+      color: '#297AB1',
+    },
+  ];
+
   return (
-    <View style={{ alignSelf: 'center' }}>
-      <LineChart
+    // <View
+    //   style={{
+    //     alignSelf: 'center',
+    //     width: width,
+    //     marginLeft: 0,
+    //     paddingLeft: 0,
+    //     borderRadius: 16,
+    //   }}
+    // >
+    <PureChart height={height} width={width} data={sampleData} type="line" />
+
+    /* <LineChart
         onDataPointClick={(event) => console.log(event)}
         data={{
           labels: [],
@@ -66,8 +104,8 @@ const LineChartComponent = ({ height, width, data }) => {
           },
         }}
         bezier
-      />
-    </View>
+      /> */
+    // </View>
   );
 };
 

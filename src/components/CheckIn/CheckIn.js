@@ -17,10 +17,7 @@ import { NoDataAlert } from './NoDataAlert';
 
 const CheckIn = ({ route, navigation }) => {
   const {
-    params: {
-      date: { dateString },
-      monthYearString,
-    },
+    params: { date, monthYearString },
   } = route;
   const [sounds, setSounds] = useState();
   const [sliderValues, setSliderValues] = useState({
@@ -37,7 +34,7 @@ const CheckIn = ({ route, navigation }) => {
       addCheckIn(
         getCheckedSounds(sounds),
         sliderValues,
-        dateString,
+        date,
         currentUser,
         monthYearString,
       ).then(() => {
@@ -60,7 +57,7 @@ const CheckIn = ({ route, navigation }) => {
 
   const getCheckIn = () => {
     const currentUser = auth().currentUser.uid;
-    DB.ref(`/checkIns/${currentUser}/${monthYearString}/${dateString}`).on(
+    DB.ref(`/checkIns/${currentUser}/${monthYearString}/${date}`).on(
       'value',
       (querySnapshot) => {
         let soundsResponse = {};
@@ -110,7 +107,7 @@ const CheckIn = ({ route, navigation }) => {
     if (!isEmpty(sounds)) {
       setLoading(false);
     }
-  }, [sounds, dateString]);
+  }, [sounds, date]);
   return (
     <>
       {sounds && (
