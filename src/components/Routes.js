@@ -15,6 +15,7 @@ import { addDiscussionPost, addReply } from '../api/DiscussionsApi';
 import { Icon } from 'native-base';
 import { getHeaderTitle, options } from './Routes.utils';
 import CheckIn from './CheckIn/CheckIn';
+import { formatDate } from '../utils';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -33,8 +34,9 @@ const Routes = () => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
+    return () => subscriber; // unsubscribe on unmount
   }, []);
+
   if (loading) {
     return <Loading />;
   }
@@ -129,11 +131,8 @@ const Routes = () => {
             name="Check In"
             component={CheckIn}
             options={({ route }) => {
-              const checkInDate = new Date(route.params.date.dateString);
-              const dateLocaleString = checkInDate.toLocaleDateString(
-                'en-US',
-                options,
-              );
+              const checkInDate = formatDate(route.params.date);
+              const dateLocaleString = checkInDate;
               return {
                 headerTitle: dateLocaleString,
               };

@@ -1,106 +1,150 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar } from 'react-native-calendars';
 import auth from '@react-native-firebase/auth';
 import { DB } from '../../config';
-import { View, Text, Button } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import Loading from '../Loading';
 import { Center } from '../Center';
+import CalendarStrip from 'react-native-calendar-strip';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { getMonthYearString } from '../../utils';
+import { useFocusEffect } from '@react-navigation/native';
+import EmptyDataMessage from './components/EmptyDataMessage';
+import DataDisplaySection from './components/DataDisplaySection';
+import MyCalendarStyles from './MyCalendar.styles';
 
 const MyCalendar = ({ navigation }) => {
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
   const currentUser = auth().currentUser.uid;
-  const [markedDates, setMarkedDates] = useState();
-  const [currentCalendarDate, setCurrentCalendarDate] = useState(new Date());
   const [checkIns, setCheckIns] = useState();
-  const [monthYearString, setMonthYearString] = useState();
+  const [monthYearString, setMonthYearString] = useState(
+    getMonthYearString(today),
+  );
   const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
 
-  const handleMarkedDates = (data = {}) => {
-    let newMarkedDates = [];
-    Object.keys(data).map((key) => {
-      newMarkedDates[key] = {
-        customStyles: {
-          container: {
-            backgroundColor: '#C3FDB8',
-          },
-          text: {
-            color: 'black',
-            fontWeight: 'bold',
-          },
-        },
-      };
-    });
-    setMarkedDates(newMarkedDates);
+  const [selectedDate, setSelectedDate] = useState(today);
+
+  const getCheckIns = (userId, year) => {
+    try {
+      DB.ref(`/checkIns/${userId}/${year}`).on('value', (querySnapshot) => {
+        let data = querySnapshot.val() ? querySnapshot.val() : null;
+        setCheckIns(data);
+      });
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
+  const handleDateUpdate = (day = selectedDate) => {
+    if (getMonthYearString(day) !== monthYearString) {
+      setMonthYearString(day);
+    }
+    setSelectedDate(day);
+    setData(null);
+    const date = new Date(day);
+
+    setLoading(true);
+    checkIns &&
+      setData(
+        checkIns[`${date.getFullYear()}-${date.getMonth() + 1}`]?.[
+          `${date.getDate()}`
+        ],
+      );
     setLoading(false);
   };
 
-  const getCheckIns = (userId, monthYearValue) => {
-    try {
-      DB.ref(`/checkIns/${userId}/${monthYearValue}`).on(
-        'value',
-        (querySnapshot) => {
-          let data = querySnapshot.val() ? querySnapshot.val() : {};
-          setCheckIns(data);
-          handleMarkedDates(data);
-        },
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleMonthUpdate = (date) => {
-    setLoading(true);
-    const updatedDate = new Date(date);
-    const newMonthYearString = `${updatedDate.getFullYear()}-${
-      updatedDate.getMonth() + 1
-    }`;
-    setCurrentCalendarDate(updatedDate);
-    setMonthYearString(newMonthYearString);
-    getCheckIns(currentUser, newMonthYearString);
-  };
+  useFocusEffect(
+    React.useCallback(() => {
+      getCheckIns(currentUser, selectedDate?.getFullYear());
+    }, [navigation]),
+  );
 
   useEffect(() => {
-    if (!monthYearString) {
-      setMonthYearString(
-        `${currentCalendarDate.getFullYear()}-${
-          currentCalendarDate.getMonth() + 1
-        }`,
-      );
+    if (!data && checkIns) {
+      handleDateUpdate();
     }
-    if (!checkIns && monthYearString) {
-      getCheckIns(currentUser, monthYearString);
-    }
-  }, [markedDates, currentCalendarDate, monthYearString, checkIns]);
+  }, [data, checkIns]);
 
   return (
-    <>
-      {checkIns && markedDates && !loading && (
-        <View>
-          <Calendar
-            onDayPress={(day) =>
+    <View style={MyCalendarStyles.container}>
+      <CalendarStrip
+        scrollable
+        style={MyCalendarStyles.calendarStrip}
+        calendarHeaderStyle={MyCalendarStyles.nonHighlightedText}
+        dateNumberStyle={MyCalendarStyles.nonHighlightedText}
+        dateNameStyle={MyCalendarStyles.nonHighlightedText}
+        highlightDateNumberStyle={MyCalendarStyles.highlightedText}
+        highlightDateNameStyle={MyCalendarStyles.highlightedText}
+        highlightDateContainerStyle={MyCalendarStyles.highlightedDateContainer}
+        onDateSelected={handleDateUpdate}
+        selectedDate={selectedDate}
+        maxDate={tomorrow}
+        datesBlacklist={[tomorrow]}
+        scrollToOnSetSelectedDate
+      />
+      <View style={MyCalendarStyles.dataViewContainer}>
+        {loading && (
+          <Center>
+            <View>
+              <Loading />
+            </View>
+          </Center>
+        )}
+        {!data && !loading && (
+          <EmptyDataMessage
+            handleClick={() =>
               navigation.push('Check In', {
-                date: day,
+                date: selectedDate,
                 monthYearString,
               })
             }
-            hideArrows={false}
-            hideExtraDays={true}
-            markedDates={markedDates}
-            markingType={'custom'}
-            current={currentCalendarDate}
-            onMonthChange={(date) => handleMonthUpdate(date.dateString)}
-            maxDate={new Date()}
           />
-        </View>
-      )}
-      {loading && (
-        <Center>
-          <View>
-            <Loading />
-          </View>
-        </Center>
-      )}
-    </>
+        )}
+        {!loading && data && (
+          <ScrollView style={MyCalendarStyles.scrollViewContainer}>
+            <DataDisplaySection
+              data={[
+                { value: 0.3, heading: 'Mood', highValueIsBad: false },
+                {
+                  value: data.sliderValues.stressLevel / 10,
+                  heading: 'Stress',
+                  highValueIsBad: true,
+                },
+              ]}
+              icon={<FontAwesome5 name="smile" size={50} />}
+              title="Personal"
+            />
+            <DataDisplaySection
+              data={[
+                {
+                  heading: 'Sound Intensity',
+                  value: data.sliderValues.soundIntensity / 10,
+                  highValueIsBad: true,
+                },
+                { heading: 'Sound Pitch', value: 0.3, highValueIsBad: true },
+              ]}
+              icon={<MaterialIcons name="hearing" size={50} />}
+              title="Hearing"
+            />
+            <DataDisplaySection
+              title="Sleep"
+              data={[
+                {
+                  heading: 'Hours',
+                  value: data.sliderValues.sleepHours / 10,
+                  maxValue: '12+',
+                  highValueIsBad: false,
+                },
+              ]}
+              icon={<FontAwesome5 name="bed" size={45} />}
+            />
+          </ScrollView>
+        )}
+      </View>
+    </View>
   );
 };
 

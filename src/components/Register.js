@@ -50,7 +50,7 @@ const Register = ({ navigation: { navigate } }) => {
             onFocus={handleFocus}
             value={firstName}
           />
-          {emailFieldError && <Icon name="alert-circle-outline"></Icon>}
+          {emailFieldError && <Icon name="alert-circle-outline" />}
         </Item>
         <Item style={RegisterStyles.inputFields} floatingLabel>
           <Label>Last Name</Label>
@@ -59,7 +59,7 @@ const Register = ({ navigation: { navigate } }) => {
             onFocus={handleFocus}
             value={lastName}
           />
-          {emailFieldError && <Icon name="alert-circle-outline"></Icon>}
+          {emailFieldError && <Icon name="alert-circle-outline" />}
         </Item>
         <Item style={RegisterStyles.inputFields} floatingLabel>
           <Label>Username</Label>
@@ -68,7 +68,7 @@ const Register = ({ navigation: { navigate } }) => {
             onFocus={handleFocus}
             value={userName}
           />
-          {emailFieldError && <Icon name="alert-circle-outline"></Icon>}
+          {emailFieldError && <Icon name="alert-circle-outline" />}
         </Item>
         <Item
           style={RegisterStyles.inputFields}
@@ -94,7 +94,7 @@ const Register = ({ navigation: { navigate } }) => {
               }
             }}
           />
-          {emailFieldError && <Icon name="alert-circle-outline"></Icon>}
+          {emailFieldError && <Icon name="alert-circle-outline" />}
         </Item>
         <Item style={RegisterStyles.inputFields} floatingLabel>
           <Label>Password</Label>

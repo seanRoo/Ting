@@ -42,3 +42,16 @@ export const sleepArray = [
     checked: false,
   },
 ];
+
+export const formatDate = (date) => {
+  date = new Date(date);
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+};
+
+export const getMonthYearString = (date) => {
+  date = new Date(date);
+  return `${date.getFullYear()}-${date.getMonth() + 1}`;
+};

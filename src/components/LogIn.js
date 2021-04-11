@@ -59,7 +59,7 @@ const Login = ({ navigation: { navigate } }) => {
               }
             }}
           />
-          {emailFieldError && <Icon name="alert-circle-outline"></Icon>}
+          {emailFieldError && <Icon name="alert-circle-outline" />}
         </Item>
         <Item style={LoginStyles.inputFields} floatingLabel>
           <Label>Password</Label>
