@@ -15,6 +15,11 @@
       "./assets/fonts"
     ]
   },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts"
+    ]
+  },
   "dependencies": {
     "@react-native-community/checkbox": "^0.5.2",
     "@react-native-community/cli": "^4.12.0",
