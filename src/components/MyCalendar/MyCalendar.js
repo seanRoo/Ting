@@ -15,8 +15,6 @@ import MyCalendarStyles from './MyCalendar.styles';
 
 const MyCalendar = ({ navigation }) => {
   const today = new Date();
-  const tomorrow = new Date();
-  tomorrow.setDate(today.getDate() + 1);
   const currentUser = auth().currentUser.uid;
   const [checkIns, setCheckIns] = useState();
   const [monthYearString, setMonthYearString] = useState(
@@ -81,8 +79,7 @@ const MyCalendar = ({ navigation }) => {
         highlightDateContainerStyle={MyCalendarStyles.highlightedDateContainer}
         onDateSelected={handleDateUpdate}
         selectedDate={selectedDate}
-        maxDate={tomorrow}
-        datesBlacklist={[tomorrow]}
+        maxDate={today}
         scrollToOnSetSelectedDate
       />
       <View style={MyCalendarStyles.dataViewContainer}>
