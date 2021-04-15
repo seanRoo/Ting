@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { AuthContext } from '../AuthProvider';
 import { Center } from './Center';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScaledSheet } from 'react-native-size-matters';
 
 const Register = ({ navigation: { navigate } }) => {
   const { register, error, setError } = useContext(AuthContext);
@@ -141,21 +142,21 @@ const Register = ({ navigation: { navigate } }) => {
   );
 };
 
-const RegisterStyles = StyleSheet.create({
+const RegisterStyles = ScaledSheet.create({
   inputFields: {
-    width: 300,
+    width: '300@s',
   },
   registerButton: {
-    marginTop: 30,
+    marginTop: '30@s',
     alignSelf: 'center',
-    width: 200,
+    width: '200@s',
   },
   loginButton: {
     alignSelf: 'center',
-    paddingTop: 20,
+    paddingTop: '20@s',
   },
   header: {
-    fontSize: 20,
+    fontSize: '20@s',
     fontWeight: 'bold',
   },
   container: {
@@ -170,7 +171,7 @@ const RegisterStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  registerErrorText: { alignSelf: 'center', paddingTop: 10, color: 'red' },
+  registerErrorText: { alignSelf: 'center', paddingTop: '10@s', color: 'red' },
 });
 
 export default Register;

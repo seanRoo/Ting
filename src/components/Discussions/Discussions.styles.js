@@ -1,15 +1,15 @@
-import { StyleSheet } from 'react-native';
+import { ScaledSheet } from 'react-native-size-matters';
 
-const DiscussionCardStyles = StyleSheet.create({
+const DiscussionCardStyles = ScaledSheet.create({
   container: {
     padding: 5,
     backgroundColor: 'ghostwhite',
   },
   heading: {
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: '12@s',
   },
-  bodyText: { fontSize: 16, fontFamily: 'Roboto' },
+  bodyText: { fontSize: '14@s', fontFamily: 'Roboto' },
   bold: { fontWeight: 'bold' },
   footer: {
     paddingRight: 0,
@@ -23,19 +23,15 @@ const DiscussionCardStyles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   buttonText: {
-    padding: 5,
-    borderRadius: 10,
-    fontSize: 16,
-    paddingLeft: 12,
+    padding: '5@s',
+    borderRadius: '10@s',
+    fontSize: '16@s',
+    paddingLeft: '12@s',
     paddingRight: 0,
   },
   buttonIcon: {
-    fontSize: 18,
+    fontSize: '18@s',
     color: 'black',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
   },
   myMessageClass: {
     borderLeftColor: 'orchid',

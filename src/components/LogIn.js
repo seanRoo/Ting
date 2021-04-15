@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { AuthContext } from '../AuthProvider';
 import { Center } from './Center';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScaledSheet } from 'react-native-size-matters';
 
 const Login = ({ navigation: { navigate } }) => {
   const { login, error, setError } = useContext(AuthContext);
@@ -103,21 +104,21 @@ const Login = ({ navigation: { navigate } }) => {
   );
 };
 
-const LoginStyles = StyleSheet.create({
+const LoginStyles = ScaledSheet.create({
   inputFields: {
-    width: 300,
+    width: '220@s',
   },
   loginButton: {
-    marginTop: 30,
+    marginTop: '30@s',
     alignSelf: 'center',
-    width: 200,
+    width: '200@s',
   },
   registerButton: {
     alignSelf: 'center',
-    paddingTop: 20,
+    paddingTop: '20@s',
   },
   header: {
-    fontSize: 20,
+    fontSize: '26@s',
     fontWeight: 'bold',
   },
   container: {
@@ -126,7 +127,7 @@ const LoginStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  loginErrorText: { alignSelf: 'center', paddingTop: 10, color: 'red' },
+  loginErrorText: { alignSelf: 'center', paddingTop: '10@s', color: 'red' },
 });
 
 export default Login;

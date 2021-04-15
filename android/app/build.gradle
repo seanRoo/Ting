@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.ting"
+        applicationId "com.tingApp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

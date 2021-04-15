@@ -25,7 +25,8 @@ export const ProgressBar = ({
       style={[
         {
           ...MyCalendarStyles.progressBarProgressLabel,
-          marginLeft: `${progress * 100}%`,
+          marginLeft:
+            progress === 1 ? `${progress * 94}%` : `${progress * 100}%`,
           color: color,
         },
       ]}

@@ -6,6 +6,7 @@ import { Avatar } from 'react-native-elements';
 import { formatFooterDate } from './Discussions.utils';
 import { DateTime } from 'luxon';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
 export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
   return (
@@ -14,28 +15,35 @@ export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
         <View
           style={{ borderColor: 'orchid', borderWidth: 1, borderRadius: 20 }}
         >
-          <View style={{ flexDirection: 'row', margin: 14, marginBottom: 5 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              margin: scale(14),
+              marginBottom: scale(5),
+            }}
+          >
             <Avatar
-              size={30}
+              size={scale(22)}
               rounded
               title="SR"
               activeOpacity={0.1}
               containerStyle={{ backgroundColor: 'black' }}
             />
-            <View style={{ flexDirection: 'column', marginLeft: 10 }}>
+            <View style={{ flexDirection: 'column', marginLeft: scale(10) }}>
               <View style={{ flexDirection: 'row' }}>
                 <Text
-                  style={
-                    ({ fontSize: 12 }, isAuthor && { ...Styles.authorStyle })
-                  }
+                  style={{
+                    fontSize: scale(10),
+                    ...(isAuthor && Styles.authorStyle),
+                  }}
                 >
                   {message.firstName} {message.lastName}
                 </Text>
                 {isAuthor && (
                   <FontAwesome5
                     style={{
-                      marginLeft: 8,
-                      marginTop: 3,
+                      marginLeft: scale(8),
+                      marginTop: scale(3),
                       alignSelf: 'flex-start',
                       color: 'dodgerblue',
                     }}
@@ -43,15 +51,15 @@ export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
                   />
                 )}
               </View>
-              <Text style={{ fontSize: 12 }}>
+              <Text style={{ fontSize: scale(8) }}>
                 {DateTime.fromJSDate(new Date(message.date)).toRelative()}
               </Text>
             </View>
           </View>
-          <CardItem header style={{ marginTop: 8, paddingBottom: 0 }}>
+          <CardItem header style={{ marginTop: scale(8), paddingBottom: 0 }}>
             <Text style={Styles.heading}>{message.messageHeader}</Text>
           </CardItem>
-          <CardItem style={{ marginTop: 8 }}>
+          <CardItem style={{ marginTop: scale(8) }}>
             <Body>
               <Text style={Styles.bodyText} numberOfLines={3}>
                 {message.messageBody}
@@ -65,19 +73,20 @@ export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
                 flex: 1,
                 justifyContent: 'flex-end',
                 flexDirection: 'row',
-                marginRight: 14,
+                marginRight: scale(14),
                 height: 'auto',
               }}
             >
               <Icon
                 name="chatbox-sharp"
                 style={{
-                  fontSize: 20,
+                  fontSize: scale(16),
                   textAlign: 'center',
-                  marginTop: 2,
+                  marginRight: scale(3.5),
+                  paddingBottom: scale(1),
                 }}
               />
-              <Text style={{ fontSize: 16 }}>
+              <Text style={{ fontSize: scale(12) }}>
                 {message.replyCount} Comments
               </Text>
             </View>
