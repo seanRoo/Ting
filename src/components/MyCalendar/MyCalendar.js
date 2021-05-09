@@ -13,8 +13,9 @@ import EmptyDataMessage from './components/EmptyDataMessage';
 import DataDisplaySection from './components/DataDisplaySection';
 import MyCalendarStyles from './MyCalendar.styles';
 
-const MyCalendar = ({ navigation }) => {
+const MyCalendar = ({ navigation, route }) => {
   const today = new Date();
+  const dashboardDate = route?.params?.dashboardDate;
   const currentUser = auth().currentUser.uid;
   const [checkIns, setCheckIns] = useState();
   const [monthYearString, setMonthYearString] = useState(
@@ -58,6 +59,14 @@ const MyCalendar = ({ navigation }) => {
     React.useCallback(() => {
       getCheckIns(currentUser, selectedDate?.getFullYear());
     }, [navigation]),
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (dashboardDate) {
+        handleDateUpdate(dashboardDate);
+      }
+    }, [dashboardDate]),
   );
 
   useEffect(() => {

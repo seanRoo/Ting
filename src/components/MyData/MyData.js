@@ -6,6 +6,7 @@ import PieChart from '../PieChart';
 import GraphViewDropdown from './GraphViewDropdown';
 import MyDataStyles from './MyData.styles';
 import auth from '@react-native-firebase/auth';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DB } from '../../config';
 import Loading from '../Loading';
 import {
@@ -16,6 +17,9 @@ import {
 import MonthSelector from './MonthSelector';
 import NoDataMessage from './NoDataMessage';
 import { normalize } from '../Discussions/Discussion.utils';
+import { Center } from '../Center';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import FilterTabs from './FilterTabs';
 
 const MyData = () => {
   const currentUser = auth().currentUser.uid;
@@ -36,6 +40,12 @@ const MyData = () => {
   });
   const [showNoDataMessage, setShowNoDataMessage] = useState(false);
   const [sliderData, setSliderData] = useState();
+  const [filters, setFilters] = useState([]);
+
+  const handleFilterUpdate = (selectedFilter) =>
+    filters.includes(selectedFilter)
+      ? setFilters(filters.filter((filter) => filter !== selectedFilter))
+      : setFilters([...filters, selectedFilter]);
 
   const handleMonthUpdate = (direction) => {
     setLoading(true);
@@ -99,135 +109,72 @@ const MyData = () => {
 
   useEffect(() => {}, [sliderData]);
   return (
-    <View style={{ height: '100%', paddingTop: 20 }}>
-      <ScrollView contentContainerStyle={MyDataStyles.scrollView}>
-        {/* <GraphViewDropdown
-          setGraphView={setGraphView}
-          graphView={graphView}
-          customStyles={{ alignSelf: 'flex-start' }}
-        /> */}
-        <View
-          style={{
-            width: '98%',
-            justifyContent: 'center',
-            borderRadius: 24,
-            height: 210,
-            borderWidth: 1,
-            backgroundColor: 'white',
-            paddingRight: 20,
-          }}
-        >
+    <View style={{ padding: 10, flex: 1, backgroundColor: 'white' }}>
+      <View style={{ flex: 0.2 }}>
+        <View style={{ flex: 0.7, flexDirection: 'row', marginTop: 12 }}>
           <View>
-            <Text style={{ paddingLeft: 18, fontSize: 18, marginBottom: 12 }}>
-              Sleep - Hours
+            <Text style={{ color: 'black', marginBottom: 4 }}>
+              Data Entries
             </Text>
-            <LineChart data={sliderData} />
+            <Text style={{ fontSize: 24, color: 'black' }}>6</Text>
+            <Text style={{ color: 'black', marginTop: 4 }}>
+              Showing data for: April 2020
+            </Text>
           </View>
         </View>
-        <View
-          style={{
-            width: '98%',
-            justifyContent: 'center',
-            borderRadius: 24,
-            height: 210,
-            borderWidth: 1,
-            backgroundColor: 'white',
-            paddingRight: 20,
-            marginTop: 10,
-          }}
-        >
-          <View>
-            <Text style={{ paddingLeft: 18, fontSize: 18, marginBottom: 12 }}>
-              Stress Level
-            </Text>
-            <LineChart data={sliderData} />
-          </View>
-        </View>
-        <View
-          style={{
-            width: '98%',
-            justifyContent: 'center',
-            borderRadius: 24,
-            height: 250,
-            borderWidth: 1,
-            backgroundColor: 'white',
-            paddingRight: 20,
-            marginTop: 10,
-            marginBottom: 10,
-          }}
-        >
-          <View style={{ marginTop: 16 }}>
-            <Text
-              style={{
-                fontSize: 18,
-                paddingLeft: 18,
-              }}
-            >
-              Sounds
-            </Text>
-            <PieChart />
-          </View>
-        </View>
-        {/* <Card
+      </View>
+      <View
         style={{
-          width: '95%',
-          alignSelf: 'center',
-          borderRadius: 16,
-          height: '78%',
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          marginBottom: 8,
         }}
       >
-        <View
+        <TouchableOpacity
           style={{
-            borderWidth: 2,
-            borderRadius: 16,
-            borderColor: 'orchid',
-            flex: 1,
+            flexDirection: 'row',
+            borderWidth: 1,
+            padding: 5,
+            borderRadius: 10,
+            backgroundColor: 'white',
+            marginRight: 8,
           }}
         >
-          {!loading && (
-            <View style={{ flex: 1 }}>
-              <MonthSelector
-                disabledArrows={disabledArrows}
-                handleMonthUpdate={handleMonthUpdate}
-                monthsArrayIndex={monthsArrayIndex}
-              />
-              {!showNoDataMessage && (
-                <View
-                  style={{
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    flex: 1,
-                  }}
-                >
-                  <CardItem>
-                    {graphView.value === 'sounds' && pieData && (
-                      <PieChart data={pieData} height={normalize(190)} />
-                    )}
-                    {graphView.value === 'sleepAndStress' && sliderData && (
-                      <View>
-                        <LineChart height={normalize(210)} data={sliderData} />
-                      </View>
-                    )}
-                  </CardItem>
-                  <CardItem
-                    footer
-                    style={{
-                      borderRadius: 16,
-                    }}
-                  >
-                    <Text style={{ fontSize: 16 }}>
-                      * Data from {dataEntries} entries
-                    </Text>
-                  </CardItem>
-                </View>
-              )}
-              {showNoDataMessage && <NoDataMessage />}
-            </View>
-          )}
-          {loading && <Loading />}
-        </View>
-      </Card> */}
-      </ScrollView>
+          <Text style={{ fontSize: 14 }}>Share</Text>
+          <MaterialCommunityIcons
+            style={{ marginLeft: 14 }}
+            name="share-variant"
+            size={20}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            flexDirection: 'row',
+            borderWidth: 1,
+            padding: 5,
+            borderRadius: 10,
+            backgroundColor: 'white',
+          }}
+        >
+          <Text style={{ fontSize: 14 }}>Rotate</Text>
+          <MaterialCommunityIcons
+            style={{ marginLeft: 14 }}
+            name="rotate-left"
+            size={20}
+          />
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          flex: 0.7,
+          backgroundColor: 'whitesmoke',
+          borderWidth: 1,
+          borderRadius: 4,
+        }}
+      >
+        <LineChart height="100%" width="100%" />
+      </View>
+      <FilterTabs handleFilterUpdate={handleFilterUpdate} filters={filters} />
     </View>
   );
 };

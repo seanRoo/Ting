@@ -5,8 +5,8 @@ import { AuthContext } from './AuthProvider';
 import { Icon } from 'native-base';
 import { MyData } from './components/AppTabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { CheckInStack } from './CheckInStack';
-import Dashboard from './components/Dashboard';
+import { MyCalendarStack } from './MyCalendarStack';
+import Dashboard from './components/Dashboard/Dashboard';
 
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -26,7 +26,7 @@ export const DashboardStack = (props) => {
 export const QuickNavigationStack = () => {
   return (
     <Tabs.Navigator>
-      <Tabs.Screen name="Check In" component={CheckInStack} />
+      <Tabs.Screen name="Check In" component={MyCalendarStack} />
       <Tabs.Screen name="My Data" component={MyData} />
     </Tabs.Navigator>
   );

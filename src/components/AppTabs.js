@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DashboardStack } from '../DashboardStack';
-import { CheckInStack } from '../CheckInStack';
+import { MyCalendarStack } from '../MyCalendarStack';
 import { DiscussionStack } from '../DiscussionStack';
 import { Center } from './Center';
 import { Text, TouchableOpacity } from 'react-native';
@@ -13,6 +13,7 @@ import { CreateDiscussion } from './Discussions/CreateDiscussion';
 import { ViewDiscussion } from './Discussions/ViewDiscussion';
 import { addDiscussionPost } from '../api/DiscussionsApi';
 import { StackActions } from '@react-navigation/native';
+import MyCalendar from './MyCalendar/MyCalendar';
 
 const Tabs = createBottomTabNavigator();
 
@@ -32,7 +33,7 @@ export const AppTabs = (props) => {
             );
           } else if (route.name === 'My Data') {
             return <Foundation name="graph-bar" size={size} color={color} />;
-          } else if (route.name === 'Check In') {
+          } else if (route.name === 'My Calendar') {
             return (
               <MaterialCommunityIcons
                 name="calendar-multiple-check"
@@ -60,7 +61,7 @@ export const AppTabs = (props) => {
       }}
     >
       <Tabs.Screen name="Dashboard" component={DashboardStack} />
-      <Tabs.Screen name="Check In" component={CheckInStack} />
+      <Tabs.Screen name="My Calendar" component={MyCalendar} />
       <Tabs.Screen name="My Data" component={MyDataStack} />
       <Tabs.Screen name="Discussions" component={DiscussionStack} />
     </Tabs.Navigator>

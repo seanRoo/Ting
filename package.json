@@ -15,11 +15,6 @@
       "./assets/fonts"
     ]
   },
-  "rnpm": {
-    "assets": [
-      "./assets/fonts"
-    ]
-  },
   "dependencies": {
     "@react-native-community/checkbox": "^0.5.2",
     "@react-native-community/cli": "^4.12.0",
@@ -36,6 +31,7 @@
     "@react-navigation/material-top-tabs": "^5.2.16",
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.9.0",
+    "add": "^2.0.6",
     "classnames": "^2.2.6",
     "dayjs": "^1.9.1",
     "faker": "^5.0.0",
@@ -52,13 +48,18 @@
     "react-native-gesture-handler": "^1.7.0",
     "react-native-global-font": "^1.0.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.3",
+    "react-native-material-menu": "^1.2.0",
     "react-native-month-year-picker": "^1.4.1",
+    "react-native-multi-selectbox": "^1.4.9",
     "react-native-multiple-select": "^0.5.5",
+    "react-native-paper": "^4.8.1",
+    "react-native-popover-view": "^4.0.1",
     "react-native-popup-menu": "^0.15.9",
     "react-native-progress": "^4.1.2",
     "react-native-pure-chart": "^0.0.24",
     "react-native-reanimated": "^1.13.0",
     "react-native-responsive-fontsize": "^0.4.3",
+    "react-native-responsive-linechart": "^5.7.1",
     "react-native-safe-area-context": "^3.1.6",
     "react-native-screens": "^2.10.1",
     "react-native-sectioned-multi-select": "^0.7.7",
@@ -66,7 +67,8 @@
     "react-native-size-matters": "^0.4.0",
     "react-native-svg": "^12.1.0",
     "react-native-vector-icons": "^7.0.0",
-    "uuidv4": "^6.2.4"
+    "uuidv4": "^6.2.4",
+    "yarn": "^1.22.10"
   },
   "devDependencies": {
     "@babel/core": "^7.11.4",

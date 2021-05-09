@@ -2,8 +2,10 @@ import { ScaledSheet } from 'react-native-size-matters';
 
 const DashboardCardStyles = ScaledSheet.create({
   container: {
-    padding: '5@s',
+    padding: '10@s',
     backgroundColor: 'ghostwhite',
+    display: 'flex',
+    flex: 1,
   },
   heading: {
     fontWeight: 'bold',
@@ -30,6 +32,21 @@ const DashboardCardStyles = ScaledSheet.create({
     color: 'black',
   },
   cardBody: { paddingLeft: '5@s', paddingRight: '5@s' },
+
+  graphContainer: {
+    flex: 0.6,
+    borderWidth: 1,
+    borderColor: 'black',
+    paddingRight: 12,
+    borderRadius: 10,
+    marginTop: 0,
+    borderTopWidth: 1,
+    backgroundColor: 'white',
+  },
+
+  // graphContainer:after{
+
+  // }
 });
 
 export default DashboardCardStyles;

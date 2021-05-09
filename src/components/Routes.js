@@ -32,6 +32,14 @@ const Routes = () => {
     setLoading(false);
   }
 
+  const handleHeader = ({ route }) => {
+    const routeName = getHeaderTitle(route);
+    if (routeName !== 'Dashboard') {
+      return routeName;
+    }
+    return false;
+  };
+
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return () => subscriber; // unsubscribe on unmount
@@ -48,7 +56,8 @@ const Routes = () => {
             name="Home"
             component={AppTabs}
             options={({ route }) => ({
-              headerTitle: getHeaderTitle(route),
+              headerTitle: handleHeader({ route }),
+              headerShown: Boolean(handleHeader({ route })),
               headerRight: () => {
                 return (
                   <TouchableOpacity

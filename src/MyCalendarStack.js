@@ -1,15 +1,15 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import CheckIn from './components/CheckIn/CheckIn';
+import MyCalendar from './components/MyCalendar/MyCalendar';
 
 const Stack = createStackNavigator();
 
-export const CheckInStack = () => {
+export const MyCalendarStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Check In">
+    <Stack.Navigator initialRouteName="My Calendar">
       <Stack.Screen
-        name="Check In"
-        component={CheckIn}
+        name="My Calendar"
+        component={MyCalendar}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
