@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { AppTabs, test } from './AppTabs';
 import { AuthStack } from '../AuthStack';
 import { AuthContext } from '../AuthProvider';
 import auth from '@react-native-firebase/auth';
 import Loading from './Loading';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StackActions } from '@react-navigation/native';
 import { TouchableOpacity, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { CreateDiscussion } from './Discussions/CreateDiscussion';
