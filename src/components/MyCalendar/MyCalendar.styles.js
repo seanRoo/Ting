@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { ScaledSheet } from 'react-native-size-matters';
 
-const MyCalendarStyles = StyleSheet.create({
+const MyCalendarStyles = ScaledSheet.create({
   container: { flex: 1, backgroundColor: 'white' },
   highlightedDateContainer: {
     borderColor: 'orchid',
@@ -14,7 +14,7 @@ const MyCalendarStyles = StyleSheet.create({
     color: 'black',
   },
   calendarStrip: {
-    height: 100,
+    height: '100@s',
     paddingTop: 15,
     paddingBottom: 10,
   },
@@ -25,7 +25,11 @@ const MyCalendarStyles = StyleSheet.create({
     borderColor: 'black',
     flex: 1,
   },
-  scrollViewContainer: { marginLeft: 15, marginTop: 25, marginBottom: 10 },
+  scrollViewContainer: {
+    marginLeft: '15@s',
+    marginTop: '15@s',
+    marginBottom: '10@s',
+  },
   iconContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
@@ -39,9 +43,9 @@ const MyCalendarStyles = StyleSheet.create({
     flex: 0.5,
     color: 'gray',
   },
-  progressBarHeadingTitle: { fontSize: 18 },
+  progressBarHeadingTitle: { fontSize: '16@s' },
   progressBarProgressLabel: { fontWeight: 'bold' },
-  dataViewTitle: { fontSize: 20, color: 'orchid', marginBottom: 12 },
+  dataViewTitle: { fontSize: '16@s', color: 'orchid', marginBottom: '8@s' },
   dataRowContainer: {
     flexDirection: 'row',
     flex: 1,

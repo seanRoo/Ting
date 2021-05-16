@@ -1,18 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DashboardStack } from '../DashboardStack';
-import { MyCalendarStack } from '../MyCalendarStack';
 import { DiscussionStack } from '../DiscussionStack';
-import { Center } from './Center';
-import { Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import { MyDataStack } from '../MyDataStack';
-import { createStackNavigator } from '@react-navigation/stack';
-import { CreateDiscussion } from './Discussions/CreateDiscussion';
-import { ViewDiscussion } from './Discussions/ViewDiscussion';
-import { addDiscussionPost } from '../api/DiscussionsApi';
-import { StackActions } from '@react-navigation/native';
 import MyCalendar from './MyCalendar/MyCalendar';
 
 const Tabs = createBottomTabNavigator();

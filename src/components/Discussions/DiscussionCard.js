@@ -3,10 +3,9 @@ import { Card, CardItem, Body, Icon } from 'native-base';
 import { Text, View, TouchableWithoutFeedback } from 'react-native';
 import Styles from './Discussions.styles';
 import { Avatar } from 'react-native-elements';
-import { formatFooterDate } from './Discussions.utils';
 import { DateTime } from 'luxon';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+import { scale } from 'react-native-size-matters';
 
 export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
   return (

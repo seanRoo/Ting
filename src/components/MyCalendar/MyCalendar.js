@@ -113,7 +113,11 @@ const MyCalendar = ({ navigation, route }) => {
           <ScrollView style={MyCalendarStyles.scrollViewContainer}>
             <DataDisplaySection
               data={[
-                { value: 0.3, heading: 'Mood', highValueIsBad: false },
+                {
+                  value: data.sliderValues.mood / 10,
+                  heading: 'Mood',
+                  highValueIsBad: false,
+                },
                 {
                   value: data.sliderValues.stressLevel / 10,
                   heading: 'Stress',
@@ -130,7 +134,11 @@ const MyCalendar = ({ navigation, route }) => {
                   value: data.sliderValues.soundIntensity / 10,
                   highValueIsBad: true,
                 },
-                { heading: 'Sound Pitch', value: 0.3, highValueIsBad: true },
+                {
+                  heading: 'Sound Pitch',
+                  value: data.sliderValues.soundPitch / 10,
+                  highValueIsBad: true,
+                },
               ]}
               icon={<MaterialIcons name="hearing" size={50} />}
               title="Hearing"

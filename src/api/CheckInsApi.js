@@ -4,7 +4,6 @@ const todaysDate = new Date();
 const currentYear = todaysDate.getFullYear();
 
 export const addCheckIn = async (
-  sounds,
   sliderValues,
   date,
   userId,
@@ -14,7 +13,7 @@ export const addCheckIn = async (
   await DB.ref(
     `/checkIns/${userId}/${date.getFullYear()}/${monthYearString}/${date.getDate()}`,
   )
-    .set({ date, sounds, sliderValues })
+    .set({ date, sliderValues })
     .then(() => console.log('Success'))
     .catch((error) => {
       throw error;

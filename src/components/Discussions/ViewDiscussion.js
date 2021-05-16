@@ -41,7 +41,7 @@ export const ViewDiscussion = ({ route: { params }, navigation }) => {
 
   const handleScrollGrow = () => {
     if (keyboardIsShown && Platform.OS === 'ios' && windowHeight < 800) {
-      return 0.55;
+      return 0.48;
     } else if (keyboardIsShown && Platform.OS === 'android') {
       return 0.8;
     } else if (keyboardIsShown && Platform.OS === 'ios' && windowHeight > 800) {

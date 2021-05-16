@@ -3,6 +3,7 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Icon, CardItem, Button } from 'native-base';
 import { Right } from '../Right';
 import Styles from './DashboardCard.styles';
+
 const DashboardCardFooter = ({ handleButtonPress, buttonText }) => {
   return (
     <CardItem footer style={Styles.footer}>

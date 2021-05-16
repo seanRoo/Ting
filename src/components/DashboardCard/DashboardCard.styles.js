@@ -43,10 +43,6 @@ const DashboardCardStyles = ScaledSheet.create({
     borderTopWidth: 1,
     backgroundColor: 'white',
   },
-
-  // graphContainer:after{
-
-  // }
 });
 
 export default DashboardCardStyles;

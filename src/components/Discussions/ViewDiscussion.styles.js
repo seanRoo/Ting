@@ -24,11 +24,10 @@ const ViewDiscussionStyles = StyleSheet.create({
     flexDirection: 'column',
   },
   replyMessageHeading: {
-    //fontSize: 15,
+    fontSize: 15,
   },
   replyMessageBody: {
     fontSize: 16,
-    //margin: 12,
     marginTop: 10,
     marginRight: 10,
   },

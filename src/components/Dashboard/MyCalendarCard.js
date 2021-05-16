@@ -14,7 +14,7 @@ const MyCalendarCard = ({ handleClick, checkedIn }) => {
           borderRadius: 10,
           padding: 8,
           paddingBottom: 0,
-          borderWidth: 1,
+          borderWidth: 0.5,
           marginBottom: 8,
           backgroundColor: 'white',
         }}

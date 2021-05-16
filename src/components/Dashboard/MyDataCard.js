@@ -7,7 +7,17 @@ import LineChart from '../LineChart';
 
 const MyDataCard = ({ handleFilterClick }) => {
   return (
-    <View style={Styles.graphContainer}>
+    <View
+      style={{
+        flex: 0.6,
+        borderWidth: 0.5,
+        borderColor: 'black',
+        paddingRight: 12,
+        borderRadius: 10,
+        marginTop: 0,
+        backgroundColor: 'white',
+      }}
+    >
       <View
         style={{
           flexDirection: 'row',

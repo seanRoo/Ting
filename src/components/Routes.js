@@ -144,6 +144,7 @@ const Routes = () => {
               const dateLocaleString = checkInDate;
               return {
                 headerTitle: dateLocaleString,
+                gestureEnabled: false,
               };
             }}
           />

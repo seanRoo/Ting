@@ -6,11 +6,14 @@ const Stack = createStackNavigator();
 
 export const CheckInStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Check In">
+    <Stack.Navigator
+      initialRouteName="Check In"
+      screenOptions={{ gesturesEnabled: false }}
+    >
       <Stack.Screen
         name="Check In"
         component={CheckIn}
-        options={{ headerShown: false }}
+        options={{ gestureEnabled: false }}
       />
     </Stack.Navigator>
   );

@@ -1,15 +1,20 @@
 import { StyleSheet } from 'react-native';
 
 const SoundIntensitySliderStyles = StyleSheet.create({
-  header: {
+  headerTitle: {
+    fontWeight: 'bold',
     fontSize: 18,
-    paddingBottom: 14,
-    alignSelf: 'center',
+  },
+  subtitle: {
+    alignSelf: 'flex-start',
+    marginTop: 6,
   },
   bold: { fontWeight: 'bold' },
-  slider: { width: 300, height: 40 },
+  slider: {
+    height: 30,
+  },
   containerView: {
-    width: '100%',
+    flex: 1,
   },
 });
 

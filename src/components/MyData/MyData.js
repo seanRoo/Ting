@@ -1,178 +1,197 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView } from 'react-native';
-import { Card, CardItem } from 'native-base';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, ScrollView, Platform } from 'react-native';
 import LineChart from '../LineChart';
-import PieChart from '../PieChart';
-import GraphViewDropdown from './GraphViewDropdown';
-import MyDataStyles from './MyData.styles';
+import Styles from './MyData.styles';
 import auth from '@react-native-firebase/auth';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MonthPicker from 'react-native-month-year-picker';
 import { DB } from '../../config';
-import Loading from '../Loading';
 import {
   countOccurrences,
   transformCountArray,
   sortData,
 } from './MyData.utils';
-import MonthSelector from './MonthSelector';
-import NoDataMessage from './NoDataMessage';
-import { normalize } from '../Discussions/Discussion.utils';
-import { Center } from '../Center';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import FilterTabs from './FilterTabs';
+import ActionButton from './ActionButton';
+
+if (Platform.OS === 'android') {
+  // only android needs polyfill
+  require('intl'); // import intl object
+  require('intl/locale-data/jsonp/en-IN'); // load the required locale details
+}
 
 const MyData = () => {
   const currentUser = auth().currentUser.uid;
-  const [graphView, setGraphView] = useState({
-    value: 'sounds',
-    text: 'Sounds',
+
+  const [sliderData, setSliderData] = useState({
+    sleepData: [],
+    soundIntensityData: [],
+    soundPitchData: [],
+    moodData: [],
+    stressLevelData: [],
   });
-  const [countArray, setCountArray] = useState();
-  const [pieData, setPieData] = useState();
-  const [dataEntries, setDataEntries] = useState();
-  const [loading, setLoading] = useState(true);
-  const [monthsArrayIndex, setMonthsArrayIndex] = useState(
-    new Date().getMonth(),
-  );
-  const [disabledArrows, setDisabledArrows] = useState({
-    rightArrow: new Date().getMonth() === 11,
-    leftArrow: new Date().getMonth() === 1,
-  });
-  const [showNoDataMessage, setShowNoDataMessage] = useState(false);
-  const [sliderData, setSliderData] = useState();
+
+  const [sleepData, setSleepData] = useState([]);
   const [filters, setFilters] = useState([]);
+  const [showMonthPicker, setShowMonthPicker] = useState(false);
+  const [monthPickerValue, setMonthPickerValue] = useState(new Date());
 
   const handleFilterUpdate = (selectedFilter) =>
     filters.includes(selectedFilter)
       ? setFilters(filters.filter((filter) => filter !== selectedFilter))
       : setFilters([...filters, selectedFilter]);
 
-  const handleMonthUpdate = (direction) => {
-    setLoading(true);
-    setShowNoDataMessage(false);
-    const newIndex = monthsArrayIndex + direction;
-    setMonthsArrayIndex(newIndex);
-    setDisabledArrows({
-      rightArrow: newIndex === 11,
-      leftArrow: newIndex === 0,
-    });
-  };
+  const showPicker = useCallback((value) => setShowMonthPicker(value), []);
 
-  const getMonthlyData = (month) => {
-    const today = new Date();
-    const mm = month || String(today.getMonth() + 1).padStart(2, '0');
-    const yyyy = String(today.getFullYear());
-    const monthYearValue = `${yyyy}-${mm}`;
-    let test = null;
+  const onValueChange = useCallback(
+    (event, newDate) => {
+      const selectedDate = newDate || monthPickerValue;
+
+      showPicker(false);
+      setMonthPickerValue(selectedDate);
+    },
+    [monthPickerValue, showPicker],
+  );
+
+  const filterNullValues = (objectArray) =>
+    objectArray.filter((option) => option.y !== undefined);
+
+  const transformDataSets = () => [
+    { name: 'Sleep', data: sliderData.sleepData, color: 'green' },
+    {
+      name: 'Sound Intensity',
+      data: sliderData.soundIntensityData,
+      color: 'purple',
+    },
+    {
+      name: 'Sound Pitch',
+      data: sliderData.soundPitchData,
+      color: 'pink',
+    },
+    { name: 'Mood', data: sliderData.moodData, color: 'blue' },
+    {
+      name: 'Stress',
+      data: sliderData.stressLevelData,
+      color: 'red',
+    },
+  ];
+
+  const getData = () => {
+    const year = monthPickerValue.getFullYear();
+    const month = String(monthPickerValue.getMonth() + 1);
+    const monthYearValue = `${year}-${month}`;
     try {
-      DB.ref(`/checkIns/${currentUser}/${monthYearValue}`).on(
+      DB.ref(`/checkIns/${currentUser}/${year}/${monthYearValue}`).on(
         'value',
         (querySnapshot) => {
-          if (querySnapshot.val()) {
-            const responseArray = sortData(querySnapshot.val());
-            setDataEntries(responseArray.length);
-            const sounds = [
-              ...responseArray.map((element) => element.sounds).flat(),
-            ];
-            const sliderValues = responseArray
-              .map((element) => ({
-                date: element.date,
-                sliderValues: element.sliderValues,
-              }))
-              .flat();
-            setCountArray(countOccurrences(sounds));
-            setSliderData(sliderValues);
-            setLoading(false);
-          } else {
-            console.log('No data!');
-            setShowNoDataMessage(true);
-            setLoading(false);
-          }
+          const responseArray = querySnapshot.val();
+          let sleepArray = [];
+          let soundIntensityArray = [];
+          let soundPitchArray = [];
+          let moodArray = [];
+          let stressLevelArray = [];
+          [...Array(31).keys()].map((num) => {
+            if (responseArray && responseArray[num]) {
+              const sleepValue = {
+                x: num,
+                y: responseArray[num].sliderValues.sleepHours,
+              };
+              const soundIntensityValue = {
+                x: num,
+                y: responseArray[num].sliderValues.soundIntensity,
+              };
+              const stressLevelValue = {
+                x: num,
+                y: responseArray[num].sliderValues.stressLevel,
+              };
+              const moodValue = {
+                x: num,
+                y: responseArray[num].sliderValues.mood,
+              };
+              const soundPitchValue = {
+                x: num,
+                y: responseArray[num].sliderValues.soundPitch,
+              };
+              sleepArray.push(sleepValue);
+              soundIntensityArray.push(soundIntensityValue);
+              stressLevelArray.push(stressLevelValue);
+              moodArray.push(moodValue);
+              soundPitchArray.push(soundPitchValue);
+            }
+          });
+          setSliderData({
+            sleepData: filterNullValues(sleepArray),
+            soundIntensityData: filterNullValues(soundIntensityArray),
+            moodData: filterNullValues(moodArray),
+            soundPitchData: filterNullValues(soundPitchArray),
+            stressLevelData: filterNullValues(stressLevelArray),
+          });
         },
       );
     } catch (error) {
-      setLoading(false);
       console.log(error);
     }
-    return test;
   };
 
   useEffect(() => {
-    getMonthlyData(monthsArrayIndex + 1);
-  }, [monthsArrayIndex]);
+    getData();
+  }, [onValueChange]);
 
   useEffect(() => {
-    if (countArray) {
-      setPieData(transformCountArray(countArray));
-    }
-  }, [countArray]);
-
-  useEffect(() => {}, [sliderData]);
+    return () => setSliderData([]);
+  }, []);
   return (
-    <View style={{ padding: 10, flex: 1, backgroundColor: 'white' }}>
-      <View style={{ flex: 0.2 }}>
-        <View style={{ flex: 0.7, flexDirection: 'row', marginTop: 12 }}>
-          <View>
-            <Text style={{ color: 'black', marginBottom: 4 }}>
-              Data Entries
+    <View style={Styles.container}>
+      {showMonthPicker && (
+        <MonthPicker
+          onChange={onValueChange}
+          value={monthPickerValue}
+          minimumDate={new Date(2020, 5)}
+          maximumDate={new Date(2025, 5)}
+        />
+      )}
+      <View style={Styles.headerSection}>
+        <Text style={Styles.headerText}>Data Entries</Text>
+        <Text style={Styles.dataEntriesText}>6</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={{ ...Styles.headerText, alignSelf: 'center' }}>
+            Showing data for:
+          </Text>
+          <TouchableOpacity
+            style={{
+              borderWidth: 0.5,
+              borderColor: 'black',
+              marginLeft: 8,
+              padding: 4,
+              flexDirection: 'row',
+              borderRadius: 10,
+            }}
+            onPress={() => showPicker(true)}
+          >
+            <Text style={{ color: 'blue' }}>
+              {`${monthPickerValue.toLocaleString('default', {
+                month: 'long',
+              })}, ${monthPickerValue.toLocaleString('default', {
+                year: 'numeric',
+              })}`}
             </Text>
-            <Text style={{ fontSize: 24, color: 'black' }}>6</Text>
-            <Text style={{ color: 'black', marginTop: 4 }}>
-              Showing data for: April 2020
-            </Text>
-          </View>
+            <MaterialCommunityIcons
+              name="pencil"
+              size={16}
+              style={{ marginLeft: 8, color: 'blue' }}
+            />
+          </TouchableOpacity>
         </View>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          marginBottom: 8,
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            borderWidth: 1,
-            padding: 5,
-            borderRadius: 10,
-            backgroundColor: 'white',
-            marginRight: 8,
-          }}
-        >
-          <Text style={{ fontSize: 14 }}>Share</Text>
-          <MaterialCommunityIcons
-            style={{ marginLeft: 14 }}
-            name="share-variant"
-            size={20}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            borderWidth: 1,
-            padding: 5,
-            borderRadius: 10,
-            backgroundColor: 'white',
-          }}
-        >
-          <Text style={{ fontSize: 14 }}>Rotate</Text>
-          <MaterialCommunityIcons
-            style={{ marginLeft: 14 }}
-            name="rotate-left"
-            size={20}
-          />
-        </TouchableOpacity>
+      <View style={Styles.actionButtonContainer}>
+        <ActionButton iconName="share-variant" text="Share" />
+        <ActionButton iconName="rotate-left" text="Rotate" />
       </View>
-      <View
-        style={{
-          flex: 0.7,
-          backgroundColor: 'whitesmoke',
-          borderWidth: 1,
-          borderRadius: 4,
-        }}
-      >
-        <LineChart height="100%" width="100%" />
+      <View style={Styles.lineChartContainer}>
+        {(sliderData.sleepData.length && (
+          <LineChart height="100%" width="100%" dataset={transformDataSets()} />
+        )) || <Text>No Data</Text>}
       </View>
       <FilterTabs handleFilterUpdate={handleFilterUpdate} filters={filters} />
     </View>

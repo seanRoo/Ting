@@ -1,7 +1,7 @@
 import React from 'react';
-import { Left, Right, ListItem, Body } from 'native-base';
+import { Left, ListItem, Body } from 'native-base';
 import { Text, View, TouchableWithoutFeedback } from 'react-native';
-import { Avatar, Divider } from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
 import Styles from './ViewDiscussion.styles';
 import { DateTime } from 'luxon';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';

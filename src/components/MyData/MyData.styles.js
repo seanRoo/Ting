@@ -1,36 +1,47 @@
-import { StyleSheet } from 'react-native';
+import { ScaledSheet } from 'react-native-size-matters';
 
-const MyDataStyles = StyleSheet.create({
-  scrollView: {
-    width: '100%',
-    minHeight: '100%',
-    //marginTop: 20,
-    // marginLeft: 12,
-    // marginRight: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-  buttonContainer: {
-    marginBottom: 15,
-    backgroundColor: 'transparent',
-  },
-  buttons: {
-    height: 35,
-    padding: 20,
-  },
-  graphContainer: {
-    width: '100%',
-  },
-  graphViewDropdown: { marginBottom: 20 },
-  menuOption: {
-    height: 45,
-    justifyContent: 'center',
-    borderBottomWidth: 0.25,
-    flexDirection: 'row',
+export default ScaledSheet.create({
+  container: {
     padding: 10,
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  headerSection: {
+    flex: 0.2,
+    marginTop: 6,
+    marginBottom: 6,
+  },
+  headerText: {
+    color: 'black',
+  },
+  dataEntriesText: {
+    fontSize: 24,
+    color: 'black',
+    margin: 4,
+    marginLeft: 0,
+  },
+  actionButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginBottom: 8,
+  },
+  actionButton: {
+    flexDirection: 'row',
+    borderWidth: 1,
+    padding: 2,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    marginLeft: 8,
+    width: 60,
+  },
+  actionButtonText: {
+    fontSize: '12@s',
+  },
+  actionButtonIcon: { marginLeft: 14 },
+  lineChartContainer: {
+    flex: 0.7,
+    backgroundColor: 'whitesmoke',
+    borderWidth: 1,
+    borderRadius: 4,
   },
 });
-
-export default MyDataStyles;
