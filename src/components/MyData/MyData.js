@@ -1,83 +1,60 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView, Platform } from 'react-native';
+import { View, Text, ScrollView, Platform, Share } from 'react-native';
 import LineChart from '../LineChart';
 import Styles from './MyData.styles';
 import auth from '@react-native-firebase/auth';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MonthPicker from 'react-native-month-year-picker';
 import { DB } from '../../config';
-import {
-  countOccurrences,
-  transformCountArray,
-  sortData,
-} from './MyData.utils';
+import { transformDataSets, onShare } from './MyData.utils';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import FilterTabs from './FilterTabs';
-import ActionButton from './ActionButton';
+import { Divider } from 'react-native-elements';
+import NoDataMessage from './NoDataMessage';
+import Loading from '../Loading';
 
 if (Platform.OS === 'android') {
   // only android needs polyfill
   require('intl'); // import intl object
   require('intl/locale-data/jsonp/en-IN'); // load the required locale details
+  Intl.__disableRegExpRestore();
 }
 
 const MyData = () => {
   const currentUser = auth().currentUser.uid;
 
-  const [sliderData, setSliderData] = useState({
-    sleepData: [],
-    soundIntensityData: [],
-    soundPitchData: [],
-    moodData: [],
-    stressLevelData: [],
-  });
-
-  const [sleepData, setSleepData] = useState([]);
-  const [filters, setFilters] = useState([]);
+  const [dataset, setDataset] = useState(null);
+  const [emptyData, setEmptyData] = useState(false);
   const [showMonthPicker, setShowMonthPicker] = useState(false);
   const [monthPickerValue, setMonthPickerValue] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleFilterUpdate = (selectedFilter) =>
-    filters.includes(selectedFilter)
-      ? setFilters(filters.filter((filter) => filter !== selectedFilter))
-      : setFilters([...filters, selectedFilter]);
+  const handleFilterUpdate = (selectedFilter) => {
+    const newState = [...dataset];
+    newState.map((option) => {
+      if (option.name === selectedFilter.name) {
+        option.toggled = !selectedFilter.toggled;
+      }
+    });
+    setDataset(newState);
+  };
 
   const showPicker = useCallback((value) => setShowMonthPicker(value), []);
 
   const onValueChange = useCallback(
     (event, newDate) => {
       const selectedDate = newDate || monthPickerValue;
-
       showPicker(false);
       setMonthPickerValue(selectedDate);
     },
-    [monthPickerValue, showPicker],
+    [monthPickerValue],
   );
 
   const filterNullValues = (objectArray) =>
     objectArray.filter((option) => option.y !== undefined);
 
-  const transformDataSets = () => [
-    { name: 'Sleep', data: sliderData.sleepData, color: 'green' },
-    {
-      name: 'Sound Intensity',
-      data: sliderData.soundIntensityData,
-      color: 'purple',
-    },
-    {
-      name: 'Sound Pitch',
-      data: sliderData.soundPitchData,
-      color: 'pink',
-    },
-    { name: 'Mood', data: sliderData.moodData, color: 'blue' },
-    {
-      name: 'Stress',
-      data: sliderData.stressLevelData,
-      color: 'red',
-    },
-  ];
-
   const getData = () => {
+    setIsLoading(true);
     const year = monthPickerValue.getFullYear();
     const month = String(monthPickerValue.getMonth() + 1);
     const monthYearValue = `${year}-${month}`;
@@ -120,27 +97,35 @@ const MyData = () => {
               soundPitchArray.push(soundPitchValue);
             }
           });
-          setSliderData({
+
+          const transformedDataSets = transformDataSets({
             sleepData: filterNullValues(sleepArray),
             soundIntensityData: filterNullValues(soundIntensityArray),
             moodData: filterNullValues(moodArray),
             soundPitchData: filterNullValues(soundPitchArray),
             stressLevelData: filterNullValues(stressLevelArray),
           });
+          setDataset(transformedDataSets);
         },
       );
     } catch (error) {
       console.log(error);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
     getData();
-  }, [onValueChange]);
+  }, [monthPickerValue]);
 
   useEffect(() => {
-    return () => setSliderData([]);
+    setEmptyData(dataset?.every((dataObject) => !dataObject.data.length));
+  }, [dataset]);
+
+  useEffect(() => {
+    setDataset(null);
   }, []);
+
   return (
     <View style={Styles.container}>
       {showMonthPicker && (
@@ -152,8 +137,6 @@ const MyData = () => {
         />
       )}
       <View style={Styles.headerSection}>
-        <Text style={Styles.headerText}>Data Entries</Text>
-        <Text style={Styles.dataEntriesText}>6</Text>
         <View style={{ flexDirection: 'row' }}>
           <Text style={{ ...Styles.headerText, alignSelf: 'center' }}>
             Showing data for:
@@ -174,7 +157,7 @@ const MyData = () => {
                 month: 'long',
               })}, ${monthPickerValue.toLocaleString('default', {
                 year: 'numeric',
-              })}`}
+              })}, ${dataset?.[0].data.length} results`}
             </Text>
             <MaterialCommunityIcons
               name="pencil"
@@ -184,16 +167,20 @@ const MyData = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={Styles.actionButtonContainer}>
-        <ActionButton iconName="share-variant" text="Share" />
-        <ActionButton iconName="rotate-left" text="Rotate" />
-      </View>
-      <View style={Styles.lineChartContainer}>
-        {(sliderData.sleepData.length && (
-          <LineChart height="100%" width="100%" dataset={transformDataSets()} />
-        )) || <Text>No Data</Text>}
-      </View>
-      <FilterTabs handleFilterUpdate={handleFilterUpdate} filters={filters} />
+      {!emptyData && (
+        <View style={{ flexDirection: 'column', flex: 0.7 }}>
+          <View style={{ marginBottom: 16 }}>
+            <LineChart dataset={dataset} />
+          </View>
+          <Divider />
+          <FilterTabs
+            handleFilterUpdate={handleFilterUpdate}
+            filters={dataset}
+          />
+        </View>
+      )}
+      {emptyData && !isLoading && <NoDataMessage />}
+      {emptyData && isLoading && <Loading />}
     </View>
   );
 };

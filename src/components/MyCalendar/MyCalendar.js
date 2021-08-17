@@ -27,14 +27,11 @@ const MyCalendar = ({ navigation, route }) => {
   const [selectedDate, setSelectedDate] = useState(today);
 
   const getCheckIns = (userId, year) => {
-    try {
-      DB.ref(`/checkIns/${userId}/${year}`).on('value', (querySnapshot) => {
-        let data = querySnapshot.val() ? querySnapshot.val() : null;
-        setCheckIns(data);
-      });
-    } catch (error) {
+    DB.ref(`/checkIns/${userId}/${year}`).on('value', (querySnapshot) => {
+      let data = querySnapshot.val();
+      setCheckIns(data);
       setLoading(false);
-    }
+    });
   };
 
   const handleDateUpdate = (day = selectedDate) => {
@@ -52,12 +49,13 @@ const MyCalendar = ({ navigation, route }) => {
           `${date.getDate()}`
         ],
       );
+    console.log(JSON.stringify(checkIns, null, 1));
     setLoading(false);
   };
 
   useFocusEffect(
     React.useCallback(() => {
-      getCheckIns(currentUser, selectedDate?.getFullYear());
+      selectedDate && getCheckIns(currentUser, selectedDate.getFullYear());
     }, [navigation]),
   );
 
@@ -75,6 +73,20 @@ const MyCalendar = ({ navigation, route }) => {
     }
   }, [data, checkIns]);
 
+  const handleCheckedInDatesStyle = (date) => {
+    const newDate = new Date(date);
+    if (
+      checkIns &&
+      checkIns[`${newDate.getFullYear()}-${newDate.getMonth() + 1}`]?.[
+        `${newDate.getDate()}`
+      ]
+    ) {
+      return {
+        dateContainerStyle: { backgroundColor: 'rgba(0, 255, 0, 0.2)' },
+      };
+    }
+  };
+
   return (
     <View style={MyCalendarStyles.container}>
       <CalendarStrip
@@ -90,6 +102,7 @@ const MyCalendar = ({ navigation, route }) => {
         selectedDate={selectedDate}
         maxDate={today}
         scrollToOnSetSelectedDate
+        customDatesStyles={handleCheckedInDatesStyle}
       />
       <View style={MyCalendarStyles.dataViewContainer}>
         {loading && (
@@ -100,14 +113,16 @@ const MyCalendar = ({ navigation, route }) => {
           </Center>
         )}
         {!data && !loading && (
-          <EmptyDataMessage
-            handleClick={() =>
-              navigation.push('Check In', {
-                date: selectedDate,
-                monthYearString,
-              })
-            }
-          />
+          <Center>
+            <EmptyDataMessage
+              handleClick={() =>
+                navigation.push('Check In', {
+                  date: selectedDate,
+                  monthYearString,
+                })
+              }
+            />
+          </Center>
         )}
         {!loading && data && (
           <ScrollView style={MyCalendarStyles.scrollViewContainer}>
@@ -149,7 +164,7 @@ const MyCalendar = ({ navigation, route }) => {
                 {
                   heading: 'Hours',
                   value: data.sliderValues.sleepHours / 10,
-                  maxValue: '12+',
+                  maxValue: 10,
                   highValueIsBad: false,
                 },
               ]}

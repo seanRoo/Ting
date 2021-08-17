@@ -1,8 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity, Text } from 'react-native';
-import { AuthContext } from './AuthProvider';
-import { Icon } from 'native-base';
 import { MyData } from './components/AppTabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MyCalendarStack } from './MyCalendarStack';
@@ -11,8 +8,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 
-export const DashboardStack = (props) => {
-  const { logout } = useContext(AuthContext);
+export const DashboardStack = () => {
   return (
     <Stack.Navigator initialRouteName="Dashboard">
       <Stack.Screen

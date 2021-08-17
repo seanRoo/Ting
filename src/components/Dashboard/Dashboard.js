@@ -5,19 +5,22 @@ import auth from '@react-native-firebase/auth';
 import { DB } from '../../config';
 import Styles from '../DashboardCard/DashboardCard.styles';
 import { getMonthYearString } from '../../utils';
-import MyDataFilterModal from '../../MyDataFilterModal';
-import MyCalendarCard from './MyCalendarCard';
-import MyDataCard from './MyDataCard';
 import DashboardHeader from './DashboardHeader';
-import DashboardDiscussionCard from './DashboardDiscussionCard';
+import { ButtonGroup } from 'react-native-elements';
+import ConsultantList from './components/ConsultantList';
+import HelpfulLinksList from './components/HelpfulLinksList';
+import DashboardOverview from './components/DashboardOverview';
+import { getUser } from '../../api/UserApi';
+import Loading from '../Loading';
 
 const Dashboard = ({ navigation }) => {
   const currentUser = auth().currentUser.uid;
   const today = new Date();
 
   const [checkedIn, setCheckedIn] = useState(false);
-  const [filterOptions, setFilterOptions] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [buttonGroupIndex, setButtonGroupIndex] = useState(0);
+  const [userInfo, setUserInfo] = useState(null);
+
   const getIsCheckedInToday = (userId) => {
     try {
       DB.ref(
@@ -35,38 +38,56 @@ const Dashboard = ({ navigation }) => {
 
   useEffect(() => {
     getIsCheckedInToday(currentUser);
+    if (!userInfo) {
+      getUser(currentUser, setUserInfo);
+    }
   }, []);
 
-  const handleSave = (options) => {
-    setFilterOptions(options);
-    setModalVisible(false);
-  };
+  const buttonGroupComponents = [
+    <DashboardOverview
+      navigation={navigation}
+      monthYearString={() => getMonthYearString(today)}
+      today={today}
+      checkedIn={checkedIn}
+    />,
+    <ConsultantList navigation={navigation} />,
+    <HelpfulLinksList />,
+  ];
+  const buttons = ['My Calendar', 'My Consultants', 'Helpful Links'];
 
   return (
-    <Container style={[Styles.container, modalVisible && { opacity: 0.2 }]}>
-      <MyDataFilterModal
-        modalVisible={modalVisible}
-        handleClose={() => setModalVisible(!modalVisible)}
-        handleSave={handleSave}
-      />
-      <DashboardHeader />
-      <View style={{ flexDirection: 'column', flex: 1 }}>
-        <View style={{ flex: 0.5, flexDirection: 'row' }}>
-          <DashboardDiscussionCard />
-          <MyCalendarCard
-            handleClick={() =>
-              !checkedIn
-                ? navigation.push('Check In', {
-                    date: today,
-                    monthYearString: getMonthYearString(today),
-                  })
-                : navigation.navigate('My Calendar', { dashboardDate: today })
-            }
-            checkedIn={checkedIn}
+    <Container style={Styles.container}>
+      {userInfo && (
+        <>
+          <DashboardHeader
+            handleClick={(routeName) => navigation.navigate(routeName)}
+            userInfo={userInfo}
           />
-        </View>
-        <MyDataCard handleFilterClick={() => setModalVisible(!modalVisible)} />
-      </View>
+          <View style={{ flexDirection: 'column', flex: 1 }}>
+            <ButtonGroup
+              onPress={setButtonGroupIndex}
+              selectedIndex={buttonGroupIndex}
+              buttons={buttons}
+              containerStyle={{
+                borderRadius: 20,
+                flex: 0.08,
+                marginBottom: 20,
+              }}
+              buttonStyle={{
+                backgroundColor: 'rgba(218,112,214, .3)',
+                height: 45,
+              }}
+              selectedButtonStyle={{ backgroundColor: 'orchid' }}
+              textStyle={{ color: 'black' }}
+              selectedTextStyle={{ fontWeight: 'bold' }}
+            />
+            <View style={{ flex: 0.92, padding: 4 }}>
+              {buttonGroupComponents[buttonGroupIndex]}
+            </View>
+          </View>
+        </>
+      )}
+      {!userInfo && <Loading />}
     </Container>
   );
 };

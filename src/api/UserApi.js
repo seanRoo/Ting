@@ -9,7 +9,7 @@ export const createUser = async ({ userName, firstName, lastName, userId }) => {
     });
 };
 
-export const getUser = (userId, callback) => {
+export const getUser = (userId, callback = () => {}) => {
   DB.ref(`/users/${userId}`).on('value', (querySnapshot) => {
     let data = querySnapshot.val() ? querySnapshot.val() : {};
     callback(data);

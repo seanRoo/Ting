@@ -14,7 +14,7 @@ const MyCalendarStyles = ScaledSheet.create({
     color: 'black',
   },
   calendarStrip: {
-    height: '100@s',
+    height: '80@s',
     paddingTop: 15,
     paddingBottom: 10,
   },
@@ -22,6 +22,8 @@ const MyCalendarStyles = ScaledSheet.create({
     borderWidth: 0.5,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
     borderColor: 'black',
     flex: 1,
   },
@@ -43,7 +45,7 @@ const MyCalendarStyles = ScaledSheet.create({
     flex: 0.5,
     color: 'gray',
   },
-  progressBarHeadingTitle: { fontSize: '16@s' },
+  progressBarHeadingTitle: { fontSize: '14@s' },
   progressBarProgressLabel: { fontWeight: 'bold' },
   dataViewTitle: { fontSize: '16@s', color: 'orchid', marginBottom: '8@s' },
   dataRowContainer: {

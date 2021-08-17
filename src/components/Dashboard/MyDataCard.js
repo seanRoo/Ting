@@ -10,12 +10,17 @@ const MyDataCard = ({ handleFilterClick }) => {
     <View
       style={{
         flex: 0.6,
-        borderWidth: 0.5,
-        borderColor: 'black',
+        borderWidth: 1,
+        borderColor: 'orchid',
         paddingRight: 12,
         borderRadius: 10,
         marginTop: 0,
         backgroundColor: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 8,
       }}
     >
       <View
@@ -38,7 +43,7 @@ const MyDataCard = ({ handleFilterClick }) => {
           color="orchid"
         />
       </View>
-      <View style={{ flex: 0.6 }}>
+      {/* <View style={{ flex: 0.6 }}>
         <TouchableOpacity
           onPress={handleFilterClick}
           style={{
@@ -59,8 +64,8 @@ const MyDataCard = ({ handleFilterClick }) => {
             style={{ marginTop: 3, marginLeft: 4 }}
           />
         </TouchableOpacity>
-      </View>
-      <LineChart />
+      </View> */}
+      {/* <LineChart /> */}
     </View>
   );
 };

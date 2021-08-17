@@ -5,7 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const EmptyDataMessage = ({ handleClick }) => (
-  <View style={{ flex: 0.7, flexDirection: 'column' }}>
+  <View style={{ flexDirection: 'column' }}>
     <Center>
       <MaterialCommunityIcons name="calendar-blank" size={100} color="orchid" />
       <Text

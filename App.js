@@ -4,9 +4,9 @@ import { Providers } from './src/Providers';
 import { Root } from 'native-base';
 
 const App = () => {
-  useEffect(() => {
-    GlobalFont.applyGlobal('Roboto');
-  }, []);
+  // useEffect(() => {
+  //   GlobalFont.applyGlobal('Roboto');
+  // }, []);
   return (
     <Root>
       <Providers />

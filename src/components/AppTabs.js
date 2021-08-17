@@ -53,7 +53,7 @@ export const AppTabs = (props) => {
       }}
     >
       <Tabs.Screen name="Dashboard" component={DashboardStack} />
-      <Tabs.Screen name="My Calendar" component={MyCalendar} />
+      {/* <Tabs.Screen name="My Calendar" component={MyCalendar} /> */}
       <Tabs.Screen name="My Data" component={MyDataStack} />
       <Tabs.Screen name="Discussions" component={DiscussionStack} />
     </Tabs.Navigator>

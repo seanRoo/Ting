@@ -6,17 +6,23 @@ import { DateTime } from 'luxon';
 
 const MyCalendarCard = ({ handleClick, checkedIn }) => {
   return (
-    <View style={{ flex: 0.5, flexDirection: 'column' }}>
+    <View style={{ height: '100%', width: '100%', flexDirection: 'column' }}>
       <TouchableOpacity
         onPress={handleClick}
         style={{
+          margin: 2,
           flex: 0.98,
           borderRadius: 10,
           padding: 8,
           paddingBottom: 0,
-          borderWidth: 0.5,
-          marginBottom: 8,
+          borderWidth: 1,
+          borderColor: 'orchid',
           backgroundColor: 'white',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.8,
+          shadowRadius: 2,
+          elevation: 8,
         }}
       >
         <View
@@ -33,7 +39,7 @@ const MyCalendarCard = ({ handleClick, checkedIn }) => {
               position: 'absolute',
               right: 0,
             }}
-            size={20}
+            size={24}
             name="calendar-multiple-check"
             color="orchid"
           />

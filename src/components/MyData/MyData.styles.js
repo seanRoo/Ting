@@ -7,7 +7,7 @@ export default ScaledSheet.create({
     backgroundColor: 'white',
   },
   headerSection: {
-    flex: 0.2,
+    flex: 0.1,
     marginTop: 6,
     marginBottom: 6,
   },
@@ -20,28 +20,10 @@ export default ScaledSheet.create({
     margin: 4,
     marginLeft: 0,
   },
-  actionButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginBottom: 8,
-  },
-  actionButton: {
-    flexDirection: 'row',
-    borderWidth: 1,
-    padding: 2,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    marginLeft: 8,
-    width: 60,
-  },
-  actionButtonText: {
-    fontSize: '12@s',
-  },
-  actionButtonIcon: { marginLeft: 14 },
-  lineChartContainer: {
-    flex: 0.7,
-    backgroundColor: 'whitesmoke',
-    borderWidth: 1,
-    borderRadius: 4,
-  },
+  // lineChartContainer: {
+  //   flex: 0.6,
+  //   backgroundColor: 'white',
+  //   // borderWidth: 1,
+  //   // borderRadius: 4,
+  // },
 });

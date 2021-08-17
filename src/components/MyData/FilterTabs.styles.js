@@ -2,11 +2,12 @@ import { ScaledSheet } from 'react-native-size-matters';
 
 export default ScaledSheet.create({
   container: {
+    marginTop: 8,
+  },
+  tabContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    marginTop: 8,
-    flex: 0.2,
   },
   button: {
     borderWidth: 0.5,

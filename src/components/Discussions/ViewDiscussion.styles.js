@@ -2,12 +2,9 @@ import { StyleSheet } from 'react-native';
 
 const ViewDiscussionStyles = StyleSheet.create({
   textInputContainer: {
-    margin: 5,
     position: 'absolute',
-    left: 0,
-    right: 0,
-    backgroundColor: 'white',
-    flex: 0.01,
+    backgroundColor: 'whitesmoke',
+    width: '100%',
   },
   textInputComponent: {
     minHeight: 40,
@@ -18,6 +15,10 @@ const ViewDiscussionStyles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 15,
     maxHeight: 80,
+    backgroundColor: 'white',
+    marginLeft: 8,
+    marginRight: 4,
+    marginBottom: 6,
   },
   replyTextContainer: {
     width: '88%',

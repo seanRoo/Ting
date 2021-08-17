@@ -31,7 +31,7 @@ const CheckIn = ({ route, navigation }) => {
           buttonText: 'Okay',
           type: 'success',
         });
-        navigation.navigate('My Calendar');
+        navigation.navigate('Dashboard');
       });
     } catch (error) {
       console.error(error);

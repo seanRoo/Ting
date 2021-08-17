@@ -34,7 +34,7 @@ export const ProgressBar = ({
           {minValue}
         </Text>
         <Text style={MyCalendarStyles.progressBarMaxValueLabel}>
-          {maxValue}
+          {maxValue === 10 ? '10+' : maxValue}
         </Text>
       </View>
       <Bar color={color} progress={progress} width={null} />

@@ -12,9 +12,15 @@ const DashboardDiscussionCard = () => {
           borderRadius: 10,
           padding: 8,
           paddingBottom: 0,
-          borderWidth: 0.5,
+          borderWidth: 1,
+          borderColor: 'orchid',
           marginBottom: 8,
           backgroundColor: 'white',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.8,
+          shadowRadius: 2,
+          elevation: 8,
         }}
       >
         <View

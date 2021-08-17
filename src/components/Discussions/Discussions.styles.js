@@ -3,13 +3,13 @@ import { ScaledSheet } from 'react-native-size-matters';
 const DiscussionCardStyles = ScaledSheet.create({
   container: {
     padding: 5,
-    backgroundColor: 'ghostwhite',
+    // backgroundColor: 'green',
   },
   heading: {
     fontWeight: 'bold',
     fontSize: '12@s',
   },
-  bodyText: { fontSize: '14@s', fontFamily: 'Roboto' },
+  bodyText: { fontSize: '14@s' },
   bold: { fontWeight: 'bold' },
   footer: {
     paddingRight: 0,
@@ -42,6 +42,7 @@ const DiscussionCardStyles = ScaledSheet.create({
     alignSelf: 'center',
     borderColor: 'orchid',
     borderRadius: 20,
+    height: 200,
   },
   authorStyle: { color: 'dodgerblue' },
 });

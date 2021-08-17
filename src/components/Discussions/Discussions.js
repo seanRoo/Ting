@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Container, Content, Icon, Fab } from 'native-base';
-import { Text, Dimensions, Animated } from 'react-native';
+import { Text, Dimensions, Animated, View, ScrollView } from 'react-native';
 import { DiscussionCard } from './DiscussionCard';
 import Styles from './Discussions.styles';
 import { getDiscussionPosts } from '../../api/DiscussionsApi';
@@ -63,9 +63,20 @@ export const Discussions = ({ navigation }) => {
     <BottomTabBarHeightContext.Consumer>
       {(tabBarHeight) => (
         <>
-          <Container style={Styles.container}>
+          <ScrollView
+            style={Styles.container}
+            onScroll={(e) => handleScroll(e, tabBarHeight)}
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: 'space-between',
+              padding: 8,
+            }}
+          >
             {!loading && data && (
-              <Content onScroll={(e) => handleScroll(e, tabBarHeight)}>
+              // <ScrollView
+              //   style={{ backgroundColor: 'green', display: 'flex' }}
+              // >
+              <>
                 {data.map((message) => {
                   const isAuthor = message.userId === currentUser;
                   return (
@@ -74,13 +85,23 @@ export const Discussions = ({ navigation }) => {
                       handleNavigation={handleNavigation}
                       isAuthor={isAuthor}
                     />
+                    // <View
+                    //   style={{
+                    //     // flex: 0.2,
+                    //     height: 180,
+                    //     backgroundColor: 'yellow',
+                    //     margin: 10,
+                    //   }}
+                    // >
+                    //   <Text>Hello</Text>
+                    // </View>
                   );
                 })}
-              </Content>
+              </>
             )}
             {loading && <Loading />}
             {!loading && data.length === 0 && <Text>No Data</Text>}
-          </Container>
+          </ScrollView>
           <Animated.View
             style={[
               Styles.fadingContainer,
