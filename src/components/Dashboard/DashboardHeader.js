@@ -33,7 +33,14 @@ const DashboardHeader = ({ handleClick, userInfo }) => {
             </TouchableOpacity>
           }
         >
-          <Menu.Item icon="account-edit" onPress={() => {}} title="Profile" />
+          <Menu.Item
+            icon="account-edit"
+            onPress={() => {
+              handleClick('Profile');
+              setPopoverIsVisible(false);
+            }}
+            title="Profile"
+          />
           <Menu.Item
             icon="account-multiple-plus"
             onPress={() => {

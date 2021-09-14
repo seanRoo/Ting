@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Container } from 'native-base';
 import auth from '@react-native-firebase/auth';
+import SplashScreen from 'react-native-splash-screen';
 import { DB } from '../../config';
 import Styles from '../DashboardCard/DashboardCard.styles';
 import { getMonthYearString } from '../../utils';
@@ -43,6 +44,10 @@ const Dashboard = ({ navigation }) => {
     }
   }, []);
 
+  useEffect(() => {
+    SplashScreen.hide();
+  });
+
   const buttonGroupComponents = [
     <DashboardOverview
       navigation={navigation}
@@ -81,7 +86,14 @@ const Dashboard = ({ navigation }) => {
               textStyle={{ color: 'black' }}
               selectedTextStyle={{ fontWeight: 'bold' }}
             />
-            <View style={{ flex: 0.92, padding: 4 }}>
+            <View
+              style={{
+                flex: 0.92,
+                padding: 4,
+                borderRadius: 30,
+                borderColor: 'orchid',
+              }}
+            >
               {buttonGroupComponents[buttonGroupIndex]}
             </View>
           </View>

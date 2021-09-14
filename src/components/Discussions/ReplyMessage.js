@@ -25,6 +25,11 @@ export const ReplyMessage = ({
           marginTop: index === 0 ? 10 : 0,
           borderColor: 'orchid',
           borderWidth: 1,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.8,
+          shadowRadius: 2,
+          elevation: 8,
         }}
         avatar
         noBorder

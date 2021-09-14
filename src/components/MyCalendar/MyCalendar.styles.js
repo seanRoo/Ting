@@ -1,10 +1,13 @@
 import { ScaledSheet } from 'react-native-size-matters';
 
 const MyCalendarStyles = ScaledSheet.create({
-  container: { flex: 1, backgroundColor: 'white' },
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    borderRadius: 30,
+  },
   highlightedDateContainer: {
     borderColor: 'orchid',
-    borderRadius: 10,
     borderWidth: 1,
   },
   highlightedText: {

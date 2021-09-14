@@ -18,6 +18,14 @@ const DashboardOverview = ({
         width: '100%',
         flex: 1,
         flexDirection: 'column',
+        borderWidth: 1,
+        borderRadius: 30,
+        borderColor: 'orchid',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 8,
       }}
     >
       <View
@@ -27,22 +35,6 @@ const DashboardOverview = ({
           display: 'flex',
         }}
       >
-        {/* <View style={{ flex: 0.5 }}>
-          <MyCalendarCard
-            handleClick={() =>
-              !checkedIn
-                ? navigation.push('Check In', {
-                    date: today,
-                    monthYearString: monthYearString,
-                  })
-                : navigation.navigate('My Calendar', { dashboardDate: today })
-            }
-            checkedIn={checkedIn}
-          />
-        </View>
-        <View style={{ flex: 0.5 }}>
-          <WeeklyGoalsCard />
-        </View> */}
         <MyCalendar navigation={navigation} />
       </View>
     </View>

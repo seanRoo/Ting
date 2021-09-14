@@ -10,6 +10,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { CreateDiscussion } from './Discussions/CreateDiscussion';
 import { ViewDiscussion } from './Discussions/ViewDiscussion';
 import MapPage from './Map/AddConsultantForm';
+import Profile from './Profile/Profile';
 import { addDiscussionPost, addReply } from '../api/DiscussionsApi';
 import { Icon } from 'native-base';
 import { getHeaderTitle, options } from './Routes.utils';
@@ -150,6 +151,14 @@ const Routes = () => {
           <Stack.Screen
             name="Add a Consultant"
             component={MapPage}
+            options={{
+              tabBarVisible: false,
+              tabBarOptions: { visible: false },
+            }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
             options={{
               tabBarVisible: false,
               tabBarOptions: { visible: false },
