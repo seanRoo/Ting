@@ -1,16 +1,12 @@
-import React, { useEffect } from 'react';
-import GlobalFont from 'react-native-global-font';
+import React from 'react';
 import { Providers } from './src/Providers';
-import { Root } from 'native-base';
+import { NativeBaseProvider } from 'native-base';
 
 const App = () => {
-  // useEffect(() => {
-  //   GlobalFont.applyGlobal('Roboto');
-  // }, []);
   return (
-    <Root>
+    <NativeBaseProvider>
       <Providers />
-    </Root>
+    </NativeBaseProvider>
   );
 };
 export default App;

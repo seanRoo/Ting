@@ -1,8 +1,12 @@
 import { DB } from '../config';
 
-export const createUser = async ({ userName, firstName, lastName, userId }) => {
+export const createUser = async ({
+  firstName = null,
+  lastName = null,
+  userId,
+}) => {
   await DB.ref(`/users/${userId}/`)
-    .set({ userName, firstName, lastName, userId })
+    .set({ firstName, lastName, userId })
     .then(() => console.log('Success'))
     .catch((error) => {
       throw error;

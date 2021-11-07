@@ -8,17 +8,18 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { CreateDiscussion } from './Discussions/CreateDiscussion';
-import { ViewDiscussion } from './Discussions/ViewDiscussion';
+import ViewDiscussion from './Discussions/ViewDiscussion';
 import MapPage from './Map/AddConsultantForm';
 import Profile from './Profile/Profile';
 import { addDiscussionPost, addReply } from '../api/DiscussionsApi';
-import { Icon } from 'native-base';
+import { useToast } from 'native-base';
 import { getHeaderTitle, options } from './Routes.utils';
 import CheckIn from './CheckIn/CheckIn';
 import { formatDate } from '../utils';
 
 const Stack = createStackNavigator();
 const Routes = () => {
+  const toast = useToast();
   const { logout } = useContext(AuthContext);
 
   const { user, setUser, loading, setLoading } = useContext(AuthContext);
@@ -34,10 +35,7 @@ const Routes = () => {
 
   const handleHeader = ({ route }) => {
     const routeName = getHeaderTitle(route);
-    if (routeName !== 'Dashboard') {
-      return routeName;
-    }
-    return false;
+    return routeName === 'Discussions' && routeName;
   };
 
   useEffect(() => {
@@ -48,6 +46,9 @@ const Routes = () => {
   if (loading) {
     return <Loading />;
   }
+
+  const toastId = 'toastId';
+
   return (
     <>
       {user && !loading && (
@@ -57,24 +58,7 @@ const Routes = () => {
             component={AppTabs}
             options={({ route }) => ({
               headerTitle: handleHeader({ route }),
-              headerShown: Boolean(handleHeader({ route })),
-              headerRight: () => {
-                return (
-                  <TouchableOpacity
-                    onPress={logout}
-                    style={{ paddingRight: 20 }}
-                  >
-                    <Text>Logout</Text>
-                  </TouchableOpacity>
-                );
-              },
-              headerLeft: () => {
-                return (
-                  <TouchableOpacity style={{ paddingLeft: 20 }}>
-                    <Icon name="person-circle" />
-                  </TouchableOpacity>
-                );
-              },
+              headerShown: false,
             })}
           />
           <Stack.Screen
@@ -94,8 +78,19 @@ const Routes = () => {
               headerRight: () => (
                 <TouchableOpacity
                   onPress={() => {
-                    addDiscussionPost(params.message);
-                    navigation.navigate('Discussions');
+                    const { messageHeader, messageBody } = params.message;
+                    if (messageHeader?.length && messageBody?.length) {
+                      addDiscussionPost(params.message);
+                      navigation.navigate('Discussions');
+                    } else {
+                      if (!toast.isActive(toastId)) {
+                        toast.show({
+                          title: "Can't post a blank message",
+                          status: 'info',
+                          id: toastId,
+                        });
+                      }
+                    }
                   }}
                 >
                   <MaterialCommunityIcons

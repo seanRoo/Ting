@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { Container } from 'native-base';
 import auth from '@react-native-firebase/auth';
-import SplashScreen from 'react-native-splash-screen';
 import { DB } from '../../config';
 import Styles from '../DashboardCard/DashboardCard.styles';
 import { getMonthYearString } from '../../utils';
@@ -13,6 +11,7 @@ import HelpfulLinksList from './components/HelpfulLinksList';
 import DashboardOverview from './components/DashboardOverview';
 import { getUser } from '../../api/UserApi';
 import Loading from '../Loading';
+import TextCustomFont from '../TextCustomFont';
 
 const Dashboard = ({ navigation }) => {
   const currentUser = auth().currentUser.uid;
@@ -44,10 +43,6 @@ const Dashboard = ({ navigation }) => {
     }
   }, []);
 
-  useEffect(() => {
-    SplashScreen.hide();
-  });
-
   const buttonGroupComponents = [
     <DashboardOverview
       navigation={navigation}
@@ -58,10 +53,14 @@ const Dashboard = ({ navigation }) => {
     <ConsultantList navigation={navigation} />,
     <HelpfulLinksList />,
   ];
-  const buttons = ['My Calendar', 'My Consultants', 'Helpful Links'];
+  const buttons = [
+    <TextCustomFont>My Calendar</TextCustomFont>,
+    <TextCustomFont>My Consultants</TextCustomFont>,
+    <TextCustomFont>Helpful Links</TextCustomFont>,
+  ];
 
   return (
-    <Container style={Styles.container}>
+    <View style={Styles.container}>
       {userInfo && (
         <>
           <DashboardHeader
@@ -100,7 +99,7 @@ const Dashboard = ({ navigation }) => {
         </>
       )}
       {!userInfo && <Loading />}
-    </Container>
+    </View>
   );
 };
 

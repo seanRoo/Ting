@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
             setError(true);
           }
         },
-        register: async (email, password, firstName, lastName, userName) => {
+        register: async ({ email, password, firstName, surName }) => {
           try {
             setLoading(true);
             let res = await auth().createUserWithEmailAndPassword(
@@ -38,9 +38,8 @@ export const AuthProvider = ({ children }) => {
             );
             if (res) {
               createUser({
-                userName,
                 firstName,
-                lastName,
+                surName,
                 userId: res.user.uid,
               });
             }

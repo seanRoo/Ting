@@ -7,12 +7,10 @@ import {
   Linking,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import auth from '@react-native-firebase/auth';
 import Feather from 'react-native-vector-icons/Feather';
 import { getConsultants } from '../../../api/ConsultantApi';
 import Loading from '../../Loading';
-import { Center } from '../../Center';
 
 const ConsultantList = ({ navigation }) => {
   const currentUser = auth().currentUser.uid;
@@ -58,6 +56,8 @@ const ConsultantList = ({ navigation }) => {
               backgroundColor: 'white',
               width: '96%',
               alignSelf: 'center',
+              borderColor: 'orchid',
+              borderWidth: 0.5,
             }}
           >
             <View

@@ -49,22 +49,14 @@ const MyCalendar = ({ navigation, route }) => {
           `${date.getDate()}`
         ],
       );
-    console.log(JSON.stringify(checkIns, null, 1));
     setLoading(false);
   };
 
   useFocusEffect(
     React.useCallback(() => {
       selectedDate && getCheckIns(currentUser, selectedDate.getFullYear());
-    }, [navigation]),
-  );
-
-  useFocusEffect(
-    React.useCallback(() => {
-      if (dashboardDate) {
-        handleDateUpdate(dashboardDate);
-      }
-    }, [dashboardDate]),
+      dashboardDate && handleDateUpdate(dashboardDate);
+    }, [navigation, dashboardDate]),
   );
 
   useEffect(() => {
@@ -89,21 +81,25 @@ const MyCalendar = ({ navigation, route }) => {
 
   return (
     <View style={MyCalendarStyles.container}>
-      <CalendarStrip
-        scrollable
-        style={MyCalendarStyles.calendarStrip}
-        calendarHeaderStyle={MyCalendarStyles.nonHighlightedText}
-        dateNumberStyle={MyCalendarStyles.nonHighlightedText}
-        dateNameStyle={MyCalendarStyles.nonHighlightedText}
-        highlightDateNumberStyle={MyCalendarStyles.highlightedText}
-        highlightDateNameStyle={MyCalendarStyles.highlightedText}
-        highlightDateContainerStyle={MyCalendarStyles.highlightedDateContainer}
-        onDateSelected={handleDateUpdate}
-        selectedDate={selectedDate}
-        maxDate={today}
-        scrollToOnSetSelectedDate
-        customDatesStyles={handleCheckedInDatesStyle}
-      />
+      {selectedDate && !loading && (
+        <CalendarStrip
+          style={MyCalendarStyles.calendarStrip}
+          calendarHeaderStyle={MyCalendarStyles.nonHighlightedText}
+          dateNumberStyle={MyCalendarStyles.nonHighlightedText}
+          dateNameStyle={MyCalendarStyles.nonHighlightedText}
+          highlightDateNumberStyle={MyCalendarStyles.highlightedText}
+          highlightDateNameStyle={MyCalendarStyles.highlightedText}
+          highlightDateContainerStyle={
+            MyCalendarStyles.highlightedDateContainer
+          }
+          onDateSelected={handleDateUpdate}
+          selectedDate={selectedDate}
+          maxDate={today}
+          scrollToOnSetSelectedDate
+          scrollable
+          customDatesStyles={handleCheckedInDatesStyle}
+        />
+      )}
       <View style={MyCalendarStyles.dataViewContainer}>
         {loading && (
           <Center>

@@ -3,11 +3,9 @@ import {
   Text,
   View,
   ScrollView,
-  TouchableWithoutFeedback,
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 
 const helpfulLinks = [
@@ -19,8 +17,7 @@ const helpfulLinks = [
     publisher: 'https://www2.hse.ie',
   },
   {
-    url:
-      'https://www.mayoclinic.org/diseases-conditions/tinnitus/diagnosis-treatment/drc-20350162#:~:text=If%20tinnitus%20is%20especially%20noticeable,Limit%20alcohol%2C%20caffeine%20and%20nicotine.',
+    url: 'https://www.mayoclinic.org/diseases-conditions/tinnitus/diagnosis-treatment/drc-20350162#:~:text=If%20tinnitus%20is%20especially%20noticeable,Limit%20alcohol%2C%20caffeine%20and%20nicotine.',
     title: 'Tinnitus - Diagnosis and treatment',
     snippet:
       "If tinnitus is especially noticeable in quiet settings, try using a white noise machine to mask the noise from tinnitus. If you don't have a white noise machine, a fan, soft music or low-volume radio static also may help. Limit alcohol, caffeine and nicotine.",
@@ -66,6 +63,8 @@ const HelpfulLinksList = () => {
             backgroundColor: 'white',
             width: '96%',
             alignSelf: 'center',
+            borderColor: 'orchid',
+            borderWidth: 0.5,
           }}
           activeOpacity={0.8}
           onPress={() => Linking.openURL(element.url)}

@@ -12,6 +12,7 @@ export const addDiscussionPost = async (message, callback) => {
 export const getDiscussionPosts = (callback) => {
   DB.ref('/discussions/').on('value', (querySnapshot) => {
     let data = querySnapshot.val() ? querySnapshot.val() : {};
+    data = Object.values(data).sort((a, b) => a.date - b.date);
     callback(Object.values(data));
   });
 };

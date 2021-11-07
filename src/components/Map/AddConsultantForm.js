@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, Text, StyleSheet, ScrollView } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { View } from 'react-native';
 import { Input } from 'react-native-elements';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import auth from '@react-native-firebase/auth';
 import { Toast } from 'native-base';
-import { Picker } from '@react-native-picker/picker';
 import { addConsultant } from '../../api/ConsultantApi';
 import RNPickerSelect from 'react-native-picker-select';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -59,8 +58,6 @@ const AddConsultantForm = ({ navigation }) => {
     <InputScrollView
       style={{
         padding: 10,
-        // display: 'flex',
-        // flex: 1,
       }}
       keyboardOffset={100}
       useAnimatedScrollView
@@ -72,7 +69,6 @@ const AddConsultantForm = ({ navigation }) => {
           fetchDetails
           placeholder={'Start typing to search...'}
           onPress={(data, details) => {
-            // console.log('data.description', data.description.split(','));
             setAddressValue({
               id: data.place_id,
               desc: data.description,

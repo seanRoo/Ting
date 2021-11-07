@@ -1,8 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Popover from 'react-native-popover-view';
 import { Menu, Divider } from 'react-native-paper';
+import TextCustomFont from '../TextCustomFont';
 import { AuthContext } from '../../AuthProvider';
 
 const DashboardHeader = ({ handleClick, userInfo }) => {
@@ -13,13 +14,15 @@ const DashboardHeader = ({ handleClick, userInfo }) => {
     <View style={{ flex: 0.2 }}>
       <View style={{ flex: 0.7, flexDirection: 'row', marginTop: 12 }}>
         <View>
-          <Text style={{ fontSize: 24 }}>
+          <TextCustomFont style={{ fontSize: 24 }}>
             Hi,{' '}
-            <Text style={{ fontWeight: 'bold' }}>{userInfo?.firstName}!</Text>
-          </Text>
-          <Text style={{ color: 'gray', marginTop: 4 }}>
+            <TextCustomFont style={{ fontWeight: 'bold' }}>
+              {userInfo?.firstName}!
+            </TextCustomFont>
+          </TextCustomFont>
+          <TextCustomFont style={{ color: 'gray', marginTop: 4 }}>
             Your dashboard for today
-          </Text>
+          </TextCustomFont>
         </View>
         <Popover
           isVisible={popoverIsVisible}

@@ -1,12 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Container, Content, Icon, Fab } from 'native-base';
-import { Text, Dimensions, Animated, View, ScrollView } from 'react-native';
+import {
+  Text,
+  Dimensions,
+  Animated,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import { DiscussionCard } from './DiscussionCard';
 import Styles from './Discussions.styles';
 import { getDiscussionPosts } from '../../api/DiscussionsApi';
 import Loading from '../Loading';
 import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import auth from '@react-native-firebase/auth';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export const Discussions = ({ navigation }) => {
   const currentUser = auth().currentUser.uid;
@@ -31,19 +37,50 @@ export const Discussions = ({ navigation }) => {
   };
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [displayData, setDisplayData] = useState(null);
 
   useEffect(() => {
+    console.log('fired');
     if (!data) {
       getDiscussionPosts(setData);
     }
     if (data) {
+      // setData(data.sort((a, b) => a - b);
+      setDisplayData([...data]);
       setLoading(false);
     }
   }, [data]);
 
   useEffect(() => {
+    navigation.setParams({ handleFilterChange });
     fadeIn();
-  }, []);
+  }, [displayData, handleFilterChange]);
+
+  const isAscending = (arr) => {
+    return arr.every(function (x, i) {
+      return i === 0 || x.date >= arr[i - 1].date;
+    });
+  };
+
+  const isDescending = (arr) => {
+    return arr.every(function (x, i) {
+      return i === 0 || x.date <= arr[i - 1].date;
+    });
+  };
+
+  const handleFilterChange = () => {
+    let newData = [...displayData];
+    if (newData?.length > 1) {
+      if (isAscending(newData)) {
+        newData.sort((a, b) => b.date - a.date);
+      } else if (isDescending(newData)) {
+        newData.sort((a, b) => a.date - b.date);
+      }
+      setDisplayData(newData);
+    }
+  };
+
+  useEffect(() => {}, [displayData]);
 
   const handleNavigation = (message) => {
     navigation.navigate('View Discussion', { message });
@@ -72,12 +109,9 @@ export const Discussions = ({ navigation }) => {
               padding: 8,
             }}
           >
-            {!loading && data && (
-              // <ScrollView
-              //   style={{ backgroundColor: 'green', display: 'flex' }}
-              // >
+            {!loading && displayData && (
               <>
-                {data.map((message) => {
+                {displayData.map((message) => {
                   const isAuthor = message.userId === currentUser;
                   return (
                     <DiscussionCard
@@ -85,44 +119,41 @@ export const Discussions = ({ navigation }) => {
                       handleNavigation={handleNavigation}
                       isAuthor={isAuthor}
                     />
-                    // <View
-                    //   style={{
-                    //     // flex: 0.2,
-                    //     height: 180,
-                    //     backgroundColor: 'yellow',
-                    //     margin: 10,
-                    //   }}
-                    // >
-                    //   <Text>Hello</Text>
-                    // </View>
                   );
                 })}
               </>
             )}
             {loading && <Loading />}
-            {!loading && data.length === 0 && <Text>No Data</Text>}
+            {!loading && displayData?.length === 0 && <Text>No Data</Text>}
           </ScrollView>
           <Animated.View
-            style={[
-              Styles.fadingContainer,
-              {
-                opacity: fadeAnim,
-                height: 80,
-                width: '100%',
-                position: 'absolute',
-                bottom: 0,
-              },
-            ]}
+            style={{
+              opacity: fadeAnim,
+              height: 80,
+              width: '100%',
+              position: 'absolute',
+              bottom: 0,
+            }}
           >
-            <Fab
-              onPress={() => navigation.navigate('Create Discussion')}
+            <TouchableOpacity
               style={{
+                width: 65,
+                height: 65,
+                borderRadius: 32.5,
+                alignSelf: 'flex-end',
+                marginRight: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
                 backgroundColor: 'orchid',
               }}
-              position="bottomRight"
+              onPress={() => navigation.navigate('Create Discussion')}
             >
-              <Icon name="pencil-outline" size={80} />
-            </Fab>
+              <MaterialCommunityIcons
+                name="pencil-outline"
+                size={30}
+                color="white"
+              />
+            </TouchableOpacity>
           </Animated.View>
         </>
       )}

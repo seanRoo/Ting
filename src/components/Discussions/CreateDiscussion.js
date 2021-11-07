@@ -16,7 +16,6 @@ export const CreateDiscussion = ({ navigation }) => {
     messageBody: null,
     firstName: null,
     lastName: null,
-    userName: null,
   });
 
   useEffect(() => {
@@ -46,7 +45,6 @@ export const CreateDiscussion = ({ navigation }) => {
       ...message,
       firstName: data.firstName,
       lastName: data.lastName,
-      userName: data.userName,
       replyCount: 0,
     });
   };

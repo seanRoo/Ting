@@ -1,10 +1,10 @@
 import React from 'react';
-import { Card, CardItem, Body, Icon } from 'native-base';
 import { Text, View, TouchableWithoutFeedback } from 'react-native';
 import Styles from './Discussions.styles';
 import { Avatar, Divider } from 'react-native-elements';
 import { DateTime } from 'luxon';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import IonIcons from 'react-native-vector-icons/Ionicons';
 import { scale } from 'react-native-size-matters';
 
 export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
@@ -32,7 +32,7 @@ export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
               }}
             >
               <Avatar
-                size={scale(22)}
+                size={28}
                 rounded
                 title="SR"
                 activeOpacity={0.1}
@@ -42,7 +42,7 @@ export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
                 <View style={{ flexDirection: 'row' }}>
                   <Text
                     style={{
-                      fontSize: scale(10),
+                      fontSize: 14,
                       ...(isAuthor && Styles.authorStyle),
                     }}
                   >
@@ -60,7 +60,7 @@ export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
                     />
                   )}
                 </View>
-                <Text style={{ fontSize: scale(8) }}>
+                <Text style={{ fontSize: 12 }}>
                   {DateTime.fromJSDate(new Date(message.date)).toRelative()}
                 </Text>
               </View>
@@ -85,18 +85,15 @@ export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
               paddingRight: 16,
             }}
           >
-            <Icon
-              name="chatbox-sharp"
+            <IonIcons
+              name="chatbox-ellipses-outline"
+              size={22}
               style={{
-                fontSize: scale(16),
                 textAlign: 'center',
-                marginRight: scale(3.5),
-                paddingBottom: scale(1),
+                marginRight: 6,
               }}
             />
-            <Text style={{ fontSize: scale(12) }}>
-              {message.replyCount} Comments
-            </Text>
+            <Text style={{ fontSize: 14 }}>{message.replyCount} Comments</Text>
           </View>
         </View>
       </View>

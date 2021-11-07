@@ -20,14 +20,12 @@ const MyCalendarStyles = ScaledSheet.create({
     height: '80@s',
     paddingTop: 15,
     paddingBottom: 10,
+    fontFamily: 'Roboto',
   },
   dataViewContainer: {
     borderWidth: 0.5,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    borderColor: 'black',
+    borderRadius: 30,
+    borderColor: 'orchid',
     flex: 1,
   },
   scrollViewContainer: {

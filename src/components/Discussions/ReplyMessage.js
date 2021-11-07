@@ -1,5 +1,4 @@
 import React from 'react';
-import { Left, ListItem, Body } from 'native-base';
 import { Text, View, TouchableWithoutFeedback } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import Styles from './ViewDiscussion.styles';
@@ -13,11 +12,13 @@ export const ReplyMessage = ({
   ForceLoseFocus,
   isAuthor,
 }) => {
-  let relativeDate = DateTime.fromJSDate(new Date(message.date)).toRelative();
+  let relativeDate = DateTime.fromJSDate(
+    new Date(message.item.date),
+  ).toRelative();
   relativeDate = relativeDate === 'in 0 seconds' ? 'Just now' : relativeDate;
   return (
     <TouchableWithoutFeedback onPress={() => ForceLoseFocus()}>
-      <ListItem
+      <View
         style={{
           backgroundColor: 'white',
           marginBottom: 10,
@@ -30,20 +31,11 @@ export const ReplyMessage = ({
           shadowOpacity: 0.8,
           shadowRadius: 2,
           elevation: 8,
+          paddingBottom: 12,
+          paddingTop: 8,
         }}
-        avatar
-        noBorder
       >
-        <Left style={{ marginLeft: 6 }}>
-          <Avatar
-            size={20}
-            rounded
-            title={initials}
-            activeOpacity={0.1}
-            containerStyle={Styles.avatar}
-          />
-        </Left>
-        <Body style={{ marginLeft: 12 }}>
+        <View style={{ marginLeft: 12, marginBottom: 4 }}>
           <View style={{ flexDirection: 'row', flex: 1, marginBottom: 10 }}>
             <View
               style={{
@@ -51,10 +43,18 @@ export const ReplyMessage = ({
                 flex: 0.95,
                 marginTop: 1,
                 flexDirection: 'row',
+                alignItems: 'center',
               }}
             >
+              <Avatar
+                size={24}
+                rounded
+                title={initials}
+                activeOpacity={0.1}
+                containerStyle={Styles.replyMessageAvatar}
+              />
               <Text style={isAuthor && { color: 'dodgerblue' }}>
-                {message.firstName} {message.lastName}
+                {message.item.firstName} {message.item.lastName}
               </Text>
               {isAuthor && (
                 <FontAwesome5
@@ -67,12 +67,16 @@ export const ReplyMessage = ({
                   name="feather"
                 />
               )}
+              <Text style={{ marginLeft: 'auto', color: 'black' }}>
+                {relativeDate}
+              </Text>
             </View>
-            <Text style={{ alignSelf: 'flex-end' }}>{relativeDate}</Text>
           </View>
-          <Text style={Styles.replyMessageBody}>{message.messageBody}</Text>
-        </Body>
-      </ListItem>
+          <Text style={Styles.replyMessageBody}>
+            {message.item.messageBody}
+          </Text>
+        </View>
+      </View>
     </TouchableWithoutFeedback>
   );
 };

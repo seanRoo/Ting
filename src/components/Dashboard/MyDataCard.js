@@ -1,11 +1,8 @@
 import React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Text, View } from 'react-native';
 import Foundation from 'react-native-vector-icons/Foundation';
-import Styles from '../DashboardCard/DashboardCard.styles';
-import LineChart from '../LineChart';
 
-const MyDataCard = ({ handleFilterClick }) => {
+const MyDataCard = () => {
   return (
     <View
       style={{

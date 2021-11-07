@@ -1,15 +1,8 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import MyCalendar from '../../MyCalendar/MyCalendar';
-import MyCalendarCard from '../MyCalendarCard';
-import WeeklyGoalsCard from '../WeeklyGoalsCard';
 
-const DashboardOverview = ({
-  navigation,
-  monthYearString,
-  checkedIn,
-  today,
-}) => {
+const DashboardOverview = ({ navigation }) => {
   return (
     <View
       style={{
@@ -18,9 +11,9 @@ const DashboardOverview = ({
         width: '100%',
         flex: 1,
         flexDirection: 'column',
-        borderWidth: 1,
-        borderRadius: 30,
         borderColor: 'orchid',
+        borderWidth: 0.5,
+        borderRadius: 30,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.8,

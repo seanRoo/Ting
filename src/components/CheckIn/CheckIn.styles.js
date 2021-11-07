@@ -4,9 +4,9 @@ const SoundListStyles = StyleSheet.create({
   containerView: {
     flex: 1,
     flexDirection: 'column',
-    padding: 16,
-    // width: '100%',
-    marginTop: 5,
+    marginTop: 12,
+    marginLeft: 12,
+    marginRight: 4,
   },
   soundIntensitySliderContainer: {
     width: '100%',

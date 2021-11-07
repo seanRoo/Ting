@@ -11,7 +11,6 @@ const CheckIn = ({ route, navigation }) => {
   const {
     params: { date, monthYearString },
   } = route;
-  const [sounds, setSounds] = useState();
   const [sliderValues, setSliderValues] = useState({
     soundIntensity: 0,
     sleepHours: 0,
@@ -19,7 +18,6 @@ const CheckIn = ({ route, navigation }) => {
     mood: 0,
     soundPitch: 0,
   });
-  const [loading, setLoading] = useState(true);
   const [checkedIn, setCheckedIn] = useState(false);
 
   const handleCheckIn = () => {
@@ -34,7 +32,6 @@ const CheckIn = ({ route, navigation }) => {
         navigation.navigate('Dashboard');
       });
     } catch (error) {
-      console.error(error);
       Toast.show({
         text: 'Something went wrong..',
         buttonText: 'Okay',
@@ -105,10 +102,10 @@ const CheckIn = ({ route, navigation }) => {
       {!checkedIn && (
         <Button
           onPress={handleCheckIn}
-          style={{ backgroundColor: 'orchid', flex: 0.05 }}
+          style={{ backgroundColor: 'orchid', flex: 0.05, borderRadius: 20 }}
         >
           <Center>
-            <Text style={{ color: 'white' }}>Check In!</Text>
+            <Text style={{ color: 'white' }}>Check in</Text>
           </Center>
         </Button>
       )}
