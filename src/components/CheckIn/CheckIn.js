@@ -6,10 +6,11 @@ import { addCheckIn } from '../../api/CheckInsApi';
 import CustomSlider from './SoundIntensitySlider';
 import Styles from './CheckIn.styles';
 import auth from '@react-native-firebase/auth';
+import { getMonthYearString, getMonthYearDayString } from '../../utils';
 
 const CheckIn = ({ route, navigation }) => {
   const {
-    params: { date, monthYearString },
+    params: { date, handleNewCheckIn },
   } = route;
   const [sliderValues, setSliderValues] = useState({
     soundIntensity: 0,
@@ -23,14 +24,16 @@ const CheckIn = ({ route, navigation }) => {
   const handleCheckIn = () => {
     try {
       const currentUser = auth().currentUser.uid;
-      addCheckIn(sliderValues, date, currentUser, monthYearString).then(() => {
-        Toast.show({
-          text: 'Check In Successful',
-          buttonText: 'Okay',
-          type: 'success',
-        });
-        navigation.navigate('Dashboard');
-      });
+      addCheckIn(sliderValues, date, currentUser, handleNewCheckIn).then(
+        (res) => {
+          Toast.show({
+            text: 'Check In Successful',
+            buttonText: 'Okay',
+            type: 'success',
+          });
+          navigation.navigate('Dashboard');
+        },
+      );
     } catch (error) {
       Toast.show({
         text: 'Something went wrong..',

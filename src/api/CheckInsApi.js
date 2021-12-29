@@ -1,20 +1,23 @@
 import { DB } from '../config';
+import { getMonthYearString } from '../utils';
 
 const todaysDate = new Date();
 const currentYear = todaysDate.getFullYear();
 
-export const addCheckIn = async (
-  sliderValues,
-  date,
-  userId,
-  monthYearString,
-) => {
+export const addCheckIn = async (sliderValues, date, userId, callback) => {
   date = new Date(date);
   await DB.ref(
-    `/checkIns/${userId}/${date.getFullYear()}/${monthYearString}/${date.getDate()}`,
+    `/checkIns/${userId}/${date.getFullYear()}/${getMonthYearString(
+      date,
+    )}/${date.getDate().toString()}`,
   )
     .set({ date, sliderValues })
-    .then(() => console.log('Success'))
+    .then(() => {
+      const day = date.getDate();
+      const newValue = { [day]: sliderValues };
+      callback(newValue, getMonthYearString(date), date);
+    })
+    // )}
     .catch((error) => {
       throw error;
     });

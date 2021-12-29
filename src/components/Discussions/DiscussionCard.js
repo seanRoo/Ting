@@ -5,7 +5,6 @@ import { Avatar, Divider } from 'react-native-elements';
 import { DateTime } from 'luxon';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import IonIcons from 'react-native-vector-icons/Ionicons';
-import { scale } from 'react-native-size-matters';
 
 export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
   return (
@@ -38,12 +37,12 @@ export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
                 activeOpacity={0.1}
                 containerStyle={{ backgroundColor: 'black' }}
               />
-              <View style={{ flexDirection: 'column', marginLeft: scale(10) }}>
+              <View style={{ flexDirection: 'column', marginLeft: 10 }}>
                 <View style={{ flexDirection: 'row' }}>
                   <Text
                     style={{
                       fontSize: 14,
-                      ...(isAuthor && Styles.authorStyle),
+                      color: isAuthor ? 'dodgerblue' : 'black',
                     }}
                   >
                     {message.firstName} {message.lastName}
@@ -51,8 +50,8 @@ export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
                   {isAuthor && (
                     <FontAwesome5
                       style={{
-                        marginLeft: scale(8),
-                        marginTop: scale(3),
+                        marginLeft: 8,
+                        marginTop: 3,
                         alignSelf: 'flex-start',
                         color: 'dodgerblue',
                       }}

@@ -44,7 +44,7 @@ const DiscussionCardStyles = ScaledSheet.create({
     borderRadius: 20,
     height: 200,
   },
-  authorStyle: { color: 'dodgerblue' },
+  // authorStyle: { color: 'dodgerblue' },
 });
 
 export default DiscussionCardStyles;

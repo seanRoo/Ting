@@ -2,7 +2,7 @@ import { ScaledSheet } from 'react-native-size-matters';
 
 export default ScaledSheet.create({
   container: {
-    padding: 10,
+    paddingTop: 20,
     flex: 1,
     backgroundColor: 'white',
   },

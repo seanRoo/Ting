@@ -27,7 +27,6 @@ const AddConsultantForm = ({ navigation }) => {
       setSaveEnabled(false);
     }
   }, [phoneNumValue, addressValue, consultantType]);
-  console.log(consultantType);
 
   const handleSave = () => {
     const formValues = {

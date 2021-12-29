@@ -12,6 +12,7 @@ import { getInitials, formatFooterDate } from './Discussions.utils';
 import { v4 as uuid } from 'uuid';
 import Loading from '../Loading';
 import TextCustomFont from '../TextCustomFont';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const ViewDiscussion = ({ route: { params }, navigation }) => {
   const currentUser = auth().currentUser.uid;
@@ -20,7 +21,7 @@ const ViewDiscussion = ({ route: { params }, navigation }) => {
   const [user, setUser] = useState(null);
   const [keyboardHeight, setKeyboardHeight] = useState();
   const [keyboardIsShown, setKeyboardIsShown] = useState(false);
-  const [keyboardTextCustomFont, setKeyboardTextCustomFont] = useState(null);
+  const [keyboardText, setKeyboardText] = useState(null);
   const [sendIsDisabled, setSendIsDisabled] = useState(true);
   const [replies, setReplies] = useState(null);
   const [repliesLoading, setRepliesLoading] = useState(true);
@@ -55,16 +56,16 @@ const ViewDiscussion = ({ route: { params }, navigation }) => {
       navigation.setParams({
         replyMessage: {
           parentMessageId: message.messageId,
-          messageBody: keyboardTextCustomFont,
+          messageBody: keyboardText,
           userId: currentUser,
           firstName: user.firstName,
           lastName: user.lastName,
           messageId: uuid(),
         },
-        setKeyboardTextCustomFont,
+        setKeyboardText,
       });
     }
-  }, [keyboardTextCustomFont, user]);
+  }, [keyboardText, user]);
 
   useEffect(() => {
     const keyboardDidHideListener = Keyboard.addListener(
@@ -109,9 +110,9 @@ const ViewDiscussion = ({ route: { params }, navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView
+      <KeyboardAwareScrollView
         style={{
-          marginBottom: 60,
+          marginBottom: replies?.length >= 1 ? 60 : 40,
           backgroundColor: 'whitesmoke',
         }}
       >
@@ -128,8 +129,8 @@ const ViewDiscussion = ({ route: { params }, navigation }) => {
           >
             <View style={{ margin: 12, flexDirection: 'row' }}>
               <Avatar
-                size={30}
-                titleStyle={{ fontSize: 14 }}
+                size={40}
+                titleStyle={{ fontSize: 22, color: 'white' }}
                 rounded
                 title={getInitials({
                   firstName: message.firstName,
@@ -169,13 +170,19 @@ const ViewDiscussion = ({ route: { params }, navigation }) => {
           >
             {message.messageBody}
           </TextCustomFont>
-          <TextCustomFont style={{ marginLeft: normalize(12) }}>
+          <TextCustomFont
+            style={{
+              marginLeft: 14,
+              color: 'black',
+              fontWeight: 'bold',
+            }}
+          >
             {formatFooterDate(message.date)}
           </TextCustomFont>
-          <Divider style={{ marginTop: 10 }} />
-          <Divider style={{ marginTop: 10 }} />
+          <Divider color="black" style={{ paddingTop: 10 }} />
+          <Divider color="black" style={{ paddingTop: 10 }} />
         </View>
-        <View style={{ minHeight: 250 }}>
+        <View style={{ minHeight: 'auto' }}>
           {replies && !repliesLoading && (
             <FlatList
               contentContainerStyle={{
@@ -211,15 +218,15 @@ const ViewDiscussion = ({ route: { params }, navigation }) => {
             </View>
           )}
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
       <ViewDiscussionFooter
         keyboardHeight={keyboardHeight}
         keyboardIsShown={keyboardIsShown}
         replyInput={replyInput}
-        setKeyboardTextCustomFont={setKeyboardTextCustomFont}
+        setKeyboardText={setKeyboardText}
         setSendIsDisabled={setSendIsDisabled}
         sendIsDisabled={sendIsDisabled}
-        keyboardTextCustomFont={keyboardTextCustomFont}
+        keyboardText={keyboardText}
       />
     </View>
   );

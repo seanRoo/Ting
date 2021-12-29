@@ -1,11 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import {
-  Text,
-  Dimensions,
-  Animated,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, Animated, ScrollView, TouchableOpacity } from 'react-native';
 import { DiscussionCard } from './DiscussionCard';
 import Styles from './Discussions.styles';
 import { getDiscussionPosts } from '../../api/DiscussionsApi';
@@ -13,39 +7,22 @@ import Loading from '../Loading';
 import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import auth from '@react-native-firebase/auth';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import useFadeAnimation from './hooks/useFadeAnimation.hook';
+import { isDescending, isAscending } from './Discussion.utils';
 
 export const Discussions = ({ navigation }) => {
   const currentUser = auth().currentUser.uid;
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const { fadeIn, fadeAnim, handleScroll } = useFadeAnimation();
 
-  const fadeIn = () => {
-    // Will change fadeAnim value to 1 in 5 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 50,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const fadeOut = () => {
-    // Will change fadeAnim value to 0 in 5 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 50,
-      useNativeDriver: true,
-    }).start();
-  };
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [displayData, setDisplayData] = useState(null);
 
   useEffect(() => {
-    console.log('fired');
     if (!data) {
       getDiscussionPosts(setData);
     }
     if (data) {
-      // setData(data.sort((a, b) => a - b);
       setDisplayData([...data]);
       setLoading(false);
     }
@@ -55,18 +32,6 @@ export const Discussions = ({ navigation }) => {
     navigation.setParams({ handleFilterChange });
     fadeIn();
   }, [displayData, handleFilterChange]);
-
-  const isAscending = (arr) => {
-    return arr.every(function (x, i) {
-      return i === 0 || x.date >= arr[i - 1].date;
-    });
-  };
-
-  const isDescending = (arr) => {
-    return arr.every(function (x, i) {
-      return i === 0 || x.date <= arr[i - 1].date;
-    });
-  };
 
   const handleFilterChange = () => {
     let newData = [...displayData];
@@ -80,22 +45,10 @@ export const Discussions = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {}, [displayData]);
-
   const handleNavigation = (message) => {
     navigation.navigate('View Discussion', { message });
   };
 
-  const handleScroll = (e, tabBarHeight) => {
-    const windowHeight = Dimensions.get('window').height;
-    const height = e.nativeEvent.contentSize.height;
-    const offset = e.nativeEvent.contentOffset.y;
-    if (windowHeight + offset >= height + tabBarHeight) {
-      fadeOut();
-    } else {
-      fadeIn();
-    }
-  };
   return (
     <BottomTabBarHeightContext.Consumer>
       {(tabBarHeight) => (
@@ -112,14 +65,16 @@ export const Discussions = ({ navigation }) => {
             {!loading && displayData && (
               <>
                 {displayData.map((message) => {
-                  const isAuthor = message.userId === currentUser;
-                  return (
-                    <DiscussionCard
-                      message={message}
-                      handleNavigation={handleNavigation}
-                      isAuthor={isAuthor}
-                    />
-                  );
+                  if (message.firstName && message.lastName && message.userId) {
+                    const isAuthor = message.userId === currentUser;
+                    return (
+                      <DiscussionCard
+                        message={message}
+                        handleNavigation={handleNavigation}
+                        isAuthor={isAuthor}
+                      />
+                    );
+                  }
                 })}
               </>
             )}

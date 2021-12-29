@@ -52,6 +52,21 @@ export const formatDate = (date) => {
 };
 
 export const getMonthYearString = (date) => {
-  date = new Date(date);
-  return `${date.getFullYear()}-${date.getMonth() + 1}`;
+  if (date) {
+    date = new Date(date);
+    const monthYearString = `${date.getFullYear()}-${date.getMonth() + 1}`;
+    return monthYearString;
+  }
+  return null;
+};
+
+export const getMonthYearDayString = (date) =>
+  `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+
+export const isObjectAndEmpty = (obj) => {
+  return Boolean(
+    obj &&
+      Object.keys(obj).length === 0 &&
+      Object.getPrototypeOf(obj) === Object.prototype,
+  );
 };

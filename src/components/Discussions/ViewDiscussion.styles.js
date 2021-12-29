@@ -34,13 +34,12 @@ const ViewDiscussionStyles = StyleSheet.create({
     marginLeft: 24,
   },
   replyMessageAvatar: {
-    backgroundColor: 'grey',
-    // marginLeft: 12,
+    backgroundColor: 'black',
     marginTop: 4,
     marginRight: 8,
   },
   viewDiscussionAvatar: {
-    backgroundColor: 'grey',
+    backgroundColor: 'black',
   },
   avatarContainer: {
     width: '12%',

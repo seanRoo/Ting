@@ -21,7 +21,6 @@
 		F521BDBB26979F2600837FFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F521BDBA26979F2600837FFE /* Assets.xcassets */; };
 		F553002C269773B400ED12AF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F5DBBD7D24F87329001D5700 /* GoogleService-Info.plist */; };
 		F56DD81924F2FCC0009BF1EF /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = F56DD81824F2FCC0009BF1EF /* File.swift */; };
-		F584755B2741743200C9F15E /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F584755A2741743200C9F15E /* Roboto.ttf */; };
 		F5DBBD7F24F8732F001D5700 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F5DBBD7D24F87329001D5700 /* GoogleService-Info.plist */; };
 		F5DBBD8024F87330001D5700 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F5DBBD7D24F87329001D5700 /* GoogleService-Info.plist */; };
 		F5DBBD8124F87330001D5700 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F5DBBD7D24F87329001D5700 /* GoogleService-Info.plist */; };
@@ -107,7 +106,6 @@
 		F521BDBA26979F2600837FFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F56DD81724F2FCC0009BF1EF /* ting-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ting-Bridging-Header.h"; sourceTree = "<group>"; };
 		F56DD81824F2FCC0009BF1EF /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
-		F584755A2741743200C9F15E /* Roboto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Roboto.ttf; path = ../assets/fonts/Roboto.ttf; sourceTree = "<group>"; };
 		F5DBBD7D24F87329001D5700 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F96BAF9D61EE42A5B75FBADF /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		F992EB6D8B8EFBE19B5D350C /* libPods-ting-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ting-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -169,7 +167,6 @@
 		13B07FAE1A68108700A75B9A /* ting */ = {
 			isa = PBXGroup;
 			children = (
-				F584755A2741743200C9F15E /* Roboto.ttf */,
 				F521BDBA26979F2600837FFE /* Assets.xcassets */,
 				F5DBBD7D24F87329001D5700 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -441,7 +438,6 @@
 				F553002C269773B400ED12AF /* GoogleService-Info.plist in Resources */,
 				F521BDBB26979F2600837FFE /* Assets.xcassets in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				F584755B2741743200C9F15E /* Roboto.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,88 +1,114 @@
 import React, { useEffect, useState } from 'react';
 import auth from '@react-native-firebase/auth';
 import { DB } from '../../config';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, SnapshotViewIOSBase } from 'react-native';
 import Loading from '../Loading';
 import { Center } from '../Center';
 import CalendarStrip from 'react-native-calendar-strip';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { getMonthYearString } from '../../utils';
 import { useFocusEffect } from '@react-navigation/native';
 import EmptyDataMessage from './components/EmptyDataMessage';
 import DataDisplaySection from './components/DataDisplaySection';
 import MyCalendarStyles from './MyCalendar.styles';
+import {
+  getMonthYearDayString,
+  getMonthYearString,
+  isObjectAndEmpty,
+} from '../../utils';
 
 const MyCalendar = ({ navigation, route }) => {
   const today = new Date();
-  const dashboardDate = route?.params?.dashboardDate;
   const currentUser = auth().currentUser.uid;
-  const [checkIns, setCheckIns] = useState();
-  const [monthYearString, setMonthYearString] = useState(
-    getMonthYearString(today),
-  );
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState(null);
 
+  const [checkIns, setCheckIns] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [singleDayData, setSingleDayData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(today);
 
-  const getCheckIns = (userId, year) => {
-    DB.ref(`/checkIns/${userId}/${year}`).on('value', (querySnapshot) => {
-      let data = querySnapshot.val();
-      setCheckIns(data);
-      setLoading(false);
+  const findSingleDayData = (day, dataArray) => {
+    const monthYearData = dataArray.find((element) => {
+      return Object.keys(element)[0] === getMonthYearString(day);
     });
+    if (monthYearData) {
+      return Object?.values(monthYearData)?.[0]?.[day.getDate().toString()];
+    }
+    return null;
   };
 
-  const handleDateUpdate = (day = selectedDate) => {
-    if (getMonthYearString(day) !== monthYearString) {
-      setMonthYearString(day);
-    }
-    setSelectedDate(day);
-    setData(null);
-    const date = new Date(day);
-
+  const getCheckIns = (userId, year) => {
     setLoading(true);
-    checkIns &&
-      setData(
-        checkIns[`${date.getFullYear()}-${date.getMonth() + 1}`]?.[
-          `${date.getDate()}`
-        ],
-      );
+    DB.ref(`/checkIns/${userId}/${year}`).on('value', (querySnapshot) => {
+      const data = querySnapshot.val();
+      if (data && selectedDate) {
+        let dataArray = [];
+        for (var key in querySnapshot.val()) {
+          dataArray.push({ [key]: querySnapshot.val()[key] });
+        }
+        setCheckIns(dataArray);
+        setSingleDayData(findSingleDayData(selectedDate, dataArray));
+      }
+    });
     setLoading(false);
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      selectedDate && getCheckIns(currentUser, selectedDate.getFullYear());
-      dashboardDate && handleDateUpdate(dashboardDate);
-    }, [navigation, dashboardDate]),
-  );
-
-  useEffect(() => {
-    if (!data && checkIns) {
-      handleDateUpdate();
+  const handleDateUpdate = (day) => {
+    setSelectedDate(day);
+    if (checkIns?.length) {
+      setSingleDayData(findSingleDayData(day, checkIns));
     }
-  }, [data, checkIns]);
+  };
 
   const handleCheckedInDatesStyle = (date) => {
     const newDate = new Date(date);
-    if (
-      checkIns &&
-      checkIns[`${newDate.getFullYear()}-${newDate.getMonth() + 1}`]?.[
-        `${newDate.getDate()}`
-      ]
-    ) {
+    if (selectedDateHasData(newDate)) {
       return {
         dateContainerStyle: { backgroundColor: 'rgba(0, 255, 0, 0.2)' },
       };
     }
   };
 
+  const selectedDateHasData = (date) => {
+    if (checkIns?.length) {
+      return checkIns.some((element) => {
+        return (
+          Object.keys(element)[0] === getMonthYearString(date) &&
+          Object?.values(element).some((another) =>
+            Object.keys(another).includes(date.getDate().toString()),
+          )
+        );
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (!checkIns) {
+      getCheckIns(currentUser, today.getFullYear());
+    }
+    //handleDateUpdate(new Date());
+  }, []);
+
+  const handleNewCheckIn = (newValue, monthYearString, date) => {
+    console.log(newValue, monthYearString, date);
+    const newCheckIns = [...checkIns];
+    const index = checkIns.findIndex(
+      (element) => Object.keys(element)[0] === monthYearString,
+    );
+    const newObject = { ...newCheckIns[index][monthYearString], newValue };
+    newCheckIns[index][monthYearString] = newObject;
+    console.log(newCheckIns);
+    setCheckIns(newCheckIns);
+    handleCheckedInDatesStyle(date);
+    handleDateUpdate(date);
+  };
+  //console.log(checkIns);
+
   return (
     <View style={MyCalendarStyles.container}>
-      {selectedDate && !loading && (
+      {checkIns?.length && selectedDate && !loading && (
         <CalendarStrip
+          scrollToOnSetSelectedDate
+          scrollable
           style={MyCalendarStyles.calendarStrip}
           calendarHeaderStyle={MyCalendarStyles.nonHighlightedText}
           dateNumberStyle={MyCalendarStyles.nonHighlightedText}
@@ -92,11 +118,9 @@ const MyCalendar = ({ navigation, route }) => {
           highlightDateContainerStyle={
             MyCalendarStyles.highlightedDateContainer
           }
-          onDateSelected={handleDateUpdate}
+          onDateSelected={(date) => handleDateUpdate(new Date(date))}
           selectedDate={selectedDate}
           maxDate={today}
-          scrollToOnSetSelectedDate
-          scrollable
           customDatesStyles={handleCheckedInDatesStyle}
         />
       )}
@@ -108,29 +132,29 @@ const MyCalendar = ({ navigation, route }) => {
             </View>
           </Center>
         )}
-        {!data && !loading && (
+        {!singleDayData && !loading && (
           <Center>
             <EmptyDataMessage
-              handleClick={() =>
+              handleClick={() => {
                 navigation.push('Check In', {
                   date: selectedDate,
-                  monthYearString,
-                })
-              }
+                  handleNewCheckIn,
+                });
+              }}
             />
           </Center>
         )}
-        {!loading && data && (
+        {!loading && singleDayData && !isObjectAndEmpty(singleDayData) && (
           <ScrollView style={MyCalendarStyles.scrollViewContainer}>
             <DataDisplaySection
               data={[
                 {
-                  value: data.sliderValues.mood / 10,
+                  value: singleDayData.sliderValues.mood / 10,
                   heading: 'Mood',
                   highValueIsBad: false,
                 },
                 {
-                  value: data.sliderValues.stressLevel / 10,
+                  value: singleDayData.sliderValues.stressLevel / 10,
                   heading: 'Stress',
                   highValueIsBad: true,
                 },
@@ -142,12 +166,12 @@ const MyCalendar = ({ navigation, route }) => {
               data={[
                 {
                   heading: 'Sound Intensity',
-                  value: data.sliderValues.soundIntensity / 10,
+                  value: singleDayData.sliderValues.soundIntensity / 10,
                   highValueIsBad: true,
                 },
                 {
                   heading: 'Sound Pitch',
-                  value: data.sliderValues.soundPitch / 10,
+                  value: singleDayData.sliderValues.soundPitch / 10,
                   highValueIsBad: true,
                 },
               ]}
@@ -159,7 +183,7 @@ const MyCalendar = ({ navigation, route }) => {
               data={[
                 {
                   heading: 'Hours',
-                  value: data.sliderValues.sleepHours / 10,
+                  value: singleDayData.sliderValues.sleepHours / 10,
                   maxValue: 10,
                   highValueIsBad: false,
                 },

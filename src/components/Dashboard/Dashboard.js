@@ -24,9 +24,7 @@ const Dashboard = ({ navigation }) => {
   const getIsCheckedInToday = (userId) => {
     try {
       DB.ref(
-        `/checkIns/${userId}/${today.getFullYear()}/${getMonthYearString(
-          today,
-        )}/${today.getDate()}`,
+        `/checkIns/${userId}/${today.getFullYear()}/2021-11/${today.getDate()}`,
       ).on('value', (querySnapshot) => {
         let data = querySnapshot.val() ? querySnapshot.val() : null;
         setCheckedIn(Boolean(data));

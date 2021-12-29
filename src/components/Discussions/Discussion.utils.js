@@ -13,3 +13,15 @@ export function normalize(size) {
     return Math.round(PixelRatio.roundToNearestPixel(newSize));
   }
 }
+
+export const isAscending = (arr) => {
+  return arr.every(function (x, i) {
+    return i === 0 || x.date >= arr[i - 1].date;
+  });
+};
+
+export const isDescending = (arr) => {
+  return arr.every(function (x, i) {
+    return i === 0 || x.date <= arr[i - 1].date;
+  });
+};
