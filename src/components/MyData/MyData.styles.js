@@ -5,6 +5,7 @@ export default ScaledSheet.create({
     paddingTop: 20,
     flex: 1,
     backgroundColor: 'white',
+    display: 'flex',
   },
   headerSection: {
     flex: 0.1,

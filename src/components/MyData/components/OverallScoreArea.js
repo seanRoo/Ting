@@ -23,11 +23,10 @@ const OverallScoreArea = ({
   const getCircleColour = () => {
     const scoreWhole = overallScore * 100;
     return scoreWhole <= 35
-      ? 'red'
+      ? 'rgba(255,0,0,.6)'
       : scoreWhole > 35 && scoreWhole < 70
       ? 'gold'
       : 'green';
-    //return circleColour;
   };
 
   return (
@@ -49,16 +48,6 @@ const OverallScoreArea = ({
           >
             Overall score
           </Text>
-          {/* <Text
-            style={{
-              fontSize: 16,
-              color: '#1c98e6',
-              letterSpacing: 0.5,
-              fontWeight: 'bold',
-            }}
-          >
-            From <Text>{numEntries}</Text> data entries
-          </Text> */}
         </View>
       </View>
       <View

@@ -2,19 +2,28 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-const LinearGuage = ({ startLabel, endLabel, value, ...otherProps }) => {
+const LinearGuage = ({
+  startLabel,
+  endLabel,
+  value,
+  highValueIsGood,
+  ...otherProps
+}) => {
+  const colors = highValueIsGood
+    ? ['#ff0000', '#ffc000', '#14f9ff']
+    : ['#14f9ff', '#ffc000', '#ff0000'];
   return (
     <View {...otherProps}>
       <LinearGradient
         style={{
-          width: '100%',
-          alignSelf: 'flex-start',
-          height: 40,
+          alignSelf: 'center',
+          height: 10,
           borderRadius: 25,
+          width: '100%',
         }}
         start={{ x: 0, y: 0.5 }}
         end={{ x: 1, y: 5 }}
-        colors={['#14f9ff', '#ffc000', '#ff0000']}
+        colors={colors}
       >
         <View
           style={{

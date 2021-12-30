@@ -1,4 +1,4 @@
-import { Share } from 'react-native';
+import { Share, Platform } from 'react-native';
 
 export const monthsArray = [
   'January',
@@ -124,4 +124,46 @@ export const onShare = async () => {
   } catch (error) {
     alert(error.message);
   }
+};
+
+export const intlPolyfill = () => {
+  if (Platform.OS === 'android') {
+    // only android needs polyfill
+    require('intl'); // import intl object
+    require('intl/locale-data/jsonp/en-IN'); // load the required locale details
+    Intl.__disableRegExpRestore();
+  }
+};
+
+export const getDataAverageScores = (data, monthYearString) => {
+  let sleepScore = 0,
+    soundIntensityScore = 0,
+    moodScore = 0,
+    stressScore = 0,
+    length = 0;
+  if (data?.length) {
+    const monthElement = [...data].filter(
+      (element) => Object.keys(element)[0] === monthYearString,
+    );
+    const filteredData =
+      (monthElement.length && Object.values(monthElement[0])) || null;
+    if (filteredData) {
+      length = Object.values(filteredData[0]).length;
+      Object.values(filteredData[0]).forEach((element) => {
+        const values = element.sliderValues;
+        const { mood, sleepHours, soundIntensity, stressLevel } = values;
+        moodScore += mood;
+        sleepScore += sleepHours;
+        soundIntensityScore += soundIntensity;
+        stressScore += stressLevel;
+      });
+    }
+  }
+  return {
+    sleepScore: Math.trunc((sleepScore / length) * 10),
+    moodScore: Math.trunc((moodScore / length) * 10),
+    soundIntensityScore: Math.trunc((soundIntensityScore / length) * 10),
+    stressScore: Math.trunc((stressScore / length) * 10),
+    length,
+  };
 };

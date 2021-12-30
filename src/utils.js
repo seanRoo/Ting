@@ -60,6 +60,15 @@ export const getMonthYearString = (date) => {
   return null;
 };
 
+export const getPreviousMonthYearString = (date) => {
+  if (date) {
+    date = new Date(date);
+    const monthYearString = `${date.getFullYear()}-${date.getMonth()}`;
+    return monthYearString;
+  }
+  return null;
+};
+
 export const getMonthYearDayString = (date) =>
   `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
