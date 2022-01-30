@@ -25,8 +25,9 @@ const DataDisplaySection = ({ data, icon, title }) => {
           <View>{icon}</View>
         </View>
         <View style={MyCalendarStyles.progressBarContainer}>
-          {data.map((element) => (
+          {data.map((element, index) => (
             <ProgressBar
+              key={`progress-${index}`}
               heading={element.heading}
               progress={element.value}
               color={getProgressColor(element.value, element.highValueIsBad)}

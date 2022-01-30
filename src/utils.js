@@ -63,8 +63,10 @@ export const getMonthYearString = (date) => {
 export const getPreviousMonthYearString = (date) => {
   if (date) {
     date = new Date(date);
-    const monthYearString = `${date.getFullYear()}-${date.getMonth()}`;
-    return monthYearString;
+    if (date.getMonth() === 0) {
+      return `${date.getFullYear() - 1}-12`;
+    }
+    return `${date.getFullYear()}-${date.getMonth()}`;
   }
   return null;
 };

@@ -18,7 +18,7 @@ const RecommendationsButton = ({ handleClick }) => (
       onPress={handleClick}
     >
       <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 18 }}>
-        View Recommendations
+        Relief Recommendations
       </Text>
     </TouchableOpacity>
   </View>

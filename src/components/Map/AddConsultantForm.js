@@ -28,6 +28,13 @@ const AddConsultantForm = ({ navigation }) => {
     }
   }, [phoneNumValue, addressValue, consultantType]);
 
+  useEffect(() => {
+    console.log(addressValue);
+    if (addressValue?.phoneNumber) {
+      setPhoneNumValue(addressValue.phoneNumber);
+    }
+  }, [addressValue]);
+
   const handleSave = () => {
     const formValues = {
       address: addressValue,
@@ -68,11 +75,21 @@ const AddConsultantForm = ({ navigation }) => {
           fetchDetails
           placeholder={'Start typing to search...'}
           onPress={(data, details) => {
+            console.log(data);
+            console.log(details);
             setAddressValue({
               id: data.place_id,
               desc: data.description,
               lat: details.geometry.location.lat,
               lng: details.geometry.location.lng,
+              openingHours: details.opening_hours
+                ? details.opening_hours.weekday_text
+                : null,
+              openNow: details.opening_hours
+                ? details.opening_hours.openNow
+                : null,
+              phoneNumber: details.formatted_phone_number || null,
+              icon: details?.icon,
             });
           }}
           styles={{
@@ -118,6 +135,7 @@ const AddConsultantForm = ({ navigation }) => {
           labelStyle={{ marginBottom: 10, color: 'black' }}
           placeholderTextColor="orchid"
           keyboardType="numeric"
+          value={phoneNumValue}
         />
       </View>
       <View

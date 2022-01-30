@@ -5,34 +5,91 @@ import auth from '@react-native-firebase/auth';
 import MonthPicker from 'react-native-month-year-picker';
 import NoDataMessage from './NoDataMessage';
 import DateSelect from './components/DateSelect';
-import { DB } from '../../config';
-import { intlPolyfill, getDataAverageScores } from './MyData.utils';
-import ButtonGroup from './components/ButtonGroup';
+import {
+  intlPolyfill,
+  getDataAverageScores,
+  findAndTransformDataset,
+  sleepEntries,
+  stressEntries,
+} from './MyData.utils';
+import FilterPicker from './components/FilterPicker';
 import OverallScoreArea from './components/OverallScoreArea';
 import { getMonthYearString, getPreviousMonthYearString } from '../../utils';
 import Loading from '../Loading';
 import RecommendationsButton from './components/RecommendationsButton';
 import DataDisplayBox from './components/DataDisplayBox';
+import { useFetchCheckins } from './hooks/useFetchCheckins.hook';
+import { useHasImprovedFromLastMonth } from './hooks/useHasImprovedFromLastMonth.hook';
+import { fetchRecommendations } from '../../api/RecommendationsApi';
+import { v4 as uuid } from 'uuid';
+import { setRecommendations } from '../../api/RecommendationsApi';
+import { useToast } from 'native-base';
 
-const labels = ['Sound Intensity', 'Sleep', 'Mood', 'Stress Level'];
-
+const labels = [
+  {
+    label: 'Sound Intensity',
+    value: 'soundIntensity',
+    category: 'sound',
+  },
+  { label: 'Sound Pitch', value: 'soundPitch', category: 'sound' },
+  { label: 'Sleep', value: 'sleepHours', category: 'sleep' },
+  { label: 'Mood', value: 'mood', catergory: 'mood' },
+  { label: 'Stress Level', value: 'stressLevel', category: 'stress' },
+];
+const initialChipState = {
+  sleep: sleepEntries.map((element) => ({
+    label: element,
+    selected: false,
+    attempted: false,
+    id: uuid(),
+    category: 'sleep',
+  })),
+  stress: stressEntries.map((element) => ({
+    label: element,
+    selected: false,
+    attempted: false,
+    id: uuid(),
+    category: 'stress',
+  })),
+};
 intlPolyfill();
 
 const MyData = ({ navigation: { navigate } }) => {
   const currentUser = auth().currentUser.uid;
+  const today = new Date();
+  const toast = useToast();
 
-  const [checkIns, setCheckIns] = useState(null);
   const [showMonthPicker, setShowMonthPicker] = useState(false);
   const [monthPickerValue, setMonthPickerValue] = useState(new Date());
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [currentDataButton, setCurrentDataButton] = useState('soundIntensity');
-  const [currentButtonIndex, setCurrentButtonIndex] = useState(0);
   const [numEntries, setNumEntries] = useState(0);
   const [scoreArray, setScoreArray] = useState(null);
   const [lastMonthScoreArray, setLastMonthScoreArray] = useState(null);
+  const [scoreArraysLoaded, setScoreArraysLoaded] = useState(false);
+  const [dataset, setDataset] = useState([]);
+  const [chips, setChips] = useState(initialChipState);
+  const [filterPickerValue, setFilterPickerValue] = useState(labels[0]);
+  const [filterIndex, setFilterIndex] = useState(0);
 
-  const showPicker = useCallback((value) => setShowMonthPicker(value), []);
+  const highValueIsGood =
+    filterPickerValue?.label === 'Sleep' || filterPickerValue?.label === 'Mood';
+
+  const pickerYear = monthPickerValue.getFullYear();
+  const { checkins, lastMonthCheckins, checkinsLoaded } = useFetchCheckins({
+    currentUser,
+    monthPickerValue,
+    pickerYear,
+  });
+
+  const hasImprovedFromLastMonth = useHasImprovedFromLastMonth({
+    scoreArray,
+    lastMonthScoreArray,
+    highValueIsGood,
+    filterIndex,
+  });
+
+  const showPicker = useCallback((value) => {
+    setShowMonthPicker(value);
+  }, []);
 
   const onValueChange = useCallback((event, newDate) => {
     const selectedDate = newDate || monthPickerValue;
@@ -40,69 +97,126 @@ const MyData = ({ navigation: { navigate } }) => {
     setMonthPickerValue(selectedDate);
   }, []);
 
-  const getData = () => {
-    try {
-      DB.ref(`/checkIns/${currentUser}/${monthPickerValue.getFullYear()}/`).on(
-        'value',
-        (querySnapshot) => {
-          if (querySnapshot.val()) {
-            let dataArray = [];
-            for (var key in querySnapshot.val()) {
-              dataArray.push({ [key]: querySnapshot.val()[key] });
-            }
+  const handleScoreArrays = () => {
+    setScoreArraysLoaded(false);
+    let lastMonthData;
 
-            setCheckIns(dataArray);
-          } else {
-            setCheckIns([]);
-          }
-        },
+    const thisMonthData = getDataAverageScores(
+      checkins,
+      getMonthYearString(monthPickerValue),
+    );
+
+    if (lastMonthCheckins) {
+      lastMonthData = getDataAverageScores(
+        lastMonthCheckins,
+        getPreviousMonthYearString(monthPickerValue),
       );
-    } catch (e) {
-      console.error(e);
+    } else {
+      lastMonthData = getDataAverageScores(
+        checkins,
+        getPreviousMonthYearString(monthPickerValue),
+      );
+    }
+
+    const {
+      soundIntensityScore,
+      soundPitchScore,
+      sleepScore,
+      moodScore,
+      stressScore,
+    } = thisMonthData || null;
+
+    const {
+      soundIntensityScore: soundIntensityScoreLast,
+      soundPitchScore: soundPitchScoreLast,
+      sleepScore: sleepScoreLast,
+      moodScore: moodScoreLast,
+      stressScore: stressScoreLast,
+    } = lastMonthData || null;
+
+    setNumEntries(thisMonthData?.length);
+    const newScoreArray = [
+      soundIntensityScore,
+      soundPitchScore,
+      sleepScore,
+      moodScore,
+      stressScore,
+    ];
+    setScoreArray(newScoreArray);
+    setLastMonthScoreArray([
+      soundIntensityScoreLast,
+      soundPitchScoreLast,
+      sleepScoreLast,
+      moodScoreLast,
+      stressScoreLast,
+    ]);
+    setScoreArraysLoaded(newScoreArray?.every((element) => !isNaN(element)));
+  };
+
+  const handleUpdateChips = (newChips) => {
+    if (newChips) {
+      setChips(newChips);
+    } else {
+      setChips(initialChipState);
     }
   };
 
   useEffect(() => {
-    if (checkIns?.length) {
-      const thisMonthData = getDataAverageScores(
-        checkIns,
-        getMonthYearString(monthPickerValue),
-      );
-      setNumEntries(thisMonthData?.length);
-      setScoreArray(Object.values(thisMonthData));
-
-      const lastMonthData = Object.values(
-        getDataAverageScores(
-          checkIns,
-          getPreviousMonthYearString(monthPickerValue),
+    if (checkins) {
+      setDataset(
+        findAndTransformDataset(
+          checkins,
+          labels,
+          filterPickerValue,
+          getMonthYearString(monthPickerValue),
         ),
       );
-      setLastMonthScoreArray(lastMonthData);
-    } else {
-      setNumEntries(0);
     }
-  }, [checkIns, monthPickerValue]);
+  }, [filterPickerValue, checkins, lastMonthCheckins, monthPickerValue]);
 
   useEffect(() => {
-    getData();
-  }, []);
+    if (checkins?.length) {
+      handleScoreArrays();
+    }
+  }, [checkins, lastMonthCheckins, monthPickerValue]);
 
   useEffect(() => {
-    if (scoreArray) {
-      setIsLoading(false);
-    }
-    if (!scoreArray?.length) {
-      setNumEntries(0);
-    }
-  }, [scoreArray]);
+    fetchRecommendations(
+      currentUser,
+      handleUpdateChips,
+      new Date(monthPickerValue),
+    );
+  }, [monthPickerValue]);
 
-  const hasImprovedFromLastMonth =
-    (lastMonthScoreArray?.[currentButtonIndex] &&
-      -1 *
-        (lastMonthScoreArray?.[currentButtonIndex] -
-          scoreArray?.[currentButtonIndex]) >
-        0) ||
-    true;
+  const handleClick = (type, chip) => {
+    if (chip.selected) {
+      toast.show({
+        duration: 3000,
+        title: 'Added to your dashboard',
+        isClosable: true,
+        status: 'success',
+      });
+    }
+    const newChips = JSON.parse(JSON.stringify(chips));
+    const selectedElement = newChips[type].find(
+      (element) => element.label === chip.label,
+    );
+    selectedElement.selected = chip.selected;
+
+    if (!chip.selected) {
+      selectedElement.attempted = false;
+    }
+
+    setRecommendations(currentUser, today, newChips).then(() =>
+      setChips(newChips),
+    );
+  };
+
+  const attemptedReliefs = chips[`${filterPickerValue?.category}`]?.filter(
+    (element) => element.attempted,
+  );
+
+  console.log(filterPickerValue);
 
   return (
     <View style={Styles.container}>
@@ -111,23 +225,22 @@ const MyData = ({ navigation: { navigate } }) => {
           onChange={onValueChange}
           value={monthPickerValue}
           minimumDate={new Date(2021, 0)}
-          maximumDate={new Date(2021, 11)}
+          maximumDate={new Date(today.getFullYear(), today.getMonth())}
         />
       )}
       <DateSelect
         numEntries={numEntries}
         showPicker={showPicker}
         monthPickerValue={monthPickerValue}
-        style={{ marginRight: 10, width: '30%' }}
       />
-      {checkIns && scoreArray && numEntries !== 0 && (
+      {checkinsLoaded && numEntries !== 0 && scoreArraysLoaded && (
         <>
           <OverallScoreArea
             numEntries={numEntries}
             scoreArray={scoreArray}
             monthPickerValue={monthPickerValue}
             showPicker={showPicker}
-            style={{ flex: 0.5, display: 'flex' }}
+            style={{ flex: 0.5, display: 'flex', marginTop: 16 }}
           />
           <View
             style={{
@@ -140,11 +253,11 @@ const MyData = ({ navigation: { navigate } }) => {
               marginBottom: 25,
             }}
           />
-          <ButtonGroup
-            currentDataButton={currentDataButton}
-            setCurrentDataButton={setCurrentDataButton}
-            currentButtonIndex={currentButtonIndex}
-            setCurrentButtonIndex={setCurrentButtonIndex}
+          <FilterPicker
+            items={labels}
+            setFilterIndex={setFilterIndex}
+            setFilterPickerValue={setFilterPickerValue}
+            filterPickerValue={filterPickerValue}
             style={{
               flex: 0.15,
               flexDirection: 'row',
@@ -153,31 +266,53 @@ const MyData = ({ navigation: { navigate } }) => {
               alignContent: 'space-around',
             }}
           />
-          <View
-            style={{
-              flex: 0.6,
-              padding: 12,
-              paddingTop: 16,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
-          >
-            <DataDisplayBox
-              scoreArray={scoreArray}
-              currentButtonIndex={currentButtonIndex}
-              labels={labels}
-              hasImprovedFromLastMonth={hasImprovedFromLastMonth}
-              lastMonthScoreArray={lastMonthScoreArray}
-            />
-            <RecommendationsButton
-              handleClick={() => navigate('Recommendations')}
-            />
-          </View>
+          {filterPickerValue && (
+            <View
+              style={{
+                flex: 0.6,
+                padding: 12,
+                paddingTop: 6,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}
+            >
+              <DataDisplayBox
+                scoreArray={scoreArray}
+                filterPickerValue={filterPickerValue}
+                filterIndex={filterIndex}
+                labels={labels}
+                hasImprovedFromLastMonth={hasImprovedFromLastMonth}
+                lastMonthScoreArray={lastMonthScoreArray}
+                handleDataNavigate={() =>
+                  dataset?.length &&
+                  navigate('Data Display', {
+                    dataset,
+                    title: filterPickerValue?.label,
+                    month: monthPickerValue,
+                    chips: JSON.stringify(attemptedReliefs),
+                  })
+                }
+                highValueIsGood={highValueIsGood}
+                chips={chips}
+              />
+              <RecommendationsButton
+                handleClick={() =>
+                  navigate('Relief', {
+                    date: JSON.stringify(monthPickerValue),
+                    handleClick,
+                    chips,
+                  })
+                }
+              />
+            </View>
+          )}
         </>
       )}
-      {numEntries === 0 && !isLoading && <NoDataMessage />}
-      {numEntries === 0 && isLoading && <Loading />}
+      {numEntries === 0 && checkinsLoaded && scoreArraysLoaded && (
+        <NoDataMessage />
+      )}
+      {(!checkinsLoaded || !scoreArraysLoaded) && <Loading />}
     </View>
   );
 };

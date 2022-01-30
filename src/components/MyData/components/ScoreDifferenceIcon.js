@@ -6,7 +6,8 @@ const ScoreDifferenceIcon = ({
   hasImprovedFromLastMonth,
   scoreArray,
   lastMonthScoreArray,
-  currentButtonIndex,
+  filterIndex,
+  highValueIsGood,
   styleProps,
 }) => {
   return (
@@ -29,20 +30,28 @@ const ScoreDifferenceIcon = ({
           }}
         >
           <MaterialCommunityIcons
-            name={hasImprovedFromLastMonth ? 'arrow-up' : 'arrow-down'}
-            color={hasImprovedFromLastMonth ? 'green' : 'red'}
+            name={
+              lastMonthScoreArray?.[filterIndex] - scoreArray[filterIndex] < 0
+                ? 'arrow-up'
+                : 'arrow-down'
+            }
+            color={
+              hasImprovedFromLastMonth && highValueIsGood ? 'green' : 'red'
+            }
             size={28}
           />
           <Text
             style={{
               fontSize: 24,
-              color: hasImprovedFromLastMonth ? 'green' : 'red',
+              color: !(hasImprovedFromLastMonth && highValueIsGood)
+                ? 'red'
+                : 'green',
             }}
           >
             {Math.abs(
-              lastMonthScoreArray?.[currentButtonIndex] -
-                scoreArray[currentButtonIndex],
-            ) || scoreArray[currentButtonIndex]}
+              lastMonthScoreArray?.[filterIndex] - scoreArray[filterIndex] ||
+                scoreArray[filterIndex],
+            )}
             %
           </Text>
         </View>

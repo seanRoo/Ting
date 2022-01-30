@@ -1,26 +1,24 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import LinearGuage from './LinearGuage';
 import ScoreDifferenceIcon from './ScoreDifferenceIcon';
 
 const DataDisplayBox = ({
   scoreArray,
-  currentButtonIndex,
+  filterIndex,
   labels,
   hasImprovedFromLastMonth,
   lastMonthScoreArray,
+  handleDataNavigate,
+  highValueIsGood,
 }) => {
-  const highValueIsGood =
-    labels[currentButtonIndex] === 'Sleep' ||
-    labels[currentButtonIndex] === 'Mood';
-
   const getScoreColour = () => {
-    const score = scoreArray[currentButtonIndex];
+    const score = scoreArray[filterIndex];
     if (highValueIsGood) {
-      return score <= 35
+      return score <= 30
         ? 'rgba(255,122,122,.3)'
-        : score > 35 && score < 70
+        : score > 30 && score < 70
         ? 'rgba(255,215,0, .5)'
         : 'rgba(152, 251, 152,.3)';
     } else {
@@ -32,6 +30,7 @@ const DataDisplayBox = ({
     }
   };
 
+  const noLastMonthData = lastMonthScoreArray.every((element) => !element);
   return (
     <View
       style={{
@@ -49,10 +48,10 @@ const DataDisplayBox = ({
       >
         <View style={{ justifyContent: 'flex-start' }}>
           <Text style={{ fontSize: 24, fontWeight: 'bold' }}>
-            {scoreArray[currentButtonIndex]}% average
+            {scoreArray[filterIndex]}% average
           </Text>
           <Text style={{ fontSize: 16, color: 'grey' }}>
-            {labels[currentButtonIndex]}
+            {labels[filterIndex]?.label}
           </Text>
         </View>
         <LinearGuage
@@ -63,7 +62,7 @@ const DataDisplayBox = ({
             marginTop: 30,
             width: '95%',
           }}
-          value={scoreArray[currentButtonIndex]}
+          value={scoreArray[filterIndex]}
           highValueIsGood={highValueIsGood}
         />
       </View>
@@ -75,13 +74,17 @@ const DataDisplayBox = ({
           flexDirection: 'column',
         }}
       >
-        <ScoreDifferenceIcon
-          styleProps={{ flex: 0.45 }}
-          hasImprovedFromLastMonth={hasImprovedFromLastMonth}
-          scoreArray={scoreArray}
-          lastMonthScoreArray={lastMonthScoreArray}
-          currentButtonIndex={currentButtonIndex}
-        />
+        <View style={{ flex: 0.45 }}>
+          {!noLastMonthData && (
+            <ScoreDifferenceIcon
+              hasImprovedFromLastMonth={hasImprovedFromLastMonth}
+              scoreArray={scoreArray}
+              lastMonthScoreArray={lastMonthScoreArray}
+              filterIndex={filterIndex}
+              highValueIsGood={highValueIsGood}
+            />
+          )}
+        </View>
         <View
           style={{
             width: '90%',
@@ -103,16 +106,18 @@ const DataDisplayBox = ({
           }}
         >
           <SimpleLineIcons name="graph" size={35} />
-          <Text
-            style={{
-              fontSize: 16,
-              color: 'blue',
-              fontWeight: 'bold',
-              textDecorationLine: 'underline',
-            }}
-          >
-            See data
-          </Text>
+          <TouchableOpacity onPress={handleDataNavigate}>
+            <Text
+              style={{
+                fontSize: 16,
+                color: 'blue',
+                fontWeight: 'bold',
+                textDecorationLine: 'underline',
+              }}
+            >
+              See data
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

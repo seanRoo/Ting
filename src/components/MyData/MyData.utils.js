@@ -140,6 +140,7 @@ export const getDataAverageScores = (data, monthYearString) => {
     soundIntensityScore = 0,
     moodScore = 0,
     stressScore = 0,
+    soundPitchScore = 0,
     length = 0;
   if (data?.length) {
     const monthElement = [...data].filter(
@@ -148,14 +149,17 @@ export const getDataAverageScores = (data, monthYearString) => {
     const filteredData =
       (monthElement.length && Object.values(monthElement[0])) || null;
     if (filteredData) {
-      length = Object.values(filteredData[0]).length;
-      Object.values(filteredData[0]).forEach((element) => {
+      const filteredDataNoNull = Object.values(filteredData[0]).filter(Boolean);
+      length = filteredDataNoNull.length;
+      filteredDataNoNull.forEach((element) => {
         const values = element.sliderValues;
-        const { mood, sleepHours, soundIntensity, stressLevel } = values;
+        const { mood, sleepHours, soundIntensity, stressLevel, soundPitch } =
+          values;
         moodScore += mood;
         sleepScore += sleepHours;
         soundIntensityScore += soundIntensity;
         stressScore += stressLevel;
+        soundPitchScore += soundPitch;
       });
     }
   }
@@ -164,6 +168,47 @@ export const getDataAverageScores = (data, monthYearString) => {
     moodScore: Math.trunc((moodScore / length) * 10),
     soundIntensityScore: Math.trunc((soundIntensityScore / length) * 10),
     stressScore: Math.trunc((stressScore / length) * 10),
+    soundPitchScore: Math.trunc((soundPitchScore / length) * 10),
     length,
   };
 };
+
+export const findAndTransformDataset = (
+  checkinsArray,
+  labels,
+  filterPickerValue,
+  monthYearString,
+) => {
+  let data = [];
+  const newDataSet = checkinsArray.find((element) => {
+    return Object.keys(element)[0] === monthYearString;
+  })?.[monthYearString];
+  if (newDataSet) {
+    for (const [key, val] of Object?.entries(newDataSet)) {
+      if (!isNaN(val?.sliderValues?.[filterPickerValue?.value])) {
+        data.push({
+          x: key,
+          y: val.sliderValues[filterPickerValue.value],
+        });
+      }
+    }
+  }
+  return data;
+};
+
+export const sleepEntries = [
+  'Cut caffeine intake',
+  'Pitch black bedroom',
+  'Cut screen time',
+  'Relaxing evening routine',
+  'Jot down all your thoughts',
+  'Set sleep times',
+  'Adjust thermostat',
+];
+export const stressEntries = [
+  'See a friend',
+  'Physical Exercise',
+  'Meditation',
+  'Deep Breathing Exercises',
+  'Practice Mindfulness',
+];
