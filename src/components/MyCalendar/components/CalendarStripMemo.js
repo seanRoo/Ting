@@ -26,7 +26,9 @@ const CalendarStripMemo = ({
           selectedDate={selectedDate}
           maxDate={today}
           customDatesStyles={handleCheckedInDatesStyle}
-          onWeekChanged={(start, end) => handleWeekChange(start, end)}
+          onWeekChanged={(start, end) => {
+            handleWeekChange(start, end);
+          }}
         />
       )}
     </>

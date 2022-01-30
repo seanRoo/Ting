@@ -67,8 +67,17 @@ const Dashboard = ({ navigation }) => {
             userInfo={userInfo}
           />
           <View
-            style={{ flex: 0.1, borderWidth: 1, marginTop: 8, marginBottom: 8 }}
-          ></View>
+            style={{
+              flex: 0.1,
+              borderWidth: 1,
+              marginTop: 8,
+              marginBottom: 8,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={{ fontWeight: 'bold' }}>Disclaimer will go here</Text>
+          </View>
           <View
             style={{
               flexDirection: 'column',

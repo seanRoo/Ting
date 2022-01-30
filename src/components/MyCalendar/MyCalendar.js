@@ -87,7 +87,7 @@ const MyCalendar = ({ navigation, route }) => {
     if (!checkIns) {
       getCheckIns(currentUser, today.getFullYear());
     }
-    if (checkIns) {
+    if (checkIns && !singleDayData) {
       setSingleDayData(findSingleDayData(selectedDate, checkIns));
     }
   }, [checkIns]);
@@ -126,6 +126,7 @@ const MyCalendar = ({ navigation, route }) => {
         {!singleDayData && !loading && (
           <Center>
             <EmptyDataMessage
+              selectedDate={selectedDate}
               handleClick={() => {
                 navigation.push('Check In', {
                   date: selectedDate,
