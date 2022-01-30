@@ -52,7 +52,7 @@ const Dashboard = ({ navigation }) => {
     <MyHelp />,
   ];
   const buttons = [
-    <TextCustomFont>My Calendar</TextCustomFont>,
+    <TextCustomFont>My Check-ins</TextCustomFont>,
     <TextCustomFont>My Consultants</TextCustomFont>,
     <TextCustomFont>My Relief</TextCustomFont>,
   ];

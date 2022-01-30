@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import CheckBox from 'react-native-check-box';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { setRecommendations } from '../../../api/RecommendationsApi';
 import useFetchRecommendations from '../hooks/useFetchRecommendations';
 
 const MyHelp = () => {
   const today = new Date();
   const currentUser = auth().currentUser.uid;
+
+  const [listItemsLoaded, setListItemsLoaded] = useState(false);
 
   const { recommendations } = useFetchRecommendations({
     currentUser,
@@ -21,7 +24,7 @@ const MyHelp = () => {
           ...sleep.filter((element) => element.selected),
           ...stress.filter((element) => element.selected),
         ]
-      : [];
+      : null;
 
   const handleClick = (element) => {
     const newRemedies = [...listItems];
@@ -53,81 +56,122 @@ const MyHelp = () => {
 
   return (
     <View style={{ display: 'flex', flex: 1 }}>
-      <View style={{ paddingLeft: 8 }}>
-        <Text style={{ fontSize: 19 }}>
-          Relief options you want to try this month
-        </Text>
-        <Text style={{ paddingBottom: 20, fontSize: 16, fontWeight: 'bold' }}>
-          January 2022
-        </Text>
-      </View>
-      <ScrollView
-        contentContainerStyle={{
-          justifyContent: 'space-between',
-          display: 'flex',
-        }}
-      >
-        {listItems?.map((element) => (
-          <View
-            style={{
-              minHeight: 100,
-              marginBottom: 14,
-              borderRadius: 20,
-              padding: 12,
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 1 },
-              shadowOpacity: 0.8,
-              shadowRadius: 2,
-              elevation: 5,
-              flexDirection: 'row',
-              backgroundColor: 'white',
-              alignSelf: 'center',
-              borderColor: 'orchid',
-              borderWidth: 0.5,
-            }}
-            activeOpacity={0.8}
-          >
-            <View
-              style={{
-                flexDirection: 'column',
-                flex: 0.95,
-              }}
+      {listItems ? (
+        <>
+          <View style={{ paddingLeft: 8 }}>
+            <Text style={{ fontSize: 19 }}>
+              Relief options you want to try this month
+            </Text>
+            <Text
+              style={{ paddingBottom: 20, fontSize: 16, fontWeight: 'bold' }}
             >
+              January 2022
+            </Text>
+          </View>
+          <ScrollView
+            contentContainerStyle={{
+              justifyContent: 'space-between',
+              display: 'flex',
+            }}
+          >
+            {listItems?.map((element) => (
               <View
                 style={{
+                  minHeight: 100,
+                  marginBottom: 14,
+                  borderRadius: 20,
+                  padding: 12,
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.8,
+                  shadowRadius: 2,
+                  elevation: 5,
                   flexDirection: 'row',
-                  alignItems: 'center',
-                  flex: 1,
-                  justifyContent: 'space-between',
+                  backgroundColor: 'white',
+                  alignSelf: 'center',
+                  borderColor: 'orchid',
+                  borderWidth: 0.5,
                 }}
+                activeOpacity={0.8}
               >
-                <View style={{ flexDirection: 'column' }}>
-                  <Text style={{ fontSize: 20, alignSelf: 'center' }}>
-                    {element.label}
-                  </Text>
-                  <Text style={{ fontWeight: 'bold' }}>
-                    Category:{' '}
-                    {element.category.charAt(0).toUpperCase() +
-                      element.category.slice(1)}
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => handleClick(element)}
-                  style={{ flexDirection: 'column', alignSelf: 'flex-start' }}
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    flex: 0.95,
+                  }}
                 >
-                  <Text>I tried this</Text>
-                  <CheckBox
-                    onClick={() => handleClick(element)}
-                    isChecked={element?.attempted}
-                    style={{ alignSelf: 'center', marginTop: 6 }}
-                    checkBoxColor="green"
-                  />
-                </TouchableOpacity>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      flex: 1,
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <View style={{ flexDirection: 'column' }}>
+                      <Text style={{ fontSize: 20, alignSelf: 'center' }}>
+                        {element.label}
+                      </Text>
+                      <Text style={{ fontWeight: 'bold' }}>
+                        Category:{' '}
+                        {element.category.charAt(0).toUpperCase() +
+                          element.category.slice(1)}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => handleClick(element)}
+                      style={{
+                        flexDirection: 'column',
+                        alignSelf: 'flex-start',
+                      }}
+                    >
+                      <Text>I tried this</Text>
+                      <CheckBox
+                        onClick={() => handleClick(element)}
+                        isChecked={element?.attempted}
+                        style={{ alignSelf: 'center', marginTop: 6 }}
+                        checkBoxColor="green"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
-        ))}
-      </ScrollView>
+            ))}
+          </ScrollView>
+        </>
+      ) : (
+        <View
+          style={{ justifyContent: 'center', alignItems: 'center', flex: 0.7 }}
+        >
+          <FontAwesome5Icon
+            name="hand-holding-medical"
+            size={80}
+            color="orchid"
+          />
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: 'bold',
+              marginTop: 20,
+              textAlign: 'center',
+            }}
+          >
+            No relief actions to display
+          </Text>
+          <Text
+            style={{
+              marginTop: 6,
+              textAlign: 'center',
+              fontSize: 14,
+              lineHeight: 22,
+            }}
+          >
+            You can add new relief actions through the{' '}
+            <Text style={{ fontWeight: 'bold' }}>Relief Recommendations</Text>{' '}
+            button in <Text style={{ fontWeight: 'bold' }}>My Data</Text>
+          </Text>
+        </View>
+      )}
     </View>
   );
 };

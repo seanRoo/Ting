@@ -107,7 +107,7 @@ const MyCalendar = ({ navigation, route }) => {
 
   return (
     <View style={MyCalendarStyles.container}>
-      {selectedDate && !loading && checkIns?.length && (
+      {selectedDate && !loading && (
         <CalendarStripMemo
           handleDateUpdate={handleDateUpdate}
           selectedDate={selectedDate}

@@ -44,6 +44,7 @@ const Register = ({ navigation: { navigate } }) => {
     },
   });
 
+  console.log(fieldValues);
   const checkValidRegistration = (values) => {
     const allFieldsValid = Object.entries(values).every(
       ([key, value]) => value.error === false,
@@ -118,7 +119,7 @@ const Register = ({ navigation: { navigate } }) => {
   };
 
   const checkFieldIsInvalid = (field, value) => {
-    let fieldIsInvalid = true;
+    let fieldIsInvalid = false;
     if (!value?.length) {
       return fieldIsInvalid;
     }
@@ -135,6 +136,12 @@ const Register = ({ navigation: { navigate } }) => {
         fieldIsInvalid = !(
           value.length >= 6 && value === fieldValues.password.stringValue
         );
+        break;
+      case 'firstName':
+        fieldIsInvalid = !value.length;
+        break;
+      case 'surName':
+        fieldIsInvalid = !value.length;
         break;
       // default:
       //   fieldIsInvalid = false;

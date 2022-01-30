@@ -89,7 +89,7 @@ const Login = ({ navigation }) => {
           style={{ paddingTop: 3, transform: [{ rotate: '30deg' }] }}
         />
       </View>
-      <Stack direction="column" space={12}>
+      <Stack direction="column" space={10}>
         <FormControl style={LoginStyles.inputFields} error={emailFieldError}>
           <Input
             _focus={{ borderColor: 'orchid' }}

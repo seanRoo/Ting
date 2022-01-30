@@ -201,7 +201,7 @@ const ConsultantList = ({ navigation }) => {
             color="orchid"
           />
           <Text style={{ fontWeight: 'bold', fontSize: 22, marginTop: 10 }}>
-            No Consultants to Display
+            No consultants to Display
           </Text>
           <TouchableOpacity
             onPress={() => navigation.navigate('Add a Consultant')}

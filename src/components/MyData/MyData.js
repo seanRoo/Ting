@@ -177,6 +177,8 @@ const MyData = ({ navigation: { navigate } }) => {
   useEffect(() => {
     if (checkins?.length) {
       handleScoreArrays();
+    } else {
+      setScoreArraysLoaded(true);
     }
   }, [checkins, lastMonthCheckins, monthPickerValue]);
 
@@ -215,8 +217,6 @@ const MyData = ({ navigation: { navigate } }) => {
   const attemptedReliefs = chips[`${filterPickerValue?.category}`]?.filter(
     (element) => element.attempted,
   );
-
-  console.log(filterPickerValue);
 
   return (
     <View style={Styles.container}>

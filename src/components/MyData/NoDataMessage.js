@@ -21,10 +21,11 @@ const NoDataMessage = () => {
             marginBottom: 22,
           }}
         >
-          No Data Found for This Date
+          No data found for this month
         </Text>
-        <Text style={{ fontSize: 16 }}>
-          Try updating the month or year above
+        <Text style={{ fontSize: 16, textAlign: 'center' }}>
+          Try updating the month above or adding check-in data in your{' '}
+          <Text style={{ fontWeight: 'bold' }}>Dashboard</Text>
         </Text>
       </Center>
     </View>
