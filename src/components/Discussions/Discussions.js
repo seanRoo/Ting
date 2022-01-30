@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Animated, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  Text,
+  Animated,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { DiscussionCard } from './DiscussionCard';
 import Styles from './Discussions.styles';
 import { getDiscussionPosts } from '../../api/DiscussionsApi';
@@ -17,6 +23,7 @@ export const Discussions = ({ navigation }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [displayData, setDisplayData] = useState(null);
+  const [filterState, setFilterState] = useState('Newest');
 
   useEffect(() => {
     if (!data) {
@@ -29,9 +36,8 @@ export const Discussions = ({ navigation }) => {
   }, [data]);
 
   useEffect(() => {
-    navigation.setParams({ handleFilterChange });
     fadeIn();
-  }, [displayData, handleFilterChange]);
+  }, [displayData]);
 
   const handleFilterChange = () => {
     let newData = [...displayData];
@@ -64,6 +70,51 @@ export const Discussions = ({ navigation }) => {
           >
             {!loading && displayData && (
               <>
+                <View
+                  style={{
+                    marginRight: 8,
+                    marginTop: 12,
+                    marginBottom: 12,
+                    alignSelf: 'flex-end',
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+                    width: '100%',
+                  }}
+                >
+                  <Text
+                    style={{
+                      alignSelf: 'center',
+                      fontSize: 24,
+                      paddingLeft: 10,
+                    }}
+                  >
+                    Discussions
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setFilterState(
+                        filterState === 'Newest' ? 'Oldest' : 'Newest',
+                      );
+                      handleFilterChange();
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="filter-variant"
+                      color="black"
+                      size={30}
+                      style={{ justifyContent: 'center', alignSelf: 'center' }}
+                    />
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontWeight: 'bold',
+                        alignSelf: 'center',
+                      }}
+                    >
+                      Show {filterState} first
+                    </Text>
+                  </TouchableOpacity>
+                </View>
                 {displayData.map((message) => {
                   if (message.firstName && message.lastName && message.userId) {
                     const isAuthor = message.userId === currentUser;

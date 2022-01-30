@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import auth from '@react-native-firebase/auth';
 import { DB } from '../../config';
-import { View, ScrollView, SnapshotViewIOSBase } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import Loading from '../Loading';
 import { Center } from '../Center';
-import CalendarStrip from 'react-native-calendar-strip';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useFocusEffect } from '@react-navigation/native';
 import EmptyDataMessage from './components/EmptyDataMessage';
 import DataDisplaySection from './components/DataDisplaySection';
 import MyCalendarStyles from './MyCalendar.styles';
-import {
-  getMonthYearDayString,
-  getMonthYearString,
-  isObjectAndEmpty,
-} from '../../utils';
+import { getMonthYearString, isObjectAndEmpty } from '../../utils';
+import CalendarStripMemo from './components/CalendarStripMemo';
 
 const MyCalendar = ({ navigation, route }) => {
   const today = new Date();
@@ -25,6 +20,7 @@ const MyCalendar = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true);
   const [singleDayData, setSingleDayData] = useState(null);
   const [selectedDate, setSelectedDate] = useState(today);
+  const [calendarYear, setCalendarYear] = useState(today.getFullYear());
 
   const findSingleDayData = (day, dataArray) => {
     const monthYearData = dataArray.find((element) => {
@@ -37,8 +33,9 @@ const MyCalendar = ({ navigation, route }) => {
   };
 
   const getCheckIns = (userId, year) => {
+    console.log('fired');
     setLoading(true);
-    DB.ref(`/checkIns/${userId}/${year}`).on('value', (querySnapshot) => {
+    DB.ref(`/checkIns/${userId}/${year}/`).on('value', (querySnapshot) => {
       const data = querySnapshot.val();
       if (data && selectedDate) {
         let dataArray = [];
@@ -46,7 +43,8 @@ const MyCalendar = ({ navigation, route }) => {
           dataArray.push({ [key]: querySnapshot.val()[key] });
         }
         setCheckIns(dataArray);
-        setSingleDayData(findSingleDayData(selectedDate, dataArray));
+      } else {
+        setCheckIns([]);
       }
     });
     setLoading(false);
@@ -73,9 +71,13 @@ const MyCalendar = ({ navigation, route }) => {
       return checkIns.some((element) => {
         return (
           Object.keys(element)[0] === getMonthYearString(date) &&
-          Object?.values(element).some((another) =>
-            Object.keys(another).includes(date.getDate().toString()),
-          )
+          Object?.values(element).some((another) => {
+            const dateEntryKeys = Object.keys(another);
+            return (
+              dateEntryKeys.includes(date.getDate().toString()) &&
+              another[date.getDate()] !== null
+            );
+          })
         );
       });
     }
@@ -85,43 +87,32 @@ const MyCalendar = ({ navigation, route }) => {
     if (!checkIns) {
       getCheckIns(currentUser, today.getFullYear());
     }
-    //handleDateUpdate(new Date());
-  }, []);
+    if (checkIns) {
+      setSingleDayData(findSingleDayData(selectedDate, checkIns));
+    }
+  }, [checkIns]);
 
-  const handleNewCheckIn = (newValue, monthYearString, date) => {
-    console.log(newValue, monthYearString, date);
-    const newCheckIns = [...checkIns];
-    const index = checkIns.findIndex(
-      (element) => Object.keys(element)[0] === monthYearString,
-    );
-    const newObject = { ...newCheckIns[index][monthYearString], newValue };
-    newCheckIns[index][monthYearString] = newObject;
-    console.log(newCheckIns);
-    setCheckIns(newCheckIns);
-    handleCheckedInDatesStyle(date);
-    handleDateUpdate(date);
+  const handleWeekChange = (start, end) => {
+    // track fetched years in array, max length === 2
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const startYear = startDate.getFullYear();
+    const endYear = endDate.getFullYear();
+
+    if (startYear !== calendarYear) {
+      getCheckIns(currentUser, startYear);
+      setCalendarYear(startYear);
+    }
   };
-  //console.log(checkIns);
 
   return (
     <View style={MyCalendarStyles.container}>
-      {checkIns?.length && selectedDate && !loading && (
-        <CalendarStrip
-          scrollToOnSetSelectedDate
-          scrollable
-          style={MyCalendarStyles.calendarStrip}
-          calendarHeaderStyle={MyCalendarStyles.nonHighlightedText}
-          dateNumberStyle={MyCalendarStyles.nonHighlightedText}
-          dateNameStyle={MyCalendarStyles.nonHighlightedText}
-          highlightDateNumberStyle={MyCalendarStyles.highlightedText}
-          highlightDateNameStyle={MyCalendarStyles.highlightedText}
-          highlightDateContainerStyle={
-            MyCalendarStyles.highlightedDateContainer
-          }
-          onDateSelected={(date) => handleDateUpdate(new Date(date))}
+      {selectedDate && !loading && checkIns?.length && (
+        <CalendarStripMemo
+          handleDateUpdate={handleDateUpdate}
           selectedDate={selectedDate}
-          maxDate={today}
-          customDatesStyles={handleCheckedInDatesStyle}
+          handleCheckedInDatesStyle={handleCheckedInDatesStyle}
+          handleWeekChange={handleWeekChange}
         />
       )}
       <View style={MyCalendarStyles.dataViewContainer}>
@@ -138,7 +129,6 @@ const MyCalendar = ({ navigation, route }) => {
               handleClick={() => {
                 navigation.push('Check In', {
                   date: selectedDate,
-                  handleNewCheckIn,
                 });
               }}
             />

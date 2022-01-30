@@ -1,4 +1,4 @@
-import { Share } from 'react-native';
+import { Share, Platform } from 'react-native';
 
 export const monthsArray = [
   'January',
@@ -125,3 +125,90 @@ export const onShare = async () => {
     alert(error.message);
   }
 };
+
+export const intlPolyfill = () => {
+  if (Platform.OS === 'android') {
+    // only android needs polyfill
+    require('intl'); // import intl object
+    require('intl/locale-data/jsonp/en-IN'); // load the required locale details
+    Intl.__disableRegExpRestore();
+  }
+};
+
+export const getDataAverageScores = (data, monthYearString) => {
+  let sleepScore = 0,
+    soundIntensityScore = 0,
+    moodScore = 0,
+    stressScore = 0,
+    soundPitchScore = 0,
+    length = 0;
+  if (data?.length) {
+    const monthElement = [...data].filter(
+      (element) => Object.keys(element)[0] === monthYearString,
+    );
+    const filteredData =
+      (monthElement.length && Object.values(monthElement[0])) || null;
+    if (filteredData) {
+      const filteredDataNoNull = Object.values(filteredData[0]).filter(Boolean);
+      length = filteredDataNoNull.length;
+      filteredDataNoNull.forEach((element) => {
+        const values = element.sliderValues;
+        const { mood, sleepHours, soundIntensity, stressLevel, soundPitch } =
+          values;
+        moodScore += mood;
+        sleepScore += sleepHours;
+        soundIntensityScore += soundIntensity;
+        stressScore += stressLevel;
+        soundPitchScore += soundPitch;
+      });
+    }
+  }
+  return {
+    sleepScore: Math.trunc((sleepScore / length) * 10),
+    moodScore: Math.trunc((moodScore / length) * 10),
+    soundIntensityScore: Math.trunc((soundIntensityScore / length) * 10),
+    stressScore: Math.trunc((stressScore / length) * 10),
+    soundPitchScore: Math.trunc((soundPitchScore / length) * 10),
+    length,
+  };
+};
+
+export const findAndTransformDataset = (
+  checkinsArray,
+  labels,
+  filterPickerValue,
+  monthYearString,
+) => {
+  let data = [];
+  const newDataSet = checkinsArray.find((element) => {
+    return Object.keys(element)[0] === monthYearString;
+  })?.[monthYearString];
+  if (newDataSet) {
+    for (const [key, val] of Object?.entries(newDataSet)) {
+      if (!isNaN(val?.sliderValues?.[filterPickerValue?.value])) {
+        data.push({
+          x: key,
+          y: val.sliderValues[filterPickerValue.value],
+        });
+      }
+    }
+  }
+  return data;
+};
+
+export const sleepEntries = [
+  'Cut caffeine intake',
+  'Pitch black bedroom',
+  'Cut screen time',
+  'Relaxing evening routine',
+  'Jot down all your thoughts',
+  'Set sleep times',
+  'Adjust thermostat',
+];
+export const stressEntries = [
+  'See a friend',
+  'Physical Exercise',
+  'Meditation',
+  'Deep Breathing Exercises',
+  'Practice Mindfulness',
+];

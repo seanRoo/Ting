@@ -5,8 +5,22 @@ import { Avatar, Divider } from 'react-native-elements';
 import { DateTime } from 'luxon';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import matchAll from 'string.prototype.matchall';
 
 export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
+  const name = `${message.firstName} ${message.lastName}`;
+  console.log(name);
+  const rgx = new RegExp(/(\p{L}{1})\p{L}+/, 'gu');
+  let initials;
+
+  if (name) {
+    initials = [...matchAll(name, rgx)] || [];
+
+    initials = (
+      (initials.shift()?.[1] || '') + (initials.pop()?.[1] || '')
+    ).toUpperCase();
+  }
+
   return (
     <TouchableWithoutFeedback onPress={() => handleNavigation(message)}>
       <View
@@ -33,7 +47,7 @@ export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
               <Avatar
                 size={28}
                 rounded
-                title="SR"
+                title={initials}
                 activeOpacity={0.1}
                 containerStyle={{ backgroundColor: 'black' }}
               />

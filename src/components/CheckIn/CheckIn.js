@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Toast } from 'native-base';
+import { Button, useToast } from 'native-base';
 import { Text, View, FlatList } from 'react-native';
 import { Center } from '../Center';
 import { addCheckIn } from '../../api/CheckInsApi';
@@ -20,22 +20,24 @@ const CheckIn = ({ route, navigation }) => {
     soundPitch: 0,
   });
   const [checkedIn, setCheckedIn] = useState(false);
+  const toast = useToast();
 
   const handleCheckIn = () => {
     try {
       const currentUser = auth().currentUser.uid;
       addCheckIn(sliderValues, date, currentUser, handleNewCheckIn).then(
         (res) => {
-          Toast.show({
-            text: 'Check In Successful',
-            buttonText: 'Okay',
-            type: 'success',
+          toast.show({
+            title: 'Check In Successful',
+            status: 'success',
+            isClosable: true,
+            duration: 3000,
           });
           navigation.navigate('Dashboard');
         },
       );
     } catch (error) {
-      Toast.show({
+      toast.show({
         text: 'Something went wrong..',
         buttonText: 'Okay',
         type: 'danger',

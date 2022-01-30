@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { DB } from '../../config';
 import Styles from '../DashboardCard/DashboardCard.styles';
@@ -7,11 +7,11 @@ import { getMonthYearString } from '../../utils';
 import DashboardHeader from './DashboardHeader';
 import { ButtonGroup } from 'react-native-elements';
 import ConsultantList from './components/ConsultantList';
-import HelpfulLinksList from './components/HelpfulLinksList';
 import DashboardOverview from './components/DashboardOverview';
 import { getUser } from '../../api/UserApi';
 import Loading from '../Loading';
 import TextCustomFont from '../TextCustomFont';
+import MyHelp from './components/MyHelp';
 
 const Dashboard = ({ navigation }) => {
   const currentUser = auth().currentUser.uid;
@@ -49,12 +49,12 @@ const Dashboard = ({ navigation }) => {
       checkedIn={checkedIn}
     />,
     <ConsultantList navigation={navigation} />,
-    <HelpfulLinksList />,
+    <MyHelp />,
   ];
   const buttons = [
     <TextCustomFont>My Calendar</TextCustomFont>,
     <TextCustomFont>My Consultants</TextCustomFont>,
-    <TextCustomFont>Helpful Links</TextCustomFont>,
+    <TextCustomFont>My Relief</TextCustomFont>,
   ];
 
   return (
@@ -62,18 +62,30 @@ const Dashboard = ({ navigation }) => {
       {userInfo && (
         <>
           <DashboardHeader
+            styleProps={{ flex: 0.1 }}
             handleClick={(routeName) => navigation.navigate(routeName)}
             userInfo={userInfo}
           />
-          <View style={{ flexDirection: 'column', flex: 1 }}>
+          <View
+            style={{ flex: 0.1, borderWidth: 1, marginTop: 8, marginBottom: 8 }}
+          ></View>
+          <View
+            style={{
+              flexDirection: 'column',
+              flex: 0.8,
+            }}
+          >
             <ButtonGroup
               onPress={setButtonGroupIndex}
               selectedIndex={buttonGroupIndex}
               buttons={buttons}
               containerStyle={{
                 borderRadius: 20,
-                flex: 0.08,
+                flex: 0.1,
                 marginBottom: 20,
+                width: '100%',
+                alignSelf: 'center',
+                justifyContent: 'center',
               }}
               buttonStyle={{
                 backgroundColor: 'rgba(218,112,214, .3)',
@@ -86,7 +98,6 @@ const Dashboard = ({ navigation }) => {
             <View
               style={{
                 flex: 0.92,
-                padding: 4,
                 borderRadius: 30,
                 borderColor: 'orchid',
               }}

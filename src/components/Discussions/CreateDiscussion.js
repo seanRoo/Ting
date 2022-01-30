@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View } from 'native-base';
-import { TextInput, Keyboard, Platform, Text } from 'react-native';
+import { TextInput, Keyboard, Platform } from 'react-native';
 import { v4 as uuid } from 'uuid';
 import auth from '@react-native-firebase/auth';
 import { getUser } from '../../api/UserApi';
@@ -25,18 +25,21 @@ export const CreateDiscussion = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    navigation.setParams({ message: message });
+    if (message.messageBody) {
+      navigation.setParams({ message: message });
+    }
   }, [message]);
 
   useEffect(() => {
-    const keyboardWillHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => navigation.navigate('Discussions'),
-    );
-
-    return () => {
-      keyboardWillHideListener.remove();
-    };
+    if (Platform.OS === 'android') {
+      const keyboardWillHideListener = Keyboard.addListener(
+        'keyboardDidHide',
+        () => navigation.navigate('Discussions'),
+      );
+      return () => {
+        keyboardWillHideListener.remove();
+      };
+    }
   }, []);
 
   const addUserInfoToMessage = (data) => {

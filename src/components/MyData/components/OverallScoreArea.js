@@ -1,33 +1,28 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import Circle from 'react-native-progress/Circle';
-import Bar from 'react-native-progress/Bar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import RNPickerSelect from 'react-native-picker-select';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import DateSelect from './DateSelect';
 import ProgressBar from './ProgressBar';
 
 const OverallScoreArea = ({
   numEntries,
-  scoreArray: [moodScore, sleepScore, stressScore, soundIntensityScore],
+  scoreArray: [soundIntensityScore, sleepScore, moodScore, stressScore],
   showPicker,
   monthPickerValue,
   ...styleProps
 }) => {
   const overallScore =
-    (moodScore + sleepScore + stressScore + soundIntensityScore) / 400;
+    (moodScore + sleepScore - (soundIntensityScore + stressScore) * 0.2) / 200;
 
   const getCircleColour = () => {
     const scoreWhole = overallScore * 100;
-    return scoreWhole <= 35
-      ? 'red'
-      : scoreWhole > 35 && scoreWhole < 70
+    return scoreWhole <= 30
+      ? 'rgba(255,0,0,.6)'
+      : scoreWhole > 30 && scoreWhole < 70
       ? 'gold'
       : 'green';
-    //return circleColour;
   };
 
   return (
@@ -35,7 +30,7 @@ const OverallScoreArea = ({
       <View
         style={{
           paddingLeft: 10,
-          flex: 0.25,
+          flex: 0.3,
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}
@@ -47,18 +42,8 @@ const OverallScoreArea = ({
               fontWeight: 'bold',
             }}
           >
-            Overall score
+            Overall score this month
           </Text>
-          {/* <Text
-            style={{
-              fontSize: 16,
-              color: '#1c98e6',
-              letterSpacing: 0.5,
-              fontWeight: 'bold',
-            }}
-          >
-            From <Text>{numEntries}</Text> data entries
-          </Text> */}
         </View>
       </View>
       <View

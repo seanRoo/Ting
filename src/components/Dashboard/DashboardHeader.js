@@ -6,12 +6,12 @@ import { Menu, Divider } from 'react-native-paper';
 import TextCustomFont from '../TextCustomFont';
 import { AuthContext } from '../../AuthProvider';
 
-const DashboardHeader = ({ handleClick, userInfo }) => {
+const DashboardHeader = ({ handleClick, userInfo, styleProps }) => {
   const { logout } = useContext(AuthContext);
   const [popoverIsVisible, setPopoverIsVisible] = useState(false);
 
   return (
-    <View style={{ flex: 0.2 }}>
+    <View style={{ ...styleProps }}>
       <View style={{ flex: 0.7, flexDirection: 'row', marginTop: 12 }}>
         <View>
           <TextCustomFont style={{ fontSize: 24 }}>

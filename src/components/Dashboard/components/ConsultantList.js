@@ -5,12 +5,14 @@ import {
   ScrollView,
   TouchableOpacity,
   Linking,
+  Image,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import auth from '@react-native-firebase/auth';
 import Feather from 'react-native-vector-icons/Feather';
 import { getConsultants } from '../../../api/ConsultantApi';
 import Loading from '../../Loading';
+import { DB } from '../../../config';
 
 const ConsultantList = ({ navigation }) => {
   const currentUser = auth().currentUser.uid;
@@ -31,6 +33,15 @@ const ConsultantList = ({ navigation }) => {
   const consultantListIsEmpty =
     consultantList && !Object.keys(consultantList)?.length && !isLoading;
 
+  const handleRemoveConsultant = (element, index) => {
+    const newConsultantList = { ...consultantList };
+    delete newConsultantList[element[0]];
+    setConsultantList(newConsultantList);
+
+    const ref = DB.ref(`/consultants/${currentUser}/${element[0]}`);
+    ref.remove();
+  };
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -40,7 +51,7 @@ const ConsultantList = ({ navigation }) => {
       }}
     >
       {consultantListIsLoaded ? (
-        Object.values(consultantList)?.map((element) => (
+        Object.entries(consultantList)?.map((element, index) => (
           <View
             style={{
               minHeight: 120,
@@ -67,7 +78,14 @@ const ConsultantList = ({ navigation }) => {
                 alignItems: 'center',
               }}
             >
-              <Feather name="user" size={50} />
+              {element?.[1]?.address?.icon ? (
+                <Image
+                  source={{ uri: element[1].address.icon }}
+                  style={{ height: 50, width: 50 }}
+                />
+              ) : (
+                <Feather name="user" size={50} />
+              )}
             </View>
             <View
               style={{
@@ -80,13 +98,13 @@ const ConsultantList = ({ navigation }) => {
             >
               <View style={{ width: '90%' }}>
                 <Text style={{ color: 'black' }}>
-                  {element?.consultantName}
+                  {element?.[1]?.consultantName}
                 </Text>
                 <Text style={{ color: 'black' }}>
-                  {element?.consultantType}
+                  {element?.[1]?.consultantType}
                 </Text>
                 <Text style={{ fontSize: 12, color: 'gray' }}>
-                  {element?.address?.desc}
+                  {element?.[1]?.address?.desc}
                 </Text>
               </View>
               <View
@@ -112,7 +130,9 @@ const ConsultantList = ({ navigation }) => {
                     borderColor: '#24a0ed',
                     marginRight: 4,
                   }}
-                  onPress={() => Linking.openURL(`tel:${element?.phoneNumber}`)}
+                  onPress={() =>
+                    Linking.openURL(`tel:${element?.[1]?.phoneNumber}`)
+                  }
                 >
                   <Text
                     style={{ marginRight: 4, fontSize: 12, color: '#24a0ed' }}
@@ -136,9 +156,9 @@ const ConsultantList = ({ navigation }) => {
                     marginRight: 4,
                   }}
                   onPress={() => {
-                    const latLng = `${element.address.lat},${element.address.lng}`;
+                    const latLng = `${element?.[1]?.address.lat},${element?.[1]?.address.lng}`;
                     Linking.openURL(
-                      `https://www.google.com/maps/search/?api=1&query=${latLng}&query_place_id=${element.address.id}`,
+                      `https://www.google.com/maps/search/?api=1&query=${latLng}&query_place_id=${element?.[1]?.address.id}`,
                     );
                   }}
                 >
@@ -161,7 +181,7 @@ const ConsultantList = ({ navigation }) => {
                     borderWidth: 1,
                     borderColor: 'red',
                   }}
-                  onPress={() => Linking.openURL(`tel:${element?.phoneNumber}`)}
+                  onPress={() => handleRemoveConsultant(element, index)}
                 >
                   <Text style={{ marginRight: 4, fontSize: 12, color: 'red' }}>
                     Remove
