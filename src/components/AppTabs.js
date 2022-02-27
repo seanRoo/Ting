@@ -23,7 +23,7 @@ export const AppTabs = (props) => {
                 color={color}
               />
             );
-          } else if (route.name === 'My Data') {
+          } else if (route.name === 'Data') {
             return <Foundation name="graph-bar" size={size} color={color} />;
           } else if (route.name === 'My Calendar') {
             return (
@@ -50,11 +50,14 @@ export const AppTabs = (props) => {
       tabBarOptions={{
         activeTintColor: 'orchid',
         inactiveTintColor: 'gray',
+        labelStyle: {
+          fontSize: 13,
+        },
       }}
     >
       <Tabs.Screen name="Dashboard" component={DashboardStack} />
       {/* <Tabs.Screen name="My Calendar" component={MyCalendar} /> */}
-      <Tabs.Screen name="My Data" component={MyDataStack} />
+      <Tabs.Screen name="Data" component={MyDataStack} />
       <Tabs.Screen name="Discussions" component={DiscussionStack} />
     </Tabs.Navigator>
   );

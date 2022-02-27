@@ -8,6 +8,7 @@ import {
   Image,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import auth from '@react-native-firebase/auth';
 import Feather from 'react-native-vector-icons/Feather';
 import { getConsultants } from '../../../api/ConsultantApi';
@@ -42,6 +43,18 @@ const ConsultantList = ({ navigation }) => {
     ref.remove();
   };
 
+  const handleConsultantIcon = (consultant) => {
+    switch (consultant.consultantType) {
+      case 'Doctor':
+        return <MaterialCommunityIcons name="stethoscope" size={50} />;
+      case 'GP':
+        return <Fontisto name="doctor" size={50} />;
+      case 'Audiologist':
+        return <MaterialCommunityIcons name="ear-hearing" size={50} />;
+      case 'Other':
+        return <Feather name="user" size={50} />;
+    }
+  };
   return (
     <ScrollView
       contentContainerStyle={{
@@ -54,7 +67,7 @@ const ConsultantList = ({ navigation }) => {
         Object.entries(consultantList)?.map((element, index) => (
           <View
             style={{
-              minHeight: 120,
+              minHeight: 150,
               marginBottom: 14,
               borderRadius: 20,
               padding: 12,
@@ -78,14 +91,7 @@ const ConsultantList = ({ navigation }) => {
                 alignItems: 'center',
               }}
             >
-              {element?.[1]?.address?.icon ? (
-                <Image
-                  source={{ uri: element[1].address.icon }}
-                  style={{ height: 50, width: 50 }}
-                />
-              ) : (
-                <Feather name="user" size={50} />
-              )}
+              {handleConsultantIcon(element[1])}
             </View>
             <View
               style={{
@@ -93,7 +99,7 @@ const ConsultantList = ({ navigation }) => {
                 marginLeft: 10,
                 flex: 0.85,
                 paddingRight: 8,
-                minHeight: 110,
+                minHeight: 120,
               }}
             >
               <View style={{ width: '90%' }}>
@@ -211,6 +217,12 @@ const ConsultantList = ({ navigation }) => {
               padding: 10,
               borderRadius: 15,
               marginTop: 20,
+              backgroundColor: 'white',
+              shadowColor: 'rgba(0, 0, 0, 0.1)',
+              shadowOpacity: 0.8,
+              elevation: 6,
+              shadowRadius: 15,
+              shadowOffset: { width: 1, height: 13 },
             }}
           >
             <Text>Add a Consultant</Text>

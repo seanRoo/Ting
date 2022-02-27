@@ -74,22 +74,24 @@ export const Discussions = ({ navigation }) => {
                   style={{
                     marginRight: 8,
                     marginTop: 12,
-                    marginBottom: 12,
+                    marginBottom: 20,
                     alignSelf: 'flex-end',
                     justifyContent: 'space-between',
                     flexDirection: 'row',
                     width: '100%',
                   }}
                 >
-                  <Text
-                    style={{
-                      alignSelf: 'center',
-                      fontSize: 24,
-                      paddingLeft: 10,
-                    }}
-                  >
-                    Discussions
-                  </Text>
+                  <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
+                    <Text
+                      style={{
+                        alignSelf: 'center',
+                        fontSize: 24,
+                      }}
+                    >
+                      Discussions
+                    </Text>
+                    <Text>A tinnitus forum</Text>
+                  </View>
                   <TouchableOpacity
                     onPress={() => {
                       setFilterState(

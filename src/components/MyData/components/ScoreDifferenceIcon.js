@@ -14,12 +14,11 @@ const ScoreDifferenceIcon = ({
     (
       <View
         style={{
-          width: '100%',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: 8,
           borderColor: 'grey',
           paddingTop: 0,
+          height: '100%',
           ...styleProps,
         }}
       >
@@ -27,6 +26,7 @@ const ScoreDifferenceIcon = ({
           style={{
             flexDirection: 'row',
             alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <MaterialCommunityIcons
@@ -42,7 +42,7 @@ const ScoreDifferenceIcon = ({
           />
           <Text
             style={{
-              fontSize: 24,
+              fontSize: 22,
               color: !(hasImprovedFromLastMonth && highValueIsGood)
                 ? 'red'
                 : 'green',
@@ -60,10 +60,11 @@ const ScoreDifferenceIcon = ({
             color: 'grey',
             fontWeight: 'bold',
             textAlign: 'center',
-            fontSize: 12,
+            fontSize: 14,
+            width: '90%',
           }}
         >
-          Compared to last month
+          From last month
         </Text>
         {/* <View
       style={{

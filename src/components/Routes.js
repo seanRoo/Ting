@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { AppTabs, test } from './AppTabs';
+import { AppTabs } from './AppTabs';
 import { AuthStack } from '../AuthStack';
 import { AuthContext } from '../AuthProvider';
 import auth from '@react-native-firebase/auth';
 import Loading from './Loading';
 import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { CreateDiscussion } from './Discussions/CreateDiscussion';
 import ViewDiscussion from './Discussions/ViewDiscussion';
 import MapPage from './Map/AddConsultantForm';
-import Profile from './Profile/Profile';
 import { addDiscussionPost, addReply } from '../api/DiscussionsApi';
 import { useToast } from 'native-base';
-import { getHeaderTitle, options } from './Routes.utils';
+import { getHeaderTitle } from './Routes.utils';
 import CheckIn from './CheckIn/CheckIn';
 import { formatDate } from '../utils';
+import Recommendations from './MyData/Recommendations';
 
 const Stack = createStackNavigator();
 const Routes = () => {
@@ -152,8 +152,8 @@ const Routes = () => {
             }}
           />
           <Stack.Screen
-            name="Profile"
-            component={Profile}
+            name="Relief"
+            component={Recommendations}
             options={{
               tabBarVisible: false,
               tabBarOptions: { visible: false },

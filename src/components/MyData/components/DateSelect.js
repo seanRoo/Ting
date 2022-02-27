@@ -20,7 +20,6 @@ const DateSelect = ({
       borderRadius: 10,
       height: 30,
       marginRight: 10,
-      maxWidth: '55%',
       alignSelf: 'flex-end',
       justifyContent: 'space-between',
     }}

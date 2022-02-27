@@ -23,7 +23,7 @@ export const QuickNavigationStack = () => {
   return (
     <Tabs.Navigator>
       <Tabs.Screen name="Check In" component={MyCalendarStack} />
-      <Tabs.Screen name="My Data" component={MyData} />
+      <Tabs.Screen name="Data" component={MyData} />
     </Tabs.Navigator>
   );
 };

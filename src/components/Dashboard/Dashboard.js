@@ -8,10 +8,11 @@ import DashboardHeader from './DashboardHeader';
 import { ButtonGroup } from 'react-native-elements';
 import ConsultantList from './components/ConsultantList';
 import DashboardOverview from './components/DashboardOverview';
-import { getUser } from '../../api/UserApi';
+import { getUser, acceptDisclaimer } from '../../api/UserApi';
 import Loading from '../Loading';
 import TextCustomFont from '../TextCustomFont';
 import MyHelp from './components/MyHelp';
+import DisclaimerModal from './components/DisclaimerModal';
 
 const Dashboard = ({ navigation }) => {
   const currentUser = auth().currentUser.uid;
@@ -20,6 +21,7 @@ const Dashboard = ({ navigation }) => {
   const [checkedIn, setCheckedIn] = useState(false);
   const [buttonGroupIndex, setButtonGroupIndex] = useState(0);
   const [userInfo, setUserInfo] = useState(null);
+  const [disclaimerModalVisible, setDisclaimerModalVisible] = useState(false);
 
   const getIsCheckedInToday = (userId) => {
     try {
@@ -49,7 +51,7 @@ const Dashboard = ({ navigation }) => {
       checkedIn={checkedIn}
     />,
     <ConsultantList navigation={navigation} />,
-    <MyHelp />,
+    <MyHelp navigation={navigation} />,
   ];
   const buttons = [
     <TextCustomFont>My Check-ins</TextCustomFont>,
@@ -57,67 +59,72 @@ const Dashboard = ({ navigation }) => {
     <TextCustomFont>My Relief</TextCustomFont>,
   ];
 
+  useEffect(() => {
+    if (userInfo && !userInfo?.disclaimerAccepted) {
+      setDisclaimerModalVisible(true);
+    }
+  }, [userInfo]);
+
+  const handleDisclaimerModalClose = () => {
+    acceptDisclaimer(currentUser);
+    setDisclaimerModalVisible(false);
+  };
+
   return (
-    <View style={Styles.container}>
-      {userInfo && (
-        <>
-          <DashboardHeader
-            styleProps={{ flex: 0.1 }}
-            handleClick={(routeName) => navigation.navigate(routeName)}
-            userInfo={userInfo}
-          />
-          <View
-            style={{
-              flex: 0.1,
-              borderWidth: 1,
-              marginTop: 8,
-              marginBottom: 8,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Text style={{ fontWeight: 'bold' }}>Disclaimer will go here</Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'column',
-              flex: 0.8,
-            }}
-          >
-            <ButtonGroup
-              onPress={setButtonGroupIndex}
-              selectedIndex={buttonGroupIndex}
-              buttons={buttons}
-              containerStyle={{
-                borderRadius: 20,
-                flex: 0.1,
-                marginBottom: 20,
-                width: '100%',
-                alignSelf: 'center',
-                justifyContent: 'center',
-              }}
-              buttonStyle={{
-                backgroundColor: 'rgba(218,112,214, .3)',
-                height: 45,
-              }}
-              selectedButtonStyle={{ backgroundColor: 'orchid' }}
-              textStyle={{ color: 'black' }}
-              selectedTextStyle={{ fontWeight: 'bold' }}
+    <>
+      <DisclaimerModal
+        disclaimerModalVisible={disclaimerModalVisible}
+        handleClose={() => handleDisclaimerModalClose()}
+      />
+      <View style={Styles.container}>
+        {userInfo && (
+          <>
+            <DashboardHeader
+              styleProps={{ flex: 0.15 }}
+              handleClick={(routeName) => navigation.navigate(routeName)}
+              userInfo={userInfo}
             />
             <View
               style={{
-                flex: 0.92,
-                borderRadius: 30,
-                borderColor: 'orchid',
+                flexDirection: 'column',
+                flex: 0.85,
               }}
             >
-              {buttonGroupComponents[buttonGroupIndex]}
+              <ButtonGroup
+                onPress={setButtonGroupIndex}
+                selectedIndex={buttonGroupIndex}
+                buttons={buttons}
+                containerStyle={{
+                  borderRadius: 20,
+                  flex: 0.1,
+                  marginBottom: 20,
+                  width: '100%',
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                }}
+                buttonStyle={{
+                  backgroundColor: 'rgba(218,112,214, .3)',
+                  height: 45,
+                }}
+                selectedButtonStyle={{ backgroundColor: 'orchid' }}
+                textStyle={{ color: 'black' }}
+                selectedTextStyle={{ fontWeight: 'bold' }}
+              />
+              <View
+                style={{
+                  flex: 0.92,
+                  borderRadius: 30,
+                  borderColor: 'orchid',
+                }}
+              >
+                {buttonGroupComponents[buttonGroupIndex]}
+              </View>
             </View>
-          </View>
-        </>
-      )}
-      {!userInfo && <Loading />}
-    </View>
+          </>
+        )}
+        {!userInfo && <Loading />}
+      </View>
+    </>
   );
 };
 

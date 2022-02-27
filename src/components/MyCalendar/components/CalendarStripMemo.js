@@ -14,8 +14,8 @@ const CalendarStripMemo = ({
       {selectedDate && (
         <CalendarStrip
           style={MyCalendarStyles.calendarStrip}
-          calendarHeaderStyle={MyCalendarStyles.nonHighlightedText}
-          dateNumberStyle={MyCalendarStyles.nonHighlightedText}
+          calendarHeaderStyle={MyCalendarStyles.calendarHeaderStyle}
+          dateNumberStyle={MyCalendarStyles.dateNumberStyle}
           dateNameStyle={MyCalendarStyles.nonHighlightedText}
           highlightDateNumberStyle={MyCalendarStyles.highlightedText}
           highlightDateNameStyle={MyCalendarStyles.highlightedText}

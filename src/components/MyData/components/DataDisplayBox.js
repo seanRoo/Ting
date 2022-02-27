@@ -12,6 +12,7 @@ const DataDisplayBox = ({
   lastMonthScoreArray,
   handleDataNavigate,
   highValueIsGood,
+  datasetLength,
 }) => {
   const getScoreColour = () => {
     const score = scoreArray[filterIndex];
@@ -30,11 +31,19 @@ const DataDisplayBox = ({
     }
   };
 
-  const noLastMonthData = lastMonthScoreArray.every((element) => !element);
+  const noLastMonthData = lastMonthScoreArray.every((element) =>
+    isNaN(element),
+  );
+  const showDataButtonVisible = datasetLength >= 3;
+
+  console.log(lastMonthScoreArray, noLastMonthData);
+  const expandLinearGagueContainer = noLastMonthData && !showDataButtonVisible;
+
+  console.log(expandLinearGagueContainer);
   return (
     <View
       style={{
-        flex: 0.85,
+        flex: 0.9,
         flexDirection: 'row',
         padding: 8,
         borderRadius: 10,
@@ -43,11 +52,11 @@ const DataDisplayBox = ({
     >
       <View
         style={{
-          flex: 0.7,
+          flex: expandLinearGagueContainer ? 0.9 : 0.7,
         }}
       >
         <View style={{ justifyContent: 'flex-start' }}>
-          <Text style={{ fontSize: 24, fontWeight: 'bold' }}>
+          <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
             {scoreArray[filterIndex]}% average
           </Text>
           <Text style={{ fontSize: 16, color: 'grey' }}>
@@ -66,60 +75,64 @@ const DataDisplayBox = ({
           highValueIsGood={highValueIsGood}
         />
       </View>
-      <View
-        style={{
-          flex: 0.3,
-          alignItems: 'flex-end',
-          justifyContent: 'flex-start',
-          flexDirection: 'column',
-        }}
-      >
-        <View style={{ flex: 0.45 }}>
-          {!noLastMonthData && (
-            <ScoreDifferenceIcon
-              hasImprovedFromLastMonth={hasImprovedFromLastMonth}
-              scoreArray={scoreArray}
-              lastMonthScoreArray={lastMonthScoreArray}
-              filterIndex={filterIndex}
-              highValueIsGood={highValueIsGood}
-            />
-          )}
-        </View>
+      {(!noLastMonthData || showDataButtonVisible) && (
         <View
           style={{
-            width: '90%',
-            height: 1,
-            backgroundColor: 'grey',
-            justifyContent: 'center',
-            alignSelf: 'center',
-            marginTop: 5,
-            marginBottom: 10,
-          }}
-        />
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            display: 'flex',
-            width: '100%',
-            flex: 0.45,
+            flex: 0.3,
+            alignItems: 'flex-end',
+            justifyContent: 'flex-start',
+            flexDirection: 'column',
           }}
         >
-          <SimpleLineIcons name="graph" size={35} />
-          <TouchableOpacity onPress={handleDataNavigate}>
-            <Text
+          <View style={{ flex: 0.45, width: '100%' }}>
+            {!noLastMonthData && (
+              <ScoreDifferenceIcon
+                hasImprovedFromLastMonth={hasImprovedFromLastMonth}
+                scoreArray={scoreArray}
+                lastMonthScoreArray={lastMonthScoreArray}
+                filterIndex={filterIndex}
+                highValueIsGood={highValueIsGood}
+              />
+            )}
+          </View>
+          <View
+            style={{
+              width: '90%',
+              height: 1,
+              backgroundColor: 'grey',
+              justifyContent: 'center',
+              alignSelf: 'center',
+              marginTop: 3,
+              marginBottom: 3,
+            }}
+          />
+          {showDataButtonVisible && (
+            <View
               style={{
-                fontSize: 16,
-                color: 'blue',
-                fontWeight: 'bold',
-                textDecorationLine: 'underline',
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'flex',
+                width: '100%',
+                flex: 0.45,
               }}
             >
-              See data
-            </Text>
-          </TouchableOpacity>
+              <SimpleLineIcons name="graph" size={44} />
+              <TouchableOpacity onPress={handleDataNavigate}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: 'blue',
+                    fontWeight: 'bold',
+                    textDecorationLine: 'underline',
+                  }}
+                >
+                  See data
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
-      </View>
+      )}
     </View>
   );
 };

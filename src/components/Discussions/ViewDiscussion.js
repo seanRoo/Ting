@@ -179,8 +179,8 @@ const ViewDiscussion = ({ route: { params }, navigation }) => {
           >
             {formatFooterDate(message.date)}
           </TextCustomFont>
-          <Divider color="black" style={{ paddingTop: 10 }} />
-          <Divider color="black" style={{ paddingTop: 10 }} />
+          <Divider color="gray" style={{ paddingTop: 10 }} />
+          <Divider color="gray" style={{ paddingTop: 10 }} />
         </View>
         <View style={{ minHeight: 'auto' }}>
           {replies && !repliesLoading && (
@@ -192,6 +192,7 @@ const ViewDiscussion = ({ route: { params }, navigation }) => {
                 marginTop: 8,
               }}
               data={replies}
+              keyExtractor={(reply) => reply.messageId}
               renderItem={(reply, index) => (
                 <ReplyMessage
                   initials={getInitials({

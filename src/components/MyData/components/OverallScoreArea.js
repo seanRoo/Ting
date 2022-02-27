@@ -8,7 +8,13 @@ import ProgressBar from './ProgressBar';
 
 const OverallScoreArea = ({
   numEntries,
-  scoreArray: [soundIntensityScore, sleepScore, moodScore, stressScore],
+  scoreArray: [
+    soundIntensityScore,
+    soundPitchScore,
+    sleepScore,
+    moodScore,
+    stressScore,
+  ],
   showPicker,
   monthPickerValue,
   ...styleProps
@@ -24,13 +30,12 @@ const OverallScoreArea = ({
       ? 'gold'
       : 'green';
   };
-
   return (
     <View {...styleProps}>
       <View
         style={{
           paddingLeft: 10,
-          flex: 0.3,
+          flex: 0.15,
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}
@@ -38,7 +43,7 @@ const OverallScoreArea = ({
         <View style={{ flexDirection: 'column' }}>
           <Text
             style={{
-              fontSize: 22,
+              fontSize: 20,
               fontWeight: 'bold',
             }}
           >
@@ -51,11 +56,11 @@ const OverallScoreArea = ({
           alignItems: 'center',
           justifyContent: 'center',
           flexDirection: 'row',
-          flex: 0.7,
+          flex: 0.85,
         }}
       >
         <Circle
-          size={140}
+          size={145}
           showsText
           textStyle={{ fontSize: 36, fontWeight: 'bold' }}
           progress={overallScore || 0}
@@ -69,13 +74,18 @@ const OverallScoreArea = ({
         <View
           style={{
             flexDirection: 'column',
-            height: 160,
+            height: '98%',
             justifyContent: 'space-between',
           }}
         >
           <ProgressBar
             progress={soundIntensityScore / 10}
             label="Sound Intensity"
+            icon={<Ionicons size={14} name="ear-outline" />}
+          />
+          <ProgressBar
+            progress={soundPitchScore / 10}
+            label="Sound Pitch"
             icon={<Ionicons size={14} name="ear-outline" />}
           />
           <ProgressBar

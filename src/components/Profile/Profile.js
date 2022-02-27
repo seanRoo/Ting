@@ -58,7 +58,8 @@ const Profile = () => {
                       {item.key}
                     </Text>
                   </View>
-                  <Input
+                  <Text>{item.val}</Text>
+                  {/* <Input
                     value={item.val}
                     inputStyle={{ fontWeight: 'bold' }}
                     containerStyle={{
@@ -68,7 +69,7 @@ const Profile = () => {
                       borderBottomWidth: 0,
                     }}
                     rightIcon={<SimpleLineIcons name="pencil" />}
-                  />
+                  /> */}
                 </View>
                 <Divider />
               </View>

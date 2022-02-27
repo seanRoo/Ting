@@ -13,6 +13,9 @@ export const createUser = async ({
     });
 };
 
+export const acceptDisclaimer = async (userId) =>
+  await DB.ref(`/users/${userId}/`).update({ disclaimerAccepted: true });
+
 export const getUser = (userId, callback = () => {}) => {
   DB.ref(`/users/${userId}`).on('value', (querySnapshot) => {
     let data = querySnapshot.val() ? querySnapshot.val() : {};

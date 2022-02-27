@@ -27,7 +27,7 @@ const EmptyDataMessage = ({ handleClick, selectedDate }) => (
     <TextCustomFont
       style={{
         textAlign: 'center',
-        fontSize: 18,
+        fontSize: 17,
         fontWeight: 'bold',
         marginBottom: 22,
       }}

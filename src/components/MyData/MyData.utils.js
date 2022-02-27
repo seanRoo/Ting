@@ -131,7 +131,9 @@ export const intlPolyfill = () => {
     // only android needs polyfill
     require('intl'); // import intl object
     require('intl/locale-data/jsonp/en-IN'); // load the required locale details
-    Intl.__disableRegExpRestore();
+    if (typeof Intl.__disableRegExpRestore === 'function') {
+      Intl.__disableRegExpRestore();
+    }
   }
 };
 
@@ -201,7 +203,7 @@ export const sleepEntries = [
   'Pitch black bedroom',
   'Cut screen time',
   'Relaxing evening routine',
-  'Jot down all your thoughts',
+  'Journalling',
   'Set sleep times',
   'Adjust thermostat',
 ];
@@ -211,4 +213,5 @@ export const stressEntries = [
   'Meditation',
   'Deep Breathing Exercises',
   'Practice Mindfulness',
+  'Yoga session',
 ];

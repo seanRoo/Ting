@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import {
-  ScrollView,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { LineChart, Grid, YAxis, XAxis } from 'react-native-svg-charts';
 import { Circle, G, Line, Rect, Text, Svg } from 'react-native-svg';
 
@@ -16,7 +11,13 @@ const LineChartComponent = ({ height, width, dataset, monthString }) => {
     const { data, y, x } = props;
     return data?.map((point, index) => {
       return (
-        <G x={x(index) - 75 / 2} height="80" width="80" fill="black">
+        <G
+          x={x(index) - 75 / 2}
+          height="80"
+          width="80"
+          fill="black"
+          key={`point-${index}`}
+        >
           <Circle
             opacity={'0'}
             x={75 / 2}
@@ -93,7 +94,6 @@ const LineChartComponent = ({ height, width, dataset, monthString }) => {
   const axesSvg = { fontSize: 14, fill: 'grey' };
   const verticalContentInset = { top: 20, bottom: 120 };
 
-  console.log(data);
   return (
     <View style={{ flex: 1, flexDirection: 'row' }}>
       <YAxis
@@ -110,9 +110,9 @@ const LineChartComponent = ({ height, width, dataset, monthString }) => {
         }}
       >
         <LineChart
-          style={{ width: 500, height: '95%' }}
+          style={{ flex: 1 }}
           data={data}
-          height="600"
+          height={600}
           svg={{ stroke: 'rgb(134, 65, 244)', strokeWidth: 2 }}
           contentInset={{ top: 20, bottom: 120, left: 40, right: 40 }}
           numberOfTicks={6}

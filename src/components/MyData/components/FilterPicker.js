@@ -22,7 +22,7 @@ const FilterPicker = ({
         setFilterIndex(newIndex);
       }}
       containerStyle={{
-        width: '45%',
+        maxWidth: '50%',
         alignSelf: 'flex-end',
         paddingRight: 14,
       }}

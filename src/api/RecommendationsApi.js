@@ -17,7 +17,19 @@ export const fetchRecommendations = (userId, callback, date) => {
   );
 };
 
-// export const updateAttemptedStatus = (userId, callback, date) =>{
-//     await DB.ref(`/recommendations/${userId}/${getMonthYearString(date)}/`)
+export const updateRecommendations = async (
+  userId,
+  date,
+  newItem,
+  category,
+) => {
+  DB.ref(
+    `/recommendations/${userId}/${getMonthYearString(date)}/${category}/`,
+  ).update(newItem);
+};
 
-// }
+export const deleteRecommendation = async (userId, date, category, index) => {
+  DB.ref(`/recommendations/${userId}/${getMonthYearString(date)}/${category}/`)
+    .child(`${index}`)
+    .remove();
+};

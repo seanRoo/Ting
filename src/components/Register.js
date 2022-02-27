@@ -44,7 +44,6 @@ const Register = ({ navigation: { navigate } }) => {
     },
   });
 
-  console.log(fieldValues);
   const checkValidRegistration = (values) => {
     const allFieldsValid = Object.entries(values).every(
       ([key, value]) => value.error === false,
@@ -95,7 +94,6 @@ const Register = ({ navigation: { navigate } }) => {
         surName: surName.stringValue,
       }).then(() => navigate('Log in'));
     }
-    console.log(newFieldValues);
     setFieldValues(newFieldValues);
   };
 

@@ -9,7 +9,6 @@ import matchAll from 'string.prototype.matchall';
 
 export const DiscussionCard = ({ message, handleNavigation, isAuthor }) => {
   const name = `${message.firstName} ${message.lastName}`;
-  console.log(name);
   const rgx = new RegExp(/(\p{L}{1})\p{L}+/, 'gu');
   let initials;
 

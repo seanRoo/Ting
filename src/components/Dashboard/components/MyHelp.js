@@ -1,30 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import CheckBox from 'react-native-check-box';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { setRecommendations } from '../../../api/RecommendationsApi';
 import useFetchRecommendations from '../hooks/useFetchRecommendations';
+import Loading from '../../Loading';
+import ReliefOptionsList from './ReliefOptionsList';
 
-const MyHelp = () => {
+const MyHelp = ({ navigation }) => {
   const today = new Date();
   const currentUser = auth().currentUser.uid;
+  const [listItems, setListItems] = useState(null);
 
-  const [listItemsLoaded, setListItemsLoaded] = useState(false);
+  const monthString = today.toLocaleString('default', {
+    month: 'long',
+  });
 
-  const { recommendations } = useFetchRecommendations({
+  const { recommendations, recommendationsLoaded } = useFetchRecommendations({
     currentUser,
     date: today,
   });
 
   const { sleep, stress } = recommendations || {};
-  let listItems =
-    sleep && stress
-      ? [
-          ...sleep.filter((element) => element.selected),
-          ...stress.filter((element) => element.selected),
-        ]
-      : null;
 
   const handleClick = (element) => {
     const newRemedies = [...listItems];
@@ -48,100 +45,81 @@ const MyHelp = () => {
       !newRecommedations[newElement.category][recommendationToUpdateIndex]
         .attempted;
 
-    console.log(newRecommedations);
     setRecommendations(currentUser, today, newRecommedations);
 
-    listItems = newRemedies;
+    setListItems(newRemedies);
   };
 
+  const sleepListItems = listItems?.filter((item) => item.category === 'sleep');
+  const stressListItems = listItems?.filter(
+    (item) => item.category === 'stress',
+  );
+
+  useEffect(() => {
+    if (sleep && stress) {
+      const newListItems = [
+        ...sleep.filter((element) => element.selected),
+        ...stress.filter((element) => element.selected),
+      ];
+      if (newListItems.length) {
+        setListItems(newListItems);
+      }
+    }
+  }, [sleep, stress]);
+
+  console.log(recommendationsLoaded);
   return (
     <View style={{ display: 'flex', flex: 1 }}>
-      {listItems ? (
+      {listItems?.length ? (
         <>
-          <View style={{ paddingLeft: 8 }}>
-            <Text style={{ fontSize: 19 }}>
-              Relief options you want to try this month
-            </Text>
-            <Text
-              style={{ paddingBottom: 20, fontSize: 16, fontWeight: 'bold' }}
-            >
-              January 2022
-            </Text>
-          </View>
           <ScrollView
             contentContainerStyle={{
               justifyContent: 'space-between',
               display: 'flex',
             }}
           >
-            {listItems?.map((element) => (
+            <View
+              style={{
+                alignSelf: 'flex-end',
+                borderWidth: 1,
+                borderRadius: 10,
+                padding: 4,
+                paddingRight: 8,
+                paddingLeft: 8,
+                marginBottom: 30,
+              }}
+            >
+              <Text style={{ fontWeight: 'bold', color: 'black' }}>
+                {monthString}, {new Date(today).getFullYear()}
+              </Text>
+            </View>
+            <ReliefOptionsList
+              listItems={sleepListItems}
+              title="Sleep Improvement"
+              handleClick={handleClick}
+            />
+            {stressListItems?.length ? (
               <View
                 style={{
-                  minHeight: 100,
-                  marginBottom: 14,
-                  borderRadius: 20,
-                  padding: 12,
-                  shadowColor: '#000',
-                  shadowOffset: { width: 0, height: 1 },
-                  shadowOpacity: 0.8,
-                  shadowRadius: 2,
-                  elevation: 5,
-                  flexDirection: 'row',
-                  backgroundColor: 'white',
+                  width: '100%',
+                  height: 2,
+                  marginBottom: 20,
+                  marginTop: 20,
+                  backgroundColor: 'lightgray',
                   alignSelf: 'center',
-                  borderColor: 'orchid',
-                  borderWidth: 0.5,
                 }}
-                activeOpacity={0.8}
-              >
-                <View
-                  style={{
-                    flexDirection: 'column',
-                    flex: 0.95,
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      flex: 1,
-                      justifyContent: 'space-between',
-                    }}
-                  >
-                    <View style={{ flexDirection: 'column' }}>
-                      <Text style={{ fontSize: 20, alignSelf: 'center' }}>
-                        {element.label}
-                      </Text>
-                      <Text style={{ fontWeight: 'bold' }}>
-                        Category:{' '}
-                        {element.category.charAt(0).toUpperCase() +
-                          element.category.slice(1)}
-                      </Text>
-                    </View>
-                    <TouchableOpacity
-                      onPress={() => handleClick(element)}
-                      style={{
-                        flexDirection: 'column',
-                        alignSelf: 'flex-start',
-                      }}
-                    >
-                      <Text>I tried this</Text>
-                      <CheckBox
-                        onClick={() => handleClick(element)}
-                        isChecked={element?.attempted}
-                        style={{ alignSelf: 'center', marginTop: 6 }}
-                        checkBoxColor="green"
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            ))}
+              />
+            ) : null}
+            <ReliefOptionsList
+              listItems={stressListItems}
+              title="Stress Improvement"
+              handleClick={handleClick}
+            />
           </ScrollView>
         </>
-      ) : (
+      ) : recommendationsLoaded && !listItems?.length ? (
         <View
-          style={{ justifyContent: 'center', alignItems: 'center', flex: 0.7 }}
+          style={{ justifyContent: 'center', alignItems: 'center', flex: 0.85 }}
         >
           <FontAwesome5Icon
             name="hand-holding-medical"
@@ -150,13 +128,13 @@ const MyHelp = () => {
           />
           <Text
             style={{
-              fontSize: 24,
+              fontSize: 20,
               fontWeight: 'bold',
               marginTop: 20,
               textAlign: 'center',
             }}
           >
-            No relief actions to display
+            No relief options to display
           </Text>
           <Text
             style={{
@@ -164,13 +142,36 @@ const MyHelp = () => {
               textAlign: 'center',
               fontSize: 14,
               lineHeight: 22,
+              width: '80%',
             }}
           >
-            You can add new relief actions through the{' '}
+            You can add new relief options through the{' '}
             <Text style={{ fontWeight: 'bold' }}>Relief Recommendations</Text>{' '}
-            button in <Text style={{ fontWeight: 'bold' }}>My Data</Text>
+            button in <Text style={{ fontWeight: 'bold' }}>Data page</Text>
           </Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Relief')}
+            style={{
+              marginTop: 16,
+              borderRadius: 15,
+              paddingTop: 10,
+              paddingBottom: 10,
+              padding: 30,
+              borderColor: 'blue',
+              backgroundColor: 'white',
+              borderWidth: 1,
+              shadowColor: 'rgba(0, 0, 0, 0.1)',
+              shadowOpacity: 0.8,
+              elevation: 6,
+              shadowRadius: 15,
+              shadowOffset: { width: 1, height: 13 },
+            }}
+          >
+            <Text>Take me there</Text>
+          </TouchableOpacity>
         </View>
+      ) : (
+        <Loading />
       )}
     </View>
   );

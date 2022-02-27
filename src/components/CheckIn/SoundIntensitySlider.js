@@ -25,7 +25,7 @@ const SliderComponent = ({ sliderValue, setSliderValue, subtitle, title }) => {
         />
         <View style={{ marginLeft: 10, marginRight: 10, flexDirection: 'row' }}>
           <Text>0</Text>
-          <Text style={{ position: 'absolute', right: 0 }}>{maxValue}</Text>
+          <Text style={{ position: 'absolute', right: 0 }}>10</Text>
         </View>
       </View>
     </View>

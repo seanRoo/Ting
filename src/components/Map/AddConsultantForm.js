@@ -29,7 +29,6 @@ const AddConsultantForm = ({ navigation }) => {
   }, [phoneNumValue, addressValue, consultantType]);
 
   useEffect(() => {
-    console.log(addressValue);
     if (addressValue?.phoneNumber) {
       setPhoneNumValue(addressValue.phoneNumber);
     }
@@ -75,8 +74,6 @@ const AddConsultantForm = ({ navigation }) => {
           fetchDetails
           placeholder={'Start typing to search...'}
           onPress={(data, details) => {
-            console.log(data);
-            console.log(details);
             setAddressValue({
               id: data.place_id,
               desc: data.description,

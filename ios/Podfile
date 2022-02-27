@@ -19,7 +19,8 @@ target 'ting' do
 
   pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
-  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+  pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker'
+
 
   target 'tingTests' do
     inherit! :complete

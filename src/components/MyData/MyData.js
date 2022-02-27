@@ -9,8 +9,6 @@ import {
   intlPolyfill,
   getDataAverageScores,
   findAndTransformDataset,
-  sleepEntries,
-  stressEntries,
 } from './MyData.utils';
 import FilterPicker from './components/FilterPicker';
 import OverallScoreArea from './components/OverallScoreArea';
@@ -20,10 +18,7 @@ import RecommendationsButton from './components/RecommendationsButton';
 import DataDisplayBox from './components/DataDisplayBox';
 import { useFetchCheckins } from './hooks/useFetchCheckins.hook';
 import { useHasImprovedFromLastMonth } from './hooks/useHasImprovedFromLastMonth.hook';
-import { fetchRecommendations } from '../../api/RecommendationsApi';
-import { v4 as uuid } from 'uuid';
-import { setRecommendations } from '../../api/RecommendationsApi';
-import { useToast } from 'native-base';
+import useFetchRecommendations from './hooks/useFetchRecommendations.hook';
 
 const labels = [
   {
@@ -36,28 +31,12 @@ const labels = [
   { label: 'Mood', value: 'mood', catergory: 'mood' },
   { label: 'Stress Level', value: 'stressLevel', category: 'stress' },
 ];
-const initialChipState = {
-  sleep: sleepEntries.map((element) => ({
-    label: element,
-    selected: false,
-    attempted: false,
-    id: uuid(),
-    category: 'sleep',
-  })),
-  stress: stressEntries.map((element) => ({
-    label: element,
-    selected: false,
-    attempted: false,
-    id: uuid(),
-    category: 'stress',
-  })),
-};
+
 intlPolyfill();
 
 const MyData = ({ navigation: { navigate } }) => {
   const currentUser = auth().currentUser.uid;
   const today = new Date();
-  const toast = useToast();
 
   const [showMonthPicker, setShowMonthPicker] = useState(false);
   const [monthPickerValue, setMonthPickerValue] = useState(new Date());
@@ -66,7 +45,6 @@ const MyData = ({ navigation: { navigate } }) => {
   const [lastMonthScoreArray, setLastMonthScoreArray] = useState(null);
   const [scoreArraysLoaded, setScoreArraysLoaded] = useState(false);
   const [dataset, setDataset] = useState([]);
-  const [chips, setChips] = useState(initialChipState);
   const [filterPickerValue, setFilterPickerValue] = useState(labels[0]);
   const [filterIndex, setFilterIndex] = useState(0);
 
@@ -87,6 +65,11 @@ const MyData = ({ navigation: { navigate } }) => {
     filterIndex,
   });
 
+  const { chips, setChips } = useFetchRecommendations({
+    currentUser,
+    monthPickerValue,
+  });
+
   const showPicker = useCallback((value) => {
     setShowMonthPicker(value);
   }, []);
@@ -98,6 +81,10 @@ const MyData = ({ navigation: { navigate } }) => {
   }, []);
 
   const handleScoreArrays = () => {
+    if (lastMonthScoreArray || scoreArray) {
+      setLastMonthScoreArray(null);
+      setScoreArray(null);
+    }
     setScoreArraysLoaded(false);
     let lastMonthData;
 
@@ -143,24 +130,23 @@ const MyData = ({ navigation: { navigate } }) => {
       stressScore,
     ];
     setScoreArray(newScoreArray);
-    setLastMonthScoreArray([
+
+    const newLastMonthScoreArray = [
       soundIntensityScoreLast,
       soundPitchScoreLast,
       sleepScoreLast,
       moodScoreLast,
       stressScoreLast,
-    ]);
-    setScoreArraysLoaded(newScoreArray?.every((element) => !isNaN(element)));
+    ];
+    setLastMonthScoreArray(newLastMonthScoreArray);
+    const thisMonthScoreArrayLoaded = newScoreArray !== null;
+    const lastMonthScoreArrayLoaded = newLastMonthScoreArray !== null;
+    setScoreArraysLoaded(
+      thisMonthScoreArrayLoaded && lastMonthScoreArrayLoaded,
+    );
   };
 
-  const handleUpdateChips = (newChips) => {
-    if (newChips) {
-      setChips(newChips);
-    } else {
-      setChips(initialChipState);
-    }
-  };
-
+  console.log(checkins);
   useEffect(() => {
     if (checkins) {
       setDataset(
@@ -182,42 +168,13 @@ const MyData = ({ navigation: { navigate } }) => {
     }
   }, [checkins, lastMonthCheckins, monthPickerValue]);
 
-  useEffect(() => {
-    fetchRecommendations(
-      currentUser,
-      handleUpdateChips,
-      new Date(monthPickerValue),
+  const attemptedReliefs =
+    chips &&
+    chips[`${filterPickerValue?.category}`]?.filter(
+      (element) => element.attempted,
     );
-  }, [monthPickerValue]);
 
-  const handleClick = (type, chip) => {
-    if (chip.selected) {
-      toast.show({
-        duration: 3000,
-        title: 'Added to your dashboard',
-        isClosable: true,
-        status: 'success',
-      });
-    }
-    const newChips = JSON.parse(JSON.stringify(chips));
-    const selectedElement = newChips[type].find(
-      (element) => element.label === chip.label,
-    );
-    selectedElement.selected = chip.selected;
-
-    if (!chip.selected) {
-      selectedElement.attempted = false;
-    }
-
-    setRecommendations(currentUser, today, newChips).then(() =>
-      setChips(newChips),
-    );
-  };
-
-  const attemptedReliefs = chips[`${filterPickerValue?.category}`]?.filter(
-    (element) => element.attempted,
-  );
-
+  console.log(numEntries, checkinsLoaded, scoreArraysLoaded);
   return (
     <View style={Styles.container}>
       {showMonthPicker && (
@@ -240,7 +197,11 @@ const MyData = ({ navigation: { navigate } }) => {
             scoreArray={scoreArray}
             monthPickerValue={monthPickerValue}
             showPicker={showPicker}
-            style={{ flex: 0.5, display: 'flex', marginTop: 16 }}
+            style={{
+              flex: 0.55,
+              display: 'flex',
+              marginTop: 16,
+            }}
           />
           <View
             style={{
@@ -249,7 +210,7 @@ const MyData = ({ navigation: { navigate } }) => {
               backgroundColor: 'grey',
               justifyContent: 'center',
               alignSelf: 'center',
-              marginTop: 20,
+              marginTop: 10,
               marginBottom: 25,
             }}
           />
@@ -266,7 +227,7 @@ const MyData = ({ navigation: { navigate } }) => {
               alignContent: 'space-around',
             }}
           />
-          {filterPickerValue && (
+          {filterPickerValue && scoreArraysLoaded && (
             <View
               style={{
                 flex: 0.6,
@@ -284,6 +245,7 @@ const MyData = ({ navigation: { navigate } }) => {
                 labels={labels}
                 hasImprovedFromLastMonth={hasImprovedFromLastMonth}
                 lastMonthScoreArray={lastMonthScoreArray}
+                datasetLength={dataset?.length}
                 handleDataNavigate={() =>
                   dataset?.length &&
                   navigate('Data Display', {
@@ -296,15 +258,9 @@ const MyData = ({ navigation: { navigate } }) => {
                 highValueIsGood={highValueIsGood}
                 chips={chips}
               />
-              <RecommendationsButton
-                handleClick={() =>
-                  navigate('Relief', {
-                    date: JSON.stringify(monthPickerValue),
-                    handleClick,
-                    chips,
-                  })
-                }
-              />
+              {today.getMonth() === monthPickerValue.getMonth() && (
+                <RecommendationsButton handleClick={() => navigate('Relief')} />
+              )}
             </View>
           )}
         </>

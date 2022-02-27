@@ -33,7 +33,6 @@ const MyCalendar = ({ navigation, route }) => {
   };
 
   const getCheckIns = (userId, year) => {
-    console.log('fired');
     setLoading(true);
     DB.ref(`/checkIns/${userId}/${year}/`).on('value', (querySnapshot) => {
       const data = querySnapshot.val();
@@ -95,9 +94,7 @@ const MyCalendar = ({ navigation, route }) => {
   const handleWeekChange = (start, end) => {
     // track fetched years in array, max length === 2
     const startDate = new Date(start);
-    const endDate = new Date(end);
     const startYear = startDate.getFullYear();
-    const endYear = endDate.getFullYear();
 
     if (startYear !== calendarYear) {
       getCheckIns(currentUser, startYear);
@@ -124,7 +121,15 @@ const MyCalendar = ({ navigation, route }) => {
           </Center>
         )}
         {!singleDayData && !loading && (
-          <Center>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingLeft: 10,
+              paddingRight: 10,
+            }}
+          >
             <EmptyDataMessage
               selectedDate={selectedDate}
               handleClick={() => {
@@ -133,7 +138,7 @@ const MyCalendar = ({ navigation, route }) => {
                 });
               }}
             />
-          </Center>
+          </View>
         )}
         {!loading && singleDayData && !isObjectAndEmpty(singleDayData) && (
           <ScrollView style={MyCalendarStyles.scrollViewContainer}>

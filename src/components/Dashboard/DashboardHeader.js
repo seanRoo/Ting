@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Popover from 'react-native-popover-view';
 import { Menu, Divider } from 'react-native-paper';
 import TextCustomFont from '../TextCustomFont';
@@ -20,7 +20,7 @@ const DashboardHeader = ({ handleClick, userInfo, styleProps }) => {
               {userInfo?.firstName}!
             </TextCustomFont>
           </TextCustomFont>
-          <TextCustomFont style={{ color: 'gray', marginTop: 4 }}>
+          <TextCustomFont style={{ color: 'gray', marginTop: 4, fontSize: 16 }}>
             Your dashboard for today
           </TextCustomFont>
         </View>
@@ -32,18 +32,10 @@ const DashboardHeader = ({ handleClick, userInfo, styleProps }) => {
               onPress={() => setPopoverIsVisible(!popoverIsVisible)}
               style={{ position: 'absolute', right: 0, marginTop: 4 }}
             >
-              <FontAwesome name="user-circle" size={45} />
+              <MaterialCommunityIcons name="cog-outline" size={40} />
             </TouchableOpacity>
           }
         >
-          <Menu.Item
-            icon="account-edit"
-            onPress={() => {
-              handleClick('Profile');
-              setPopoverIsVisible(false);
-            }}
-            title="Profile"
-          />
           <Menu.Item
             icon="account-multiple-plus"
             onPress={() => {
@@ -52,7 +44,6 @@ const DashboardHeader = ({ handleClick, userInfo, styleProps }) => {
             }}
             title="Add a Consultant"
           />
-          {/* <Menu.Item icon="cog-outline" onPress={() => {}} title="Settings" /> */}
           <Divider />
           <Menu.Item icon="logout-variant" onPress={logout} title="Log Out" />
         </Popover>

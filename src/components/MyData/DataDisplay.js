@@ -28,8 +28,12 @@ const DataDisplay = ({
                 padding: 10,
               }}
             >
-              <Text style={{ fontSize: 16 }}>Relief you tried this month</Text>
-              <Text>{chips}</Text>
+              <Text style={{ fontSize: 16, marginBottom: 6 }}>
+                Relief you tried this month
+              </Text>
+              {parsedChips.map((element) => (
+                <Text>{`\u2022 ${element.label}`}</Text>
+              ))}
             </View>
           ) : null}
         </View>

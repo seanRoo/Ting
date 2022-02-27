@@ -1,22 +1,30 @@
 import React from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { List, Chip } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const RecommendationListItem = ({
   options,
   title,
-  bodyText,
   accordionContent,
   handleClick,
   disabled,
+  handleAddNewOption,
+  handleRemoveOption,
 } = {}) => {
   return (
     <View>
-      <Text style={{ alignSelf: 'center', fontSize: 24, paddingTop: 12 }}>
+      <Text
+        style={{
+          alignSelf: 'flex-start',
+          fontSize: 20,
+          paddingTop: 12,
+          marginBottom: 10,
+        }}
+      >
         {title}
       </Text>
-      {bodyText}
       <View
         style={{
           flexDirection: 'row',
@@ -25,41 +33,91 @@ const RecommendationListItem = ({
         }}
       >
         {options?.map((element, index) => (
-          <Chip
-            key={`chip-element=${index}`}
-            textStyle={{
-              fontSize: 13,
-              color: element.selected ? 'white' : 'black',
-            }}
-            //icon={element.selected ? 'check' : 'plus'}
-            icon={({ size }) => (
-              <MaterialCommunityIcons
-                color={element.selected ? 'white' : 'black'}
-                name={element.selected ? 'check' : 'plus'}
-                size={size}
-              />
-            )}
-            selected={element.selected}
+          <View
             style={{
+              height: 40,
+              borderColor: 'orchid',
+              borderWidth: 2,
+              marginRight: 4,
+              marginBottom: 6,
+              padding: 10,
+              borderRadius: 20,
+              justifyContent: 'center',
+              alignItems: 'center',
               backgroundColor: element.selected
-                ? 'green'
+                ? 'rgba(63, 195, 128, .8)'
                 : !element.selected && disabled
                 ? 'rgb(220,220,220)'
                 : null,
-              marginRight: 3,
-              marginBottom: 6,
-              borderColor: 'orchid',
-              borderWidth: 2,
+              flexDirection: 'row',
             }}
-            onPress={() =>
-              handleClick({ ...element, selected: !element.selected })
-            }
-            disabled={disabled}
           >
-            {element.label}
-          </Chip>
+            <TouchableOpacity
+              onPress={() =>
+                handleClick({ ...element, selected: !element.selected })
+              }
+              style={{ flexDirection: 'row' }}
+            >
+              <MaterialCommunityIcons
+                color={'black'}
+                name={element.selected ? 'check' : 'plus'}
+                size={18}
+                style={{ marginRight: 4 }}
+              />
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: 'black',
+                  fontWeight: element.customOption && 'bold',
+                }}
+              >
+                {element.label}
+              </Text>
+            </TouchableOpacity>
+            {element.customOption ? (
+              <View style={{ flexDirection: 'row' }}>
+                <View
+                  style={{
+                    width: 2,
+                    height: 20,
+                    backgroundColor: 'gray',
+                    marginLeft: 20,
+                    marginRight: 12,
+                    alignSelf: 'center',
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() => handleRemoveOption(element)}
+                  style={{ paddingLeft: 12 }}
+                >
+                  <FontAwesome color="black" size={24} name="trash-o" />
+                </TouchableOpacity>
+              </View>
+            ) : null}
+          </View>
         ))}
-        <Text style={{ color: 'black', fontWeight: 'bold' }}>
+        <Chip
+          key={`chip-element-add-new`}
+          textStyle={{
+            fontSize: 13,
+            color: 'black',
+            fontWeight: 'bold',
+          }}
+          icon={({ size }) => (
+            <MaterialCommunityIcons color="black" name="plus" size={size} />
+          )}
+          style={{
+            marginRight: 3,
+            marginBottom: 6,
+            borderColor: 'orchid',
+            borderWidth: 2,
+            backgroundColor: 'rgba(218,112,214, .3)',
+          }}
+          onPress={handleAddNewOption}
+        >
+          Add your own
+        </Chip>
+        <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 16 }}>
           Selected options will appear on your dashboard
         </Text>
       </View>
@@ -89,16 +147,24 @@ const RecommendationListItem = ({
           />
         )}
       >
-        <Text
+        <View
           style={{
-            lineHeight: 20,
             marginTop: 10,
-            paddingLeft: 0,
-            fontSize: 16,
+            padding: 10,
+            paddingLeft: 14,
+            backgroundColor: 'rgba(0, 140, 227, .3)',
+            borderRadius: 14,
           }}
         >
-          {accordionContent}
-        </Text>
+          <Text
+            style={{
+              lineHeight: 20,
+              fontSize: 14,
+            }}
+          >
+            {accordionContent}
+          </Text>
+        </View>
       </List.Accordion>
     </View>
   );

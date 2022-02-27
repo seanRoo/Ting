@@ -12,14 +12,6 @@ export const addCheckIn = async (sliderValues, date, userId, callback) => {
     )}/${date.getDate().toString()}`,
   )
     .set({ sliderValues })
-    // .then(() => {
-    //   const day = date.getDate();
-    //   const newValue = { [day]: sliderValues };
-    //   // callback(newValue, getMonthYearString(date), date).then(
-    //   //   console.log('yes'),
-    //   // );
-    // })
-    // )}
     .catch((error) => {
       throw error;
     });

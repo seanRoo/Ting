@@ -17,7 +17,6 @@ export const useFetchCheckins = ({
       DB.ref(`/checkIns/${currentUser}/${monthPickerValue.getFullYear()}/`).on(
         'value',
         (querySnapshot) => {
-          console.log('fired');
           if (querySnapshot.val()) {
             let dataArray = [];
             for (var key in querySnapshot.val()) {
@@ -36,7 +35,6 @@ export const useFetchCheckins = ({
             monthPickerValue.getFullYear() - 1
           }/${getPreviousMonthYearString(monthPickerValue)}`,
         ).on('value', (querySnapshot) => {
-          console.log('fired');
           if (querySnapshot.val()) {
             setLastMonthCheckins([
               {
@@ -56,7 +54,7 @@ export const useFetchCheckins = ({
     } catch (e) {
       console.error(e);
     }
-  }, [pickerYear]);
+  }, [monthPickerValue]);
 
   return { checkins, checkinsLoaded, lastMonthCheckins };
 };

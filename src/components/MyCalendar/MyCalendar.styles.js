@@ -15,12 +15,21 @@ const MyCalendarStyles = ScaledSheet.create({
   },
   nonHighlightedText: {
     color: 'black',
+    //fontSize: 12,
   },
   calendarStrip: {
     height: '80@s',
     paddingTop: 15,
     paddingBottom: 10,
     fontFamily: 'Roboto',
+  },
+  dateNumberStyle: {
+    fontSize: 13,
+    color: 'black',
+  },
+  calendarHeaderStyle: {
+    marginBottom: 10,
+    color: 'black',
   },
   dataViewContainer: {
     borderWidth: 0.5,
